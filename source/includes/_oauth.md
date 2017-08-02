@@ -113,6 +113,37 @@ Once your calls are complete, you will have the user’s profile info and pledge
 
 If requests [4] and [5] were performed synchronously, then you can return a HTTP 302 for their GET in request [3], redirecting to a page with appropriate success dialogs & profile information. If the requests in requests [4] and [5] are being performed asynchronously, your response to request [3] should probably contain AJAX code that will notify the user once requests [4] and [5] are completed.
 ## Step 7 - Keeping up to date
+```php
+<?php
+require_once('vendor/patreon/patreon/src/patreon.php');
+use Patreon\API;
+use Patreon\OAuth;
+// Get your current "Creator's Access Token" from https://www.patreon.com/platform/documentation/clients
+$access_token = null;
+// Get your "Creator's Refesh Token" from https://www.patreon.com/platform/documentation/clients
+$refresh_token = null;
+$api_client = new Patreon\API($access_token);
+
+// If the token doesn't work, get a newer one
+if ($campaign_response['errors']) {
+    // Make an OAuth client
+    // Get your Client ID and Secret from https://www.patreon.com/platform/documentation/clients
+    $client_id = null;
+    $client_secret = null;
+    $oauth_client = new Patreon\OAuth($client_id, $client_secret);
+    // Get a fresher access token
+    $tokens = $oauth_client->refresh_token($refresh_token, null);
+    if ($tokens['access_token']) {
+        $access_token = $tokens['access_token'];
+        echo "Got a new access_token! Please overwrite the old one in this script with: " . $access_token . " and try again.";
+    } else {
+        echo "Can't recover from access failure\n";
+        print_r($tokens);
+    }
+    return;
+}
+?>
+```
 > Request [7]
 
 ```

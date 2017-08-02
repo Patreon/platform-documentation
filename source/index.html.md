@@ -3,9 +3,11 @@ title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
-  - ruby
-  - python
   - javascript
+  - python
+  - ruby
+  - php
+  - java
 
 toc_footers:
   - <a href='https://www.patreon.com/platform/documentation/clients'>Sign Up for an API Key</a>
@@ -18,7 +20,6 @@ includes:
 - oauth
 - api
 - webhooks
-- external
 - errors
 
 search: true
