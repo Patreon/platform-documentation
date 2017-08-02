@@ -8,110 +8,13 @@ When one of these events occurs, our servers will send an HTTP POST to a URL you
 <code>X-Patreon-Event: [trigger]<br>
 X-Patreon-Signature: [message signature]</code>
 
-where the message signature is the JSON POST body HMAC signed (with MD5) with your client_secret.
+where the message signature is the JSON POST body HMAC signed (with MD5) with your `client_secret`.
 
-Note: As always: please never reveal your client_secrets. If the secret is compromised, the attacker could get access to your campaign info, all of your patron’s profile info, and their pledge amounts (all on an ongoing, refreshable basis). If you fear your secret has been compromised, please let us know and we will look into granting you a new id & secret pair (this will, however, cause all of your patrons to have to re-“Log in with Patreon”)
+Note: As always: please never reveal your `client_secrets`. If the secret is compromised, the attacker could get access to your campaign info, all of your patron’s profile info, and their pledge amounts (all on an ongoing, refreshable basis). If you fear your secret has been compromised, please let us know and we will look into granting you a new id & secret pair (this will, however, cause all of your patrons to have to re-“Log in with Patreon”)
 
-## Get a Specific Kitten
+### Setting up a webhook
+Once you've set up a client and API key, you can create new webhook urls [here](https://www.patreon.com/platform/documentation/webhooks)
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+<aside class="notice">
+Note — You must first set up a Client & API Key in order to create webhooks.
+</aside>

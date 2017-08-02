@@ -1,7 +1,4 @@
 # Introduction
-
-Getting Started
-
 Welcome to the Patreon Platform! Get familiar with the Patreon platform products and tools using the tutorials and references below.
 
 Please note: almost all of this documentation is geared towards software developers. If any of it is confusing, please contact us at [platform@patreon.com](mailto:platform@patreon.com)

@@ -100,9 +100,9 @@ Authorization: Bearer <user's access_token>
 
 Presently, there are three APIs available:
 
-- Fetching your own profile and campaign info
-- Paging through a list of pledges to you
-- Fetching a patron's profile info
+- [Fetching your own profile and campaign info](#fetch-your-own-profile-and-campaign-info)
+- [Paging through a list of pledges to you](#paging-through-a-list-of-pledges-to-you)
+- [Fetching a patron's profile info](#fetching-a-patron-39-s-profile-info)
 
 These APIs are accessed using an OAuth client access_token obtained from the [Clients & API Keys](https://www.patreon.com/platform/documentation/clients) page. Please go there first if you do not yet have one.
 
