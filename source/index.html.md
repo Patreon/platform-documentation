@@ -14,7 +14,6 @@ toc_footers:
 
 includes:
 - intro
-- examples
 - api-libraries
 - clients
 - oauth
