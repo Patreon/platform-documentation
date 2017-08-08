@@ -68,3 +68,12 @@ pip install -r requirements.txt</code>
 Make sure that, however you install patreon, you install its dependencies as well
 
 View the source on [github](https://github.com/Patreon/patreon-python)
+
+#Third Party Libraries
+There are a number of third party libraries that the developer community has created. They can be found here:
+
+##Go
+View the source on [github](https://github.com/mxpv/patreon-go)
+
+##.NET
+View the source on [github](https://github.com/shiftos-game/Patreon.NET)
