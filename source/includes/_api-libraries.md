@@ -70,7 +70,7 @@ Make sure that, however you install patreon, you install its dependencies as wel
 View the source on [github](https://github.com/Patreon/patreon-python)
 
 #Third Party Libraries
-There are a number of third party libraries that the developer community has created. They can be found here:
+There are a number of third party libraries that the developer community has created. If you would like to add yours to this  list, please email [platform@patreon.com](mailto:platform@patreon.com)
 
 ##Go
 View the source on [github](https://github.com/mxpv/patreon-go)
