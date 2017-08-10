@@ -26,9 +26,6 @@ Authorization: Bearer <user's access_token>
     "youtube": <string>
     "twitter": <string>
     "facebook": <string>
-    "is_suspended": <bool>
-    "is_deleted": <bool>
-    "is_nuked": <bool>
     "created": <date>
     "url": <string>
   }
