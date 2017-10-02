@@ -330,7 +330,7 @@ This endpoint returns a JSON representation of the user's campaign, including it
 
 Parameter | Default | Description
 --------- | ------- | -----------
-includes | `rewards,creator,goals,pledge` | You can pass this `rewards`, `creator`, `goals`, or `pledge`
+includes | `rewards,creator,goals,pledges` | You can pass this `rewards`, `creator`, `goals`, or `pledges`
 
 <aside class="success">
 Remember — you must pass the correct <code>access_token</code> from the user.
