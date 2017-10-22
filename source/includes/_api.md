@@ -324,7 +324,7 @@ This endpoint returns a JSON representation of the user's campaign, including it
 
 ### HTTP Request
 
-`GET https://api.patreon.com/oauth2/api/current_user/campaigns`
+`GET https://www.patreon.com/api/oauth2/api/current_user/campaigns`
 
 ### Query Parameters
 
@@ -442,7 +442,7 @@ The API response will also contain a links section which may be used to fetch th
 
 ### HTTP Request
 
-`GET https://api.patreon.com/oauth2/api/campaigns/<campaign_id>/pledges`
+`GET https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges`
 
 
 ### Paging
@@ -657,7 +657,7 @@ This API returns a JSON representation of the user who granted your OAuth client
 
 ### HTTP Request
 
-`GET https://api.patreon.com/oauth2/api/current_user`
+`GET https://www.patreon.com/api/oauth2/api/current_user`
 
 ### Query Parameters
 

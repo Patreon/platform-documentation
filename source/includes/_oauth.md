@@ -75,7 +75,7 @@ When the link in [Step 2](#step-2-making-the-log-in-button) redirects to the pro
 > Request [4]
 
 ```
-POST api.patreon.com/oauth2/token
+POST www.patreon.com/api/oauth2/token
 	?code=<single use code, as passed in to GET route [2]>
 	&grant_type=authorization_code
 	&client_id=<your client id>
@@ -147,7 +147,7 @@ if ($campaign_response['errors']) {
 > Request [7]
 
 ```
-POST api.patreon.com/oauth2/token
+POST www.patreon.com/api/oauth2/token
 	?grant_type=refresh_token
 	&refresh_token=<the user‘s refresh_token>
 	&client_id=<your client id>
