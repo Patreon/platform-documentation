@@ -9,5 +9,5 @@ Testing of the API can be done by creating dummy accounts through the website. T
 
 
 <aside class="notice">
-    Unfortunately, at this time, we do not offer separate a testing/sandbox API.
+    Unfortunately, at this time, we do not offer a separate testing/sandbox API.
 </aside>
