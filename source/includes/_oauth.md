@@ -82,7 +82,7 @@ POST api.patreon.com/oauth2/token
 	&client_secret=<your client secret>
 	&redirect_uri=<redirect_uri>
 ```
-Your server should handle GET requests in [Step 3](#step-3-handling-oauth-redirect) by performing the following request on the server, not as a redirect
+Your server should handle GET requests in [Step 3](#step-3-handling-oauth-redirect) by performing the following request on the server (not as a redirect):
 
 
 
@@ -167,4 +167,4 @@ POST api.patreon.com/oauth2/token
 ```
 > and you should store this information just as before.
 
-Tokens are valid for up to one month after they are issued. During this period, you may refresh a user’s information using the API calls from step 4. If you wish to get up-to-date information after the token has expired, a new token may be issued to be used for the following month. To refresh a token,
+Tokens are valid for up to one month after they are issued. During this period, you may refresh a user’s information using the API calls from step 4. If you wish to get up-to-date information after the token has expired, a new token may be issued to be used for the following month. To refresh a token, make a POST request to the token endpoint with a grant type of `refresh_token`, as in the example. You may also manually refresh the token on the appropriate client in your [clients page](https://www.patreon.com/platform/start/registerclients).
