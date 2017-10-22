@@ -75,14 +75,14 @@ When the link in [Step 2](#step-2-making-the-log-in-button) redirects to the pro
 > Request [4]
 
 ```
-POST api.patreon.com/oauth2/token
+POST www.patreon.com/api/oauth2/token
 	?code=<single use code, as passed in to GET route [2]>
 	&grant_type=authorization_code
 	&client_id=<your client id>
 	&client_secret=<your client secret>
 	&redirect_uri=<redirect_uri>
 ```
-Your server should handle GET requests in [Step 3](#step-3-handling-oauth-redirect) by performing the following request on the server, not as a redirect
+Your server should handle GET requests in [Step 3](#step-3-handling-oauth-redirect) by performing the following request on the server (not as a redirect):
 
 
 
@@ -147,7 +147,7 @@ if ($campaign_response['errors']) {
 > Request [7]
 
 ```
-POST api.patreon.com/oauth2/token
+POST www.patreon.com/api/oauth2/token
 	?grant_type=refresh_token
 	&refresh_token=<the user‘s refresh_token>
 	&client_id=<your client id>
@@ -167,4 +167,4 @@ POST api.patreon.com/oauth2/token
 ```
 > and you should store this information just as before.
 
-Tokens are valid for up to one month after they are issued. During this period, you may refresh a user’s information using the API calls from step 4. If you wish to get up-to-date information after the token has expired, a new token may be issued to be used for the following month. To refresh a token,
+Tokens are valid for up to one month after they are issued. During this period, you may refresh a user’s information using the API calls from step 4. If you wish to get up-to-date information after the token has expired, a new token may be issued to be used for the following month. To refresh a token, make a POST request to the token endpoint with a grant type of `refresh_token`, as in the example. You may also manually refresh the token on the appropriate client in your [clients page](https://www.patreon.com/platform/start/registerclients).

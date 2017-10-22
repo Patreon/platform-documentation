@@ -21,6 +21,7 @@ includes:
 - webhooks
 - external
 - errors
+- faqs
 
 search: true
 ---

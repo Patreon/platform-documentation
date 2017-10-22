@@ -324,7 +324,7 @@ This endpoint returns a JSON representation of the user's campaign, including it
 
 ### HTTP Request
 
-`GET https://api.patreon.com/oauth2/api/current_user/campaigns`
+`GET https://www.patreon.com/api/oauth2/api/current_user/campaigns`
 
 ### Query Parameters
 
@@ -442,7 +442,7 @@ The API response will also contain a links section which may be used to fetch th
 
 ### HTTP Request
 
-`GET https://api.patreon.com/oauth2/api/campaigns/<campaign_id>/pledges`
+`GET https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges`
 
 
 ### Paging
@@ -657,7 +657,7 @@ This API returns a JSON representation of the user who granted your OAuth client
 
 ### HTTP Request
 
-`GET https://api.patreon.com/oauth2/api/current_user`
+`GET https://www.patreon.com/api/oauth2/api/current_user`
 
 ### Query Parameters
 
@@ -667,4 +667,18 @@ includes | `rewards,creator,goals,pledge` | You can pass this `rewards`, `creato
 
 <aside class="success">
 Remember — you must pass the correct <code>access_token</code> from the user.
+</aside>
+
+
+## Advanced Usage
+### Requesting specific data
+
+```
+POST https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?fields[pledge]=total_historical_amount_cents,is_paused&include=reward
+```
+
+To retrieve specific attributes or relationships other than the defaults, you can pass `fields` and `include` parameters respectively, each being comma-separated lists of attributes or resources.
+
+<aside class="note">
+For more information on requesting specific data, the <a href="http://jsonapi.org/format/#fetching">JSONAPI documentation</a> may be useful.
 </aside>
