@@ -337,7 +337,9 @@ Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
 
 ## Paging through a list of pledges to you
+
 <!--  TODO: Make this code actual Ruby-->
+
 ```ruby
 api_client = patreon.API(patron_access_token)
 patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10)
