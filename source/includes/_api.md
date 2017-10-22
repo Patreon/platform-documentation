@@ -268,8 +268,9 @@ second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=n
 // TODO: Needs a code example of pagination
 ```
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl --request GET \
+  --url https://www.patreon.com/api/oauth2/api/campaigns/1111111/pledges \
+  --header 'Authorization: Bearer <access_token>
 ```
 
 ```javascript
@@ -317,41 +318,27 @@ echo "Done!";
 ?>
 
 ```
-> The above command returns JSON structured like this:
+> Response:
 
 ```json
-
 {
-  "type": "user"
-  "id": <string>
-  "attributes": {
-    "first_name": <string>
-    "last_name": <string>
-    "full_name": <string>
-    "vanity": <string>
-    "email": <string>
-    "about": <string>
-    "facebook_id": <string>
-    "image_url": <string>
-    "thumb_url": <string>
-    "youtube": <string>
-    "twitter": <string>
-    "facebook": <string>
-    "is_suspended": <bool>
-    "is_deleted": <bool>
-    "is_nuked": <bool>
-    "created": <date>
-    "url": <string>
-  }
-  "relationships": {
-    "campaign": ...<campaign>...
+  "data": [],
+  "links": {
+    "first": "https://www.patreon.com/api/oauth2/api/campaigns/1111111/pledges?page%5Bcount%5D=10&sort=created"
+  },
+  "meta": {
+    "count": 0
   }
 }
 ```
 
-This API returns a JSON list of pledges to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
+This endpoint returns a JSON list of pledges to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
 
-The API response will also contain a links section which may be used to fetch the next page of pledges, or go back to the first page.
+The API response will also contain a `links` field which may be used to fetch the next page of pledges, or go back to the first page.
+
+<aside class="notice">
+When you made a creator page to gain API access, behind the scenes a <a href="#campaign">campaign resource</a> was created. You can access this resource as described in <a href="#fetch-your-own-profile-and-campaign-info">Fetching your own profile and campaign info</a> after authenticating via OAuth with your creator account to gain your `campaign_id`.
+</aside>
 
 ### HTTP Request
 
