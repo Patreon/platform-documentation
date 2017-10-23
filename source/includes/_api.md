@@ -3,7 +3,7 @@
 > To use a given `access_token`, send it in the Authorization HTTP Header as follows:
 
 ```
-Authorization: Bearer <user's access_token>
+Authorization: Bearer <access_token>
 ```
 
 Presently, there are three APIs available:
@@ -12,14 +12,11 @@ Presently, there are three APIs available:
 - [Paging through a list of pledges to you](#paging-through-a-list-of-pledges-to-you)
 - [Fetching a patron's profile info](#fetching-a-patron-39-s-profile-info)
 
-These APIs are accessed using an OAuth client access_token obtained from the [Clients & API Keys](https://www.patreon.com/platform/documentation/clients) page. Please go there first if you do not yet have one.
+These APIs are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
 
-When performing an API request, the information you are allowed to see is determined by which access_token you are using. Please be sure to select your access_token appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own access_token instead of the one created when they granted your client access, you will instead just get your own profile information.__
-
-
+When performing an API request, the information you are allowed to see is determined by which `access_token` you are using. Please be sure to select your `access_token` appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own access_token instead of the one created when they granted your client access, you will instead just get your own profile information.__
 
 ## Fetch your own profile and campaign info
-
 
 ```ruby
 require 'patreon'
@@ -373,7 +370,7 @@ second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=n
 ```
 ```shell
 curl --request GET \
-  --url https://www.patreon.com/api/oauth2/api/campaigns/1111111/pledges \
+  --url https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges \
   --header 'Authorization: Bearer <access_token>
 ```
 
