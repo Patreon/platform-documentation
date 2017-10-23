@@ -696,10 +696,13 @@ Remember — you must pass the correct <code>access_token</code> from the user.
 
 
 ## Advanced Usage
+
 ### Requesting specific data
 
-```
-POST https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?fields[pledge]=total_historical_amount_cents,is_paused&include=reward
+```shell
+curl --request GET \
+  --url 'https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?=&include=reward&fields%5Bpledge%5D=total_historical_amount_cents%2Cis_paused' \
+  --header 'Authorization: Bearer <access_token>
 ```
 
 To retrieve specific attributes or relationships other than the defaults, you can pass `fields` and `include` parameters respectively, each being comma-separated lists of attributes or resources.
