@@ -404,10 +404,10 @@ def oauth_redirect():
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl --request GET \
+  --url https://www.patreon.com/api/oauth2/api/current_user \
+  --header 'authorization: Bearer <access_token>'
 ```
-<!-- TODO: confirm that this is correct  -->
 
 ```php
 <?php
@@ -521,39 +521,60 @@ if (included != null) {
 
    // use the user, pledge, and campaign objects as you desire
 ```
-> The above command returns JSON structured like this:
+
+> Response:
 
 ```json
-
 {
-  "type": "user"
-  "id": <string>
-  "attributes": {
-    "first_name": <string>
-    "last_name": <string>
-    "full_name": <string>
-    "vanity": <string>
-    "email": <string>
-    "about": <string>
-    "facebook_id": <string>
-    "image_url": <string>
-    "thumb_url": <string>
-    "youtube": <string>
-    "twitter": <string>
-    "facebook": <string>
-    "is_suspended": <bool>
-    "is_deleted": <bool>
-    "is_nuked": <bool>
-    "created": <date>
-    "url": <string>
-  }
-  "relationships": {
-      ...
+  "data": {
+    "attributes": {
+      "about": null,
+      "created": "2017-10-20T21:36:23+00:00",
+      "discord_id": null,
+      "email": "corgi@example.com",
+      "facebook": null,
+      "facebook_id": null,
+      "first_name": "Corgi",
+      "full_name": "Corgi The Dev",
+      "gender": 0,
+      "has_password": true,
+      "image_url": "https://c8.patreon.com/2/400/0000000",
+      "is_deleted": false,
+      "is_email_verified": false,
+      "is_nuked": false,
+      "is_suspended": false,
+      "last_name": "The Dev",
+      "social_connections": {
+        "deviantart": null,
+        "discord": null,
+        "facebook": null,
+        "spotify": null,
+        "twitch": null,
+        "twitter": null,
+        "youtube": null
+      },
+      "thumb_url": "https://c8.patreon.com/2/100/0000000",
+      "twitch": null,
+      "twitter": null,
+      "url": "https://www.patreon.com/corgithedev",
+      "vanity": "corgithedev",
+      "youtube": null
+    },
+    "id": "0000000",
+    "relationships": {
+      "pledges": {
+        "data": []
+      }
+    },
+    "type": "user"
+  },
+  "links": {
+    "self": "https://www.patreon.com/api/user/0000000"
   }
 }
 ```
 
-This API returns a JSON representation of the user who granted your OAuth client the provided access_token. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the user's account on your site.
+This endpoint returns a JSON representation of the patron who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
 
 ### HTTP Request
 
