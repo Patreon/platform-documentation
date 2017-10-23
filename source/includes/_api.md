@@ -31,16 +31,8 @@ class OAuthController < ApplicationController
     access_token = tokens['access_token']
 
     api_client = Patreon::API.new(access_token)
-    user_response = api_client.fetch_user()
-    @user = user_response['data']
-    included = user_response['included']
-    if included
-      @pledge = included.find {|obj| obj['type'] == 'pledge' && obj['relationships']['creator']['data']['id'] == creator_id}
-      @campaign = included.find {|obj| obj['type'] == 'campaign' && obj['relationships']['creator']['data']['id'] == creator_id}
-    else
-      @pledge = nil
-      @campaign = nil
-    end
+    campaigns_response = api_client.fetch_campaign_and_patrons()
+    @campaigns = campaigns_response['data']
   end
 end
 ```
@@ -68,31 +60,7 @@ $access_token = $tokens['access_token'];
 $refresh_token = $tokens['refresh_token'];
 
 $api_client = new Patreon\API($access_token);
-$patron_response = $api_client->fetch_user();
-$patron = $patron_response['data'];
-$included = $patron_response['included'];
-$pledge = null;
-if ($included != null) {
-  foreach ($included as $obj) {
-    if ($obj["type"] == "pledge" && $obj["relationships"]["creator"]["data"]["id"] == $creator_id) {
-      $pledge = $obj;
-      break;
-    }
-  }
-}
-
-/*
- $patron will have the authenticated user's user data, and
- $pledge will have their patronage data.
- Typically, you will save the relevant pieces of this data to your database,
- linked with their user account on your site,
- so your site can customize its experience based on their Patreon data.
- You will also want to save their $access_token and $refresh_token to your database,
- linked to their user account on your site,
- so that you can refresh their Patreon data on your own schedule.
- */
-
-?>
+$campaigns = $api_client-fetch_campaign_and_patrons();
 ```
 
 ```python
@@ -125,8 +93,9 @@ def oauth_redirect():
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl --request GET \
+  --url https://www.patreon.com/api/oauth2/api/current_user/campaigns \
+  --header 'Authorization: Bearer <access_token>'
 ```
 
 ```javascript
@@ -200,37 +169,172 @@ if (included != null) {
    // use the user, pledge, and campaign objects as you desire
 ```
 
-> The above command returns JSON structured like this:
+> Response:
 
 ```json
-
 {
-  "type": "user"
-  "id": <string>
-  "attributes": {
-    "first_name": <string>
-    "last_name": <string>
-    "full_name": <string>
-    "vanity": <string>
-    "email": <string>
-    "about": <string>
-    "facebook_id": <string>
-    "image_url": <string>
-    "thumb_url": <string>
-    "youtube": <string>
-    "twitter": <string>
-    "facebook": <string>
-    "is_suspended": <bool>
-    "is_deleted": <bool>
-    "is_nuked": <bool>
-    "created": <date>
-    "url": <string>
-  }
-  "relationships": {
-    "campaign": ...<campaign>...
-  }
+  "data": [{
+    "attributes": {
+      "created_at": "2017-10-20T21:39:01+00:00",
+      "creation_count": 0,
+      "creation_name": "Documentation",
+      "discord_server_id": null,
+      "display_patron_goals": false,
+      "earnings_visibility": "public",
+      "image_small_url": null,
+      "image_url": null,
+      "is_charged_immediately": false,
+      "is_monthly": false,
+      "is_nsfw": false,
+      "is_plural": false,
+      "main_video_embed": null,
+      "main_video_url": null,
+      "one_liner": null,
+      "outstanding_payment_amount_cents": 0,
+      "patron_count": 0,
+      "pay_per_name": null,
+      "pledge_sum": 0,
+      "pledge_url": "/bePatron?c=0000000",
+      "published_at": "2017-10-20T21:49:31+00:00",
+      "summary": null,
+      "thanks_embed": null,
+      "thanks_msg": null,
+      "thanks_video_url": null
+    },
+    "id": "0000000",
+    "relationships": {
+      "creator": {
+        "data": {
+          "id": "1111111",
+          "type": "user"
+        },
+        "links": {
+          "related": "https://www.patreon.com/api/user/1111111"
+        }
+      },
+      "goals": {
+        "data": []
+      },
+      "rewards": {
+        "data": [{
+            "id": "-1",
+            "type": "reward"
+          },
+          {
+            "id": "0",
+            "type": "reward"
+          }
+        ]
+      }
+    },
+    "type": "campaign"
+  }],
+  "included": [{
+      "attributes": {
+        "about": null,
+        "created": "2017-10-20T21:36:23+00:00",
+        "discord_id": null,
+        "email": "corgi@patreon.com",
+        "facebook": null,
+        "facebook_id": null,
+        "first_name": "Corgi",
+        "full_name": "Corgi The Dev",
+        "gender": 0,
+        "has_password": true,
+        "image_url": "https://c8.patreon.com/2/400/1111111",
+        "is_deleted": false,
+        "is_email_verified": false,
+        "is_nuked": false,
+        "is_suspended": false,
+        "last_name": "The Dev",
+        "social_connections": {
+          "deviantart": null,
+          "discord": null,
+          "facebook": null,
+          "spotify": null,
+          "twitch": null,
+          "twitter": null,
+          "youtube": null
+        },
+        "thumb_url": "https://c8.patreon.com/2/100/1111111",
+        "twitch": null,
+        "twitter": null,
+        "url": "https://www.patreon.com/drkthedev",
+        "vanity": "drkthedev",
+        "youtube": null
+      },
+      "id": "1111111",
+      "relationships": {
+        "campaign": {
+          "data": {
+            "id": "0000000",
+            "type": "campaign"
+          },
+          "links": {
+            "related": "https://www.patreon.com/api/campaigns/0000000"
+          }
+        }
+      },
+      "type": "user"
+    },
+    {
+      "attributes": {
+        "amount": 0,
+        "amount_cents": 0,
+        "created_at": null,
+        "description": "Everyone",
+        "id": "-1",
+        "remaining": 0,
+        "requires_shipping": false,
+        "type": "reward",
+        "url": null,
+        "user_limit": null
+      },
+      "id": "-1",
+      "relationships": {
+        "creator": {
+          "data": {
+            "id": "1111111",
+            "type": "user"
+          },
+          "links": {
+            "related": "https://www.patreon.com/api/user/1111111"
+          }
+        }
+      },
+      "type": "reward"
+    },
+    {
+      "attributes": {
+        "amount": 1,
+        "amount_cents": 1,
+        "created_at": null,
+        "description": "Patrons Only",
+        "id": "0",
+        "remaining": 0,
+        "requires_shipping": false,
+        "type": "reward",
+        "url": null,
+        "user_limit": null
+      },
+      "id": "0",
+      "relationships": {
+        "creator": {
+          "data": {
+            "id": "1111111",
+            "type": "user"
+          },
+          "links": {
+            "related": "https://www.patreon.com/api/user/1111111"
+          }
+        }
+      },
+      "type": "reward"
+    }
+  ]
 }
 ```
+
 This endpoint returns a JSON representation of the user's campaign, including its rewards and goals, and the pledges to it. If there are more than twenty pledges to the campaign, the first twenty will be returned, along with a link to the next page of pledges.
 
 ### HTTP Request
