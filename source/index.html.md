@@ -17,6 +17,7 @@ includes:
 - api-libraries
 - clients
 - oauth
+- resources
 - api
 - webhooks
 - external

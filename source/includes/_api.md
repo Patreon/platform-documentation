@@ -1,98 +1,9 @@
 #API
->To use a given access_token, send it in an HTTP Header as follows:
+
+> To use a given `access_token`, send it in the Authorization HTTP Header as follows:
 
 ```
-Authorization: Bearer <user's access_token>
-```
-
->Our JSON responses will follow the JSON-API standard, with the following structure for our three main resources (users, campaigns, and pledges):
-
-> User Object Structure:
-
-```json
-{
-  "type": "user"
-  "id": <string>
-  "attributes": {
-    "first_name": <string>
-    "last_name": <string>
-    "full_name": <string>
-    "vanity": <string>
-    "email": <string>
-    "about": <string>
-    "facebook_id": <string>
-    "image_url": <string>
-    "thumb_url": <string>
-    "youtube": <string>
-    "twitter": <string>
-    "facebook": <string>
-    "created": <date>
-    "url": <string>
-  }
-  "relationships": {
-    "campaign": ...<campaign>...
-  }
-}
-```
-> Campaign Object Structure:
-
-```json
-{
-  "type": "campaign"
-  "id": <string>
-  "attributes": {
-    "summary": <string>
-    "creation_name": <string>
-    "pay_per_name": <string>
-    "one_liner": <string>
-    "main_video_embed": <string>
-    "main_video_url": <string>
-    "image_small_url": <string>
-    "image_url": <string>
-    "thanks_video_url": <string>
-    "thanks_embed": <string>
-    "thanks_msg": <string>
-    "is_monthly": <bool>
-    "is_nsfw": <bool>
-    "created_at": <date>
-    "published_at": <date>
-    "pledge_url": <string>
-    "pledge_sum": <int>
-    "patron_count": <int>
-    "creation_count": <int>
-    "outstanding_payment_amount_cents": <int>
-  }
-  "relationships": {
-    "creator": ...<user>...
-    "rewards": [ ...<reward>, <reward>, ... ]
-    "goals": [ ...<goal>, <goal>, ... ]
-    "pledges": [ ...<pledge>, <pledge>, ... ]
-  }
-}
-
-```
-
-> Pledge Object Structure
-
-```json
-{
-  "type": "pledge"
-  "id": <string>
-  "attributes": {
-    "amount_cents": <int>
-    "created_at": <date>
-    "pledge_cap_cents": <int>
-    "patron_pays_fees": <bool>
-  }
-  "relationships": {
-    "patron": ...<user>...
-    "reward": ...<reward>...
-    "creator": ...<user>...
-    "address": ...<address>...
-    "card": ...<card>...
-    "pledge_vat_location": ...<vat-location>...
-  }
-}
+Authorization: Bearer <access_token>
 ```
 
 Presently, there are three APIs available:
@@ -101,14 +12,11 @@ Presently, there are three APIs available:
 - [Paging through a list of pledges to you](#paging-through-a-list-of-pledges-to-you)
 - [Fetching a patron's profile info](#fetching-a-patron-39-s-profile-info)
 
-These APIs are accessed using an OAuth client access_token obtained from the [Clients & API Keys](https://www.patreon.com/platform/documentation/clients) page. Please go there first if you do not yet have one.
+These APIs are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
 
-When performing an API request, the information you are allowed to see is determined by which access_token you are using. Please be sure to select your access_token appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own access_token instead of the one created when they granted your client access, you will instead just get your own profile information.__
-
-
+When performing an API request, the information you are allowed to see is determined by which `access_token` you are using. Please be sure to select your `access_token` appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own access_token instead of the one created when they granted your client access, you will instead just get your own profile information.__
 
 ## Fetch your own profile and campaign info
-
 
 ```ruby
 require 'patreon'
@@ -120,16 +28,8 @@ class OAuthController < ApplicationController
     access_token = tokens['access_token']
 
     api_client = Patreon::API.new(access_token)
-    user_response = api_client.fetch_user()
-    @user = user_response['data']
-    included = user_response['included']
-    if included
-      @pledge = included.find {|obj| obj['type'] == 'pledge' && obj['relationships']['creator']['data']['id'] == creator_id}
-      @campaign = included.find {|obj| obj['type'] == 'campaign' && obj['relationships']['creator']['data']['id'] == creator_id}
-    else
-      @pledge = nil
-      @campaign = nil
-    end
+    campaigns_response = api_client.fetch_campaign_and_patrons()
+    @campaigns = campaigns_response['data']
   end
 end
 ```
@@ -157,31 +57,7 @@ $access_token = $tokens['access_token'];
 $refresh_token = $tokens['refresh_token'];
 
 $api_client = new Patreon\API($access_token);
-$patron_response = $api_client->fetch_user();
-$patron = $patron_response['data'];
-$included = $patron_response['included'];
-$pledge = null;
-if ($included != null) {
-  foreach ($included as $obj) {
-    if ($obj["type"] == "pledge" && $obj["relationships"]["creator"]["data"]["id"] == $creator_id) {
-      $pledge = $obj;
-      break;
-    }
-  }
-}
-
-/*
- $patron will have the authenticated user's user data, and
- $pledge will have their patronage data.
- Typically, you will save the relevant pieces of this data to your database,
- linked with their user account on your site,
- so your site can customize its experience based on their Patreon data.
- You will also want to save their $access_token and $refresh_token to your database,
- linked to their user account on your site,
- so that you can refresh their Patreon data on your own schedule.
- */
-
-?>
+$campaigns = $api_client-fetch_campaign_and_patrons();
 ```
 
 ```python
@@ -214,8 +90,9 @@ def oauth_redirect():
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl --request GET \
+  --url https://www.patreon.com/api/oauth2/api/current_user/campaigns \
+  --header 'Authorization: Bearer <access_token>'
 ```
 
 ```javascript
@@ -289,37 +166,172 @@ if (included != null) {
    // use the user, pledge, and campaign objects as you desire
 ```
 
-> The above command returns JSON structured like this:
+> Response:
 
 ```json
-
 {
-  "type": "user"
-  "id": <string>
-  "attributes": {
-    "first_name": <string>
-    "last_name": <string>
-    "full_name": <string>
-    "vanity": <string>
-    "email": <string>
-    "about": <string>
-    "facebook_id": <string>
-    "image_url": <string>
-    "thumb_url": <string>
-    "youtube": <string>
-    "twitter": <string>
-    "facebook": <string>
-    "is_suspended": <bool>
-    "is_deleted": <bool>
-    "is_nuked": <bool>
-    "created": <date>
-    "url": <string>
-  }
-  "relationships": {
-    "campaign": ...<campaign>...
-  }
+  "data": [{
+    "attributes": {
+      "created_at": "2017-10-20T21:39:01+00:00",
+      "creation_count": 0,
+      "creation_name": "Documentation",
+      "discord_server_id": null,
+      "display_patron_goals": false,
+      "earnings_visibility": "public",
+      "image_small_url": null,
+      "image_url": null,
+      "is_charged_immediately": false,
+      "is_monthly": false,
+      "is_nsfw": false,
+      "is_plural": false,
+      "main_video_embed": null,
+      "main_video_url": null,
+      "one_liner": null,
+      "outstanding_payment_amount_cents": 0,
+      "patron_count": 0,
+      "pay_per_name": null,
+      "pledge_sum": 0,
+      "pledge_url": "/bePatron?c=0000000",
+      "published_at": "2017-10-20T21:49:31+00:00",
+      "summary": null,
+      "thanks_embed": null,
+      "thanks_msg": null,
+      "thanks_video_url": null
+    },
+    "id": "0000000",
+    "relationships": {
+      "creator": {
+        "data": {
+          "id": "1111111",
+          "type": "user"
+        },
+        "links": {
+          "related": "https://www.patreon.com/api/user/1111111"
+        }
+      },
+      "goals": {
+        "data": []
+      },
+      "rewards": {
+        "data": [{
+            "id": "-1",
+            "type": "reward"
+          },
+          {
+            "id": "0",
+            "type": "reward"
+          }
+        ]
+      }
+    },
+    "type": "campaign"
+  }],
+  "included": [{
+      "attributes": {
+        "about": null,
+        "created": "2017-10-20T21:36:23+00:00",
+        "discord_id": null,
+        "email": "corgi@patreon.com",
+        "facebook": null,
+        "facebook_id": null,
+        "first_name": "Corgi",
+        "full_name": "Corgi The Dev",
+        "gender": 0,
+        "has_password": true,
+        "image_url": "https://c8.patreon.com/2/400/1111111",
+        "is_deleted": false,
+        "is_email_verified": false,
+        "is_nuked": false,
+        "is_suspended": false,
+        "last_name": "The Dev",
+        "social_connections": {
+          "deviantart": null,
+          "discord": null,
+          "facebook": null,
+          "spotify": null,
+          "twitch": null,
+          "twitter": null,
+          "youtube": null
+        },
+        "thumb_url": "https://c8.patreon.com/2/100/1111111",
+        "twitch": null,
+        "twitter": null,
+        "url": "https://www.patreon.com/drkthedev",
+        "vanity": "drkthedev",
+        "youtube": null
+      },
+      "id": "1111111",
+      "relationships": {
+        "campaign": {
+          "data": {
+            "id": "0000000",
+            "type": "campaign"
+          },
+          "links": {
+            "related": "https://www.patreon.com/api/campaigns/0000000"
+          }
+        }
+      },
+      "type": "user"
+    },
+    {
+      "attributes": {
+        "amount": 0,
+        "amount_cents": 0,
+        "created_at": null,
+        "description": "Everyone",
+        "id": "-1",
+        "remaining": 0,
+        "requires_shipping": false,
+        "type": "reward",
+        "url": null,
+        "user_limit": null
+      },
+      "id": "-1",
+      "relationships": {
+        "creator": {
+          "data": {
+            "id": "1111111",
+            "type": "user"
+          },
+          "links": {
+            "related": "https://www.patreon.com/api/user/1111111"
+          }
+        }
+      },
+      "type": "reward"
+    },
+    {
+      "attributes": {
+        "amount": 1,
+        "amount_cents": 1,
+        "created_at": null,
+        "description": "Patrons Only",
+        "id": "0",
+        "remaining": 0,
+        "requires_shipping": false,
+        "type": "reward",
+        "url": null,
+        "user_limit": null
+      },
+      "id": "0",
+      "relationships": {
+        "creator": {
+          "data": {
+            "id": "1111111",
+            "type": "user"
+          },
+          "links": {
+            "related": "https://www.patreon.com/api/user/1111111"
+          }
+        }
+      },
+      "type": "reward"
+    }
+  ]
 }
 ```
+
 This endpoint returns a JSON representation of the user's campaign, including its rewards and goals, and the pledges to it. If there are more than twenty pledges to the campaign, the first twenty will be returned, along with a link to the next page of pledges.
 
 ### HTTP Request
@@ -337,7 +349,9 @@ Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
 
 ## Paging through a list of pledges to you
+
 <!--  TODO: Make this code actual Ruby-->
+
 ```ruby
 api_client = patreon.API(patron_access_token)
 patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10)
@@ -355,8 +369,9 @@ second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=n
 // TODO: Needs a code example of pagination
 ```
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl --request GET \
+  --url https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges \
+  --header 'Authorization: Bearer <access_token>
 ```
 
 ```javascript
@@ -404,41 +419,27 @@ echo "Done!";
 ?>
 
 ```
-> The above command returns JSON structured like this:
+> Response:
 
 ```json
-
 {
-  "type": "user"
-  "id": <string>
-  "attributes": {
-    "first_name": <string>
-    "last_name": <string>
-    "full_name": <string>
-    "vanity": <string>
-    "email": <string>
-    "about": <string>
-    "facebook_id": <string>
-    "image_url": <string>
-    "thumb_url": <string>
-    "youtube": <string>
-    "twitter": <string>
-    "facebook": <string>
-    "is_suspended": <bool>
-    "is_deleted": <bool>
-    "is_nuked": <bool>
-    "created": <date>
-    "url": <string>
-  }
-  "relationships": {
-    "campaign": ...<campaign>...
+  "data": [],
+  "links": {
+    "first": "https://www.patreon.com/api/oauth2/api/campaigns/1111111/pledges?page%5Bcount%5D=10&sort=created"
+  },
+  "meta": {
+    "count": 0
   }
 }
 ```
 
-This API returns a JSON list of pledges to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
+This endpoint returns a JSON list of pledges to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
 
-The API response will also contain a links section which may be used to fetch the next page of pledges, or go back to the first page.
+The API response will also contain a `links` field which may be used to fetch the next page of pledges, or go back to the first page.
+
+<aside class="notice">
+When you made a creator page to gain API access, behind the scenes a <a href="#campaign">campaign resource</a> was created. You can access this resource as described in <a href="#fetch-your-own-profile-and-campaign-info">Fetching your own profile and campaign info</a> after authenticating via OAuth with your creator account to gain your `campaign_id`.
+</aside>
 
 ### HTTP Request
 
@@ -504,10 +505,10 @@ def oauth_redirect():
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl --request GET \
+  --url https://www.patreon.com/api/oauth2/api/current_user \
+  --header 'authorization: Bearer <access_token>'
 ```
-<!-- TODO: confirm that this is correct  -->
 
 ```php
 <?php
@@ -621,39 +622,60 @@ if (included != null) {
 
    // use the user, pledge, and campaign objects as you desire
 ```
-> The above command returns JSON structured like this:
+
+> Response:
 
 ```json
-
 {
-  "type": "user"
-  "id": <string>
-  "attributes": {
-    "first_name": <string>
-    "last_name": <string>
-    "full_name": <string>
-    "vanity": <string>
-    "email": <string>
-    "about": <string>
-    "facebook_id": <string>
-    "image_url": <string>
-    "thumb_url": <string>
-    "youtube": <string>
-    "twitter": <string>
-    "facebook": <string>
-    "is_suspended": <bool>
-    "is_deleted": <bool>
-    "is_nuked": <bool>
-    "created": <date>
-    "url": <string>
-  }
-  "relationships": {
-      ...
+  "data": {
+    "attributes": {
+      "about": null,
+      "created": "2017-10-20T21:36:23+00:00",
+      "discord_id": null,
+      "email": "corgi@example.com",
+      "facebook": null,
+      "facebook_id": null,
+      "first_name": "Corgi",
+      "full_name": "Corgi The Dev",
+      "gender": 0,
+      "has_password": true,
+      "image_url": "https://c8.patreon.com/2/400/0000000",
+      "is_deleted": false,
+      "is_email_verified": false,
+      "is_nuked": false,
+      "is_suspended": false,
+      "last_name": "The Dev",
+      "social_connections": {
+        "deviantart": null,
+        "discord": null,
+        "facebook": null,
+        "spotify": null,
+        "twitch": null,
+        "twitter": null,
+        "youtube": null
+      },
+      "thumb_url": "https://c8.patreon.com/2/100/0000000",
+      "twitch": null,
+      "twitter": null,
+      "url": "https://www.patreon.com/corgithedev",
+      "vanity": "corgithedev",
+      "youtube": null
+    },
+    "id": "0000000",
+    "relationships": {
+      "pledges": {
+        "data": []
+      }
+    },
+    "type": "user"
+  },
+  "links": {
+    "self": "https://www.patreon.com/api/user/0000000"
   }
 }
 ```
 
-This API returns a JSON representation of the user who granted your OAuth client the provided access_token. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the user's account on your site.
+This endpoint returns a JSON representation of the patron who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
 
 ### HTTP Request
 
@@ -671,10 +693,13 @@ Remember — you must pass the correct <code>access_token</code> from the user.
 
 
 ## Advanced Usage
+
 ### Requesting specific data
 
-```
-POST https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?fields[pledge]=total_historical_amount_cents,is_paused&include=reward
+```shell
+curl --request GET \
+  --url 'https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?=&include=reward&fields%5Bpledge%5D=total_historical_amount_cents%2Cis_paused' \
+  --header 'Authorization: Bearer <access_token>
 ```
 
 To retrieve specific attributes or relationships other than the defaults, you can pass `fields` and `include` parameters respectively, each being comma-separated lists of attributes or resources.
