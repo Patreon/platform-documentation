@@ -60,14 +60,20 @@
 Want webhook functionality without the code? Check out our <a href="#zapier">Zapier</a> plugin.
 </aside>
 
-Webhooks allow you to receive real-time updates from our servers. While there will eventually be many events about which you can be notified, we presently only support webhooks that trigger when you get a new patron, or an existing patron edits or deletes their pledge.
+Webhooks allow you to receive real-time updates from our servers.
+While there will eventually be many events about which you can be notified,
+we presently only support webhooks that trigger when you get a new patron, or an existing patron edits or deletes their pledge.
 
-By [creating a webhook](https://www.patreon.com/platform/documentation/webhooks), you can specify a URL for us to send an HTTP POST to when one of these events occurs. This POST request will contain the relevant data from the user action in JSON format. It will also have headers
+By [creating a webhook](https://www.patreon.com/platform/documentation/webhooks),
+you can specify a URL for us to send an HTTP POST to when one of these events occurs.
+This POST request will contain the relevant data from the user action in JSON format. It will also have headers
 
 <code>X-Patreon-Event: [trigger]<br>
 X-Patreon-Signature: [message signature]</code>
 
-where the message signature is the message body HMAC signed (with MD5) using your webhook's `secret` viewable on the [webhooks page](https://www.patreon.com/platform/documentation/webhooks).
+where the message signature is the HEX digest of the message body HMAC signed (with MD5)
+using your webhook's `secret` viewable on the [webhooks page](https://www.patreon.com/platform/documentation/webhooks).
+You can use this to verify us as the sender of the message.
 
 ### Triggers
 
