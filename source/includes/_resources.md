@@ -1,6 +1,6 @@
 # Resources
 
-Our JSON responses will follow the [JSON-API standard](http://jsonapi.org), with the following structure for our three main resources (users, campaigns, and pledges):
+Our JSON responses follow the [JSON-API standard](http://jsonapi.org), with the following structure for our three main resources (users, campaigns, and pledges):
 
 ## User
 

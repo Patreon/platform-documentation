@@ -26,10 +26,13 @@ function handleOAuthRedirectRequest(request, response) {
     })
 })
 ```
-Patreon is building an OAuth provider service — the technology that lets you log in to Medium with Twitter, log in to Disqus with Google+, and even log in to Patreon with Facebook. Below, you’ll find a technical process document that explains how to begin integrating with us. This document assumes technical competency in HTTP protocols and URL structure, and administrative access & developer control of the server that you wish to integrate with Patreon.
+Patreon has an OAuth provider service — the technology that lets you log in to Medium with Twitter, log in to Disqus with Google+, and even login to Patreon with Facebook.
+Below, you’ll find a technical process document that explains how to begin integrating with us.
+This document assumes technical competency in HTTP protocols and URL structure,
+and administrative access & developer control of the server that you wish to integrate with Patreon.
 
 ## Step 1 - Registering Your Client
-To set up, you must first register your client application with us. Please visit the [Clients & API Keys](https://www.patreon.com/platform/documentation/clients) page to register one.
+To set up OAuth, you will need to register your client application on the [Clients & API Keys](https://www.patreon.com/platform/documentation/clients) page.
 ## Step 2 - Making the Log In Button
 > Request [2]
 
@@ -52,9 +55,9 @@ Once your client is registered, you should create a “Log in with Patreon” an
 ### Query Parameters
 Parameter | Description
 --------- | -----------
-response_type **_Required_** | Defaults to `code`
+response_type **_Required_** | OAuth grant type. Set this to `code`.
 client_id **_Required_** |   Your client id
-redirect_uri **_Required_** | one of your `redirect_uri`s that you provided in step 1
+redirect_uri **_Required_** | One of your `redirect_uri`s that you provided in step 1
 scope | This optional parameter will default to `users pledges-to-me my-campaign`, which fetches user profile information, pledges to your creator, and your creator info. It will be displayed to the user in human-friendly terms when signing in with Patreon. If your client requires the ability to ask for pledges or campaign data of **other users** (not just your own campaign), please email [platform@patreon.com](mailto:platform@patreon.com), and we'll do our best to get back to you shortly.
 state | This optional parameter will be transparently appended as a query parameter when redirecting to your `redirect_uri`. This should be used as CSRF, and can be used as session/user identification as well. E.g. `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=123&redirect_uri=https://www.mysite.com/custom-uri&state=their_session_id`. On this page, users will be asked if they wish to grant your client access to their account info. When they grant or deny access, __they will be redirected to the provided redirect_uri (so long as it is pre-registered with us)__.
 
