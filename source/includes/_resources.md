@@ -1,6 +1,13 @@
 # Resources
 
-Our JSON responses follow the [JSON-API standard](http://jsonapi.org), with the following structure for our three main resources (users, campaigns, and pledges):
+Our JSON responses follow the [JSON:API standard](http://jsonapi.org), with the following structure for our three main resources (users, campaigns, and pledges):
+
+<aside class="success">
+When requesting some of these resources in our <a href="#">API</a> they will have sensible defaults for what attributes are included. To request optional attributes, e.g. <code>like_count</code> and <code>comment_count</code>,
+specify the <code>fields</code>
+parameter in the URL like <code>https://www.patreon.com/api/oauth2/api/current_user?fields[user]=like_count,comment_count</code>.
+For more information, see the <a href="http://jsonapi.org/format/#fetching-sparse-fieldsets">JSON:API docs</a>.
+</aside>
 
 ## User
 
@@ -32,12 +39,6 @@ Our JSON responses follow the [JSON-API standard](http://jsonapi.org), with the 
   }
 }
 ```
-
-<aside class="success">To request optional attributes, e.g. <code>like_count</code> and <code>comment_count</code>,
-specify the <code>fields</code>
-parameter in the URL like <code>https://www.patreon.com/api/oauth2/api/current_user?fields[user]=like_count,comment_count</code>.
-For more information, see the <a href="http://jsonapi.org/format/#fetching-sparse-fieldsets">JSONAPI docs</a>.
-</aside>
 
 ## Campaign
 
