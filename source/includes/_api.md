@@ -8,16 +8,15 @@ Authorization: Bearer <access_token>
 
 Presently, there are three endpoints available:
 
+- [Fetching a patron's profile info](#fetching-a-patron-39-s-profile-info)
 - [Fetching your own profile and campaign info](#fetch-your-own-profile-and-campaign-info)
 - [Paging through a list of pledges to you](#paging-through-a-list-of-pledges-to-you)
-- [Fetching a patron's profile info](#fetching-a-patron-39-s-profile-info)
 
 These endpoints are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
 
 When performing an API request, the information you are allowed to see is determined by which `access_token` you are using. Please be sure to select your `access_token` appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own access_token instead of the one created when they granted your client access, you will instead just get your own profile information.__
 
-## Fetch your own profile and campaign info
-
+## Fetching a patron's profile info
 ```ruby
 require 'patreon'
 
@@ -28,36 +27,11 @@ class OAuthController < ApplicationController
     access_token = tokens['access_token']
 
     api_client = Patreon::API.new(access_token)
-    campaigns_response = api_client.fetch_campaign_and_patrons()
-    @campaigns = campaigns_response['data']
+    user_response = api_client.fetch_user()
+    @user = user_response.data
+    @pledge = @user.pledges ? @user.pledges[0] : nil
   end
 end
-```
-
-```php
-<?php
-
-require_once('vendor/patreon/patreon/src/patreon.php');
-
-use Patreon\API;
-use Patreon\OAuth;
-
-$client_id = null;      // Replace with your data
-$client_secret = null;  // Replace with your data
-$creator_id = null;     // Replace with your data
-
-$oauth_client = new Patreon\OAuth($client_id, $client_secret);
-
-// Replace http://localhost:5000/oauth/redirect with your own uri
-$redirect_uri = "http://localhost:5000/oauth/redirect";
-// Make sure that you're using this snippet as Step 2 of the OAuth flow: https://www.patreon.com/platform/documentation/oauth
-// so that you have the 'code' query parameter.
-$tokens = $oauth_client->get_tokens($_GET['code'], $redirect_uri);
-$access_token = $tokens['access_token'];
-$refresh_token = $tokens['refresh_token'];
-
-$api_client = new Patreon\API($access_token);
-$campaigns = $api_client-fetch_campaign_and_patrons();
 ```
 
 ```python
@@ -77,50 +51,71 @@ def oauth_redirect():
 
     api_client = patreon.API(access_token)
     user_response = api_client.fetch_user()
-    user = user_response['data']
-    included = user_response.get('included')
-    if included:
-        pledge = next((obj for obj in included
-            if obj['type'] == 'pledge' and obj['relationships']['creator']['data']['id'] == creator_id), None)
-        campaign = next((obj for obj in included
-            if obj['type'] == 'campaign' and obj['relationships']['creator']['data']['id'] == creator_id), None)
-    else:
-        pledge = None
-        campaign = None
+    user = user_response.data()
+    pledges = user.relationship('pledges')
+    pledge = pledges[0] if pledges and len(pledges) > 0 else None
 ```
 
 ```shell
 curl --request GET \
-  --url https://www.patreon.com/api/oauth2/api/current_user/campaigns \
-  --header 'Authorization: Bearer <access_token>'
+  --url https://www.patreon.com/api/oauth2/api/current_user \
+  --header 'authorization: Bearer <access_token>'
+```
+
+```php
+<?php
+
+use Patreon\API;
+use Patreon\OAuth;
+
+$client_id = null;      // Replace with your data
+$client_secret = null;  // Replace with your data
+$redirect_uri = null;   // Replace with your data
+
+$oauth_client = new Patreon\OAuth($client_id, $client_secret);
+$tokens = $oauth_client->get_tokens($_GET['code'], $redirect_uri);
+$access_token = $tokens['access_token'];
+$refresh_token = $tokens['refresh_token'];
+
+$api_client = new Patreon\API($access_token);
+$patron_response = $api_client->fetch_user();
+$patron = $patron_response->get('data');
+$pledge = null;
+if ($user->has('relationships.pledges')) {
+    $pledges = $user->relationship('pledges')->resolve($user_response);
+    $pledge = $pledges[0];
+}
+
+?>
 ```
 
 ```javascript
 import url from 'url'
 import patreonAPI, { oauth as patreonOAuth } from 'patreon'
 
-const CLIENT_ID = 'pppp'
-const CLIENT_SECRET = 'pppp'
-const patreonOAuthClient = patreonOAuth(CLIENT_ID, CLIENT_SECRET)
+const CLIENT_ID = null     // Replace with your data
+const CLIENT_SECRET = null // Replace with your data
+const redirectURL = null   // Replace with your data
 
-const redirectURL = 'http://mypatreonapp.com/oauth/redirect'
+const patreonOAuthClient = patreonOAuth(CLIENT_ID, CLIENT_SECRET)
 
 function handleOAuthRedirectRequest(request, response) {
     const oauthGrantCode = url.parse(request.url, true).query.code
 
-    patreonOAuthClient.getTokens(oauthGrantCode, redirectURL, (tokensError, { access_token }) => {
-        const patreonAPIClient = patreonAPI(access_token)
-
-        patreonAPIClient(`/current_user`, (currentUserError, apiResponse) => {
-            if (currentUserError) {
-                console.error(currentUserError)
-                response.end(currentUserError)
-            }
-
-            response.end(apiResponse);
+    patreonOAuthClient
+        .getTokens(oauthGrantCode, redirectURL)
+        .then(tokensResponse => {
+            const patreonAPIClient = patreonAPI(tokensResponse.access_token)
+            return patreonAPIClient('/current_user')
         })
-    })
-})
+        .then(({ store }) => {
+            response.end(store.findAll('user').map(user => user.serialize()))
+        })
+        .catch(err => {
+            console.error('error!', err)
+            response.end(err)
+        })
+}
 ```
 
 ```java
@@ -145,7 +140,6 @@ JSONObject userResponse = apiClient.fetchUser();
 JSONObject user = userResponse.getJSONObject("data");
 JSONArray included = userResponse.getJSONArray("included");
 JSONObject pledge = null;
-JSONObject campaign = null;
 if (included != null) {
    for (int i = 0; i < included.length(); i++) {
        JSONObject object = included.getJSONObject(i);
@@ -154,16 +148,176 @@ if (included != null) {
            break;
        }
    }
+}
+
+   // use the user, pledge, and campaign objects as you desire
+```
+
+> Response:
+
+```json
+{
+  "data": {
+    "attributes": {
+      "about": null,
+      "created": "2017-10-20T21:36:23+00:00",
+      "discord_id": null,
+      "email": "corgi@example.com",
+      "facebook": null,
+      "facebook_id": null,
+      "first_name": "Corgi",
+      "full_name": "Corgi The Dev",
+      "gender": 0,
+      "has_password": true,
+      "image_url": "https://c8.patreon.com/2/400/0000000",
+      "is_deleted": false,
+      "is_email_verified": false,
+      "is_nuked": false,
+      "is_suspended": false,
+      "last_name": "The Dev",
+      "social_connections": {
+        "deviantart": null,
+        "discord": null,
+        "facebook": null,
+        "spotify": null,
+        "twitch": null,
+        "twitter": null,
+        "youtube": null
+      },
+      "thumb_url": "https://c8.patreon.com/2/100/0000000",
+      "twitch": null,
+      "twitter": null,
+      "url": "https://www.patreon.com/corgithedev",
+      "vanity": "corgithedev",
+      "youtube": null
+    },
+    "id": "0000000",
+    "relationships": {
+      "pledges": {
+        "data": []
+      }
+    },
+    "type": "user"
+  },
+  "links": {
+    "self": "https://www.patreon.com/api/user/0000000"
+  }
+}
+```
+
+This endpoint returns a JSON representation of the patron who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
+
+### HTTP Request
+
+`GET https://www.patreon.com/api/oauth2/api/current_user`
+
+### Query Parameters
+
+Parameter | Default | Description
+--------- | ------- | -----------
+includes | `rewards,creator,goals,pledge` | You can pass this `rewards`, `creator`, `goals`, or `pledge`
+
+<aside class="success">
+Remember — you must pass the correct <code>access_token</code> from the user.
+</aside>
+
+## Fetch your own profile and campaign info
+
+```ruby
+require 'patreon'
+
+access_token = nil  # Replace with your data
+
+api_client = Patreon::API.new(access_token)
+campaign_response = api_client.fetch_campaign()
+campaign = campaign_response.data[0]
+puts "campaign is", campaign
+user = campaign.creator
+puts "user is", user
+```
+
+```php
+<?php
+
+use Patreon\API;
+use Patreon\OAuth;
+
+$access_token = null;   // Replace with your data
+
+$api_client = new Patreon\API($access_token);
+$campaign_response = $api_client->fetch_campaign();
+$campaign = $campaign_response->get('data')->get('0');
+echo "campaign is\n";
+print_r($campaign->asArray(true));
+$user = $campaign->relationship('creator')->resolve($campaign_response);
+echo "user is\n";
+print_r($user->asArray(true));
+```
+
+```python
+import patreon
+
+accessToken = None   # Replace with your creator access token
+
+api_client = patreon.API(access_token)
+campaign_response = api_client.fetch_campaign()
+campaign = campaign_response.data()[0]
+print('campaign is', campaign)
+user = campaign.relationship('creator')
+print('user is', user)
+```
+
+```shell
+curl --request GET \
+  --url https://www.patreon.com/api/oauth2/api/current_user/campaigns \
+  --header 'Authorization: Bearer <access_token>'
+```
+
+```javascript
+import patreonAPI from 'patreon'
+
+const accessToken = null   // Replace with your creator access token
+
+const patreonAPIClient = patreonAPI(accessToken)
+patreonAPIClient('/current_user/campaigns')
+    .then(({ store }) => {
+        const user = store.findAll('user').map(user => user.serialize())
+        console.log('user is', user)
+        const campaign = store.findAll('campaign').map(campaign => campaign.serialize())
+        console.log('campaign is', campaign)
+    })
+    .catch(err => {
+        console.error('error!', err)
+        response.end(err)
+    })
+```
+
+```java
+import com.patreon.OAuth;
+import com.patreon.API;
+import org.json.JSONObject;
+import org.json.JSONArray;
+...
+
+String accessToken = null; // Replace with your data
+
+API apiClient = new API(accessToken);
+JSONObject campaignResponse = apiClient.fetchCampaign();
+JSONObject campaign = campaignResponse.getJSONObject("data");
+JSONArray included = userResponse.getJSONArray("included");
+JSONObject user = null;
+// This will get simplified in future versions of the library.
+// For now, we must denormalize the JSON:API response by hand.
+String userID = campaign .getJSONObject("relationships").getJSONObject("creator").getJSONObject("data").getString("id");
+if (included != null) {
    for (int i = 0; i < included.length(); i++) {
        JSONObject object = included.getJSONObject(i);
-       if (object.getString("type").equals("campaign") && object.getJSONObject("relationships").getJSONObject("creator").getJSONObject("data").getString("id").equals(creatorID)) {
-           campaign = object;
+       if (object.getString("type").equals("user") && object.getJSONObject("relationships").getJSONObject("creator").getJSONObject("data").getString("id").equals(userID)) {
+           user = object;
            break;
        }
    }
 }
-
-   // use the user, pledge, and campaign objects as you desire
 ```
 
 > Response:
@@ -350,24 +504,63 @@ Remember — you must pass the correct <code>access_token</code> from the user.
 
 ## Paging through a list of pledges to you
 
-<!--  TODO: Make this code actual Ruby-->
-
 ```ruby
-api_client = patreon.API(patron_access_token)
-patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10)
-next_cursor = api_client.extract_cursor(patrons_page)
-second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=next_cursor)
+require 'patreon'
+require 'uri'
+require 'cgi'
+
+access_token = nil # your Creator Access Token
+api_client = Patreon::API.new(access_token)
+
+# Get the campaign ID
+campaign_response = api_client.fetch_campaign()
+campaign_id = campaign_response.data[0].id
+
+# Fetch all pledges
+all_pledges = []
+cursor = nil
+while true do
+    page_response = api_client.fetch_page_of_pledges(campaign_id, 25, cursor)
+    all_pledges += page_response.data
+    next_page_link = page_response.links[page_response.data]['next']
+    if next_page_link
+        parsed_query = CGI::parse(next_page_link)
+        cursor = parsed_query['page[cursor]'][0]
+    else
+        break
+    end
+end
+
+# Mapping to all patrons. Feel free to customize as needed.
+# As with all standard Ruby objects, (pledge.methods - Object.methods) will list the available attributes and relationships
+puts all_pledges.map{ |pledge| { full_name: pledge.patron.full_name, amount_cents: pledge.amount_cents } }
 ```
 
 ```python
-api_client = patreon.API(patron_access_token)
-patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10)
-next_cursor = api_client.extract_cursor(patrons_page)
-second_patrons_page = api_client.fetch_page_of_pledges(campaign_id, 10, cursor=next_cursor)
+import patreon
+
+access_token = nil # your Creator Access Token
+api_client = patreon.API(access_token)
+
+# Get the campaign ID
+campaign_response = api_client.fetch_campaign()
+campaign_id = campaign_response.data()[0].id()
+
+# Fetch all pledges
+all_pledges = []
+cursor = None
+while True:
+    pledges_response = api_client.fetch_page_of_pledges(campaign_id, 25, cursor=cursor)
+    pledges += pledges_response.data()
+    cursor = api_client.extract_cursor(pledges_response)
+    if not cursor:
+        break
 ```
+
 ```java
 // TODO: Needs a code example of pagination
 ```
+
 ```shell
 curl --request GET \
   --url https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges \
@@ -375,50 +568,47 @@ curl --request GET \
 ```
 
 ```javascript
-// TODO: Add paginated example
+// TODO: get pagination example
 ```
 
 ```php
 <?php
-require_once('vendor/patreon/patreon/src/patreon.php');
+
 use Patreon\API;
 use Patreon\OAuth;
-$access_token = **Your access token**;
+
+$access_token = null; // Your Creator Access Token
+
 $api_client = new Patreon\API($access_token);
+
+// Get your campaign data
+$campaign_response = $api_client->fetch_campaign();
+$campaign_id = $campaign_response->get('data.0.id');
+
 // get page after page of pledge data
-$campaign_id = $campaign_response['data'][0]['id'];
+$all_pledges = [];
 $cursor = null;
 while (true) {
     $pledges_response = $api_client->fetch_page_of_pledges($campaign_id, 25, $cursor);
-    // get all the users in an easy-to-lookup way
-    $user_data = [];
-    foreach ($pledges_response['included'] as $included_data) {
-        if ($included_data['type'] == 'user') {
-            $user_data[$included_data['id']] = $included_data;
-        }
-    }
     // loop over the pledges to get e.g. their amount and user name
-    foreach ($pledges_response['data'] as $pledge_data) {
-        $pledge_amount = $pledge_data['attributes']['amount_cents'];
-        $patron_id = $pledge_data['relationships']['patron']['data']['id'];
-        $patron_full_name = $user_data[$patron_id]['attributes']['full_name'];
-        echo $patron_full_name . " is pledging " . $pledge_amount . " cents.\n";
+    foreach ($pledges_response->get('data')->getKeys() as $pledge_data_key) {
+        $pledge_data = $pledges_response->get('data')->get($pledge_data_key);
+        array_push($all_pledges, $pledge_data);
     }
     // get the link to the next page of pledges
-    $next_link = $pledges_response['links']['next'];
-    if (!$next_link) {
+    if (!$pledges_response->has('links.next')) {
         // if there's no next page, we're done!
         break;
     }
+    $next_link = $pledges_response->get('links.next');
     // otherwise, parse out the cursor param
     $next_query_params = explode("?", $next_link)[1];
     parse_str($next_query_params, $parsed_next_query_params);
     $cursor = $parsed_next_query_params['page']['cursor'];
 }
-echo "Done!";
 ?>
-
 ```
+
 > Response:
 
 ```json
@@ -453,243 +643,6 @@ Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
 
 You may only fetch your own list of pledges. If you attempt to fetch another creator's pledge list, the API call will return an HTTP 403. If you would like to create an application which can manage many creator's campaigns, please contact us at [platform@patreon.com](mailto:platform@patreon.com).
-
-## Fetching a patron's profile info
-```ruby
-require 'patreon'
-
-class OAuthController < ApplicationController
-  def redirect
-    oauth_client = Patreon::OAuth.new(client_id, client_secret)
-    tokens = oauth_client.get_tokens(params[:code], redirect_uri)
-    access_token = tokens['access_token']
-
-    api_client = Patreon::API.new(access_token)
-    user_response = api_client.fetch_user()
-    @user = user_response['data']
-    included = user_response['included']
-    if included
-      @pledge = included.find {|obj| obj['type'] == 'pledge' && obj['relationships']['creator']['data']['id'] == creator_id}
-
-    else
-      @pledge = nil
-    end
-  end
-end
-```
-
-```python
-import patreon
-from flask import request
-...
-
-client_id = None      # Replace with your data
-client_secret = None  # Replace with your data
-creator_id = None     # Replace with your data
-
-@app.route('/oauth/redirect')
-def oauth_redirect():
-    oauth_client = patreon.OAuth(client_id, client_secret)
-    tokens = oauth_client.get_tokens(request.args.get('code'), '/oauth/redirect')
-    access_token = tokens['access_token']
-
-    api_client = patreon.API(access_token)
-    user_response = api_client.fetch_user()
-    user = user_response['data']
-    included = user_response.get('included')
-    if included:
-        pledge = next((obj for obj in included
-            if obj['type'] == 'pledge' and obj['relationships']['creator']['data']['id'] == creator_id), None)
-    else:
-        pledge = None
-```
-
-```shell
-curl --request GET \
-  --url https://www.patreon.com/api/oauth2/api/current_user \
-  --header 'authorization: Bearer <access_token>'
-```
-
-```php
-<?php
-
-require_once('vendor/patreon/patreon/src/patreon.php');
-
-use Patreon\API;
-use Patreon\OAuth;
-
-$client_id = null;      // Replace with your data
-$client_secret = null;  // Replace with your data
-$creator_id = null;     // Replace with your data
-
-$oauth_client = new Patreon\OAuth($client_id, $client_secret);
-
-// Replace http://localhost:5000/oauth/redirect with your own uri
-$redirect_uri = "http://localhost:5000/oauth/redirect";
-// Make sure that you're using this snippet as Step 2 of the OAuth flow: https://www.patreon.com/platform/documentation/oauth
-// so that you have the 'code' query parameter.
-$tokens = $oauth_client->get_tokens($_GET['code'], $redirect_uri);
-$access_token = $tokens['access_token'];
-$refresh_token = $tokens['refresh_token'];
-
-$api_client = new Patreon\API($access_token);
-$patron_response = $api_client->fetch_user();
-$patron = $patron_response['data'];
-$included = $patron_response['included'];
-$pledge = null;
-if ($included != null) {
-  foreach ($included as $obj) {
-    if ($obj["type"] == "pledge" && $obj["relationships"]["creator"]["data"]["id"] == $creator_id) {
-      $pledge = $obj;
-      break;
-    }
-  }
-}
-
-/*
- $patron will have the authenticated user's user data, and
- $pledge will have their patronage data.
- Typically, you will save the relevant pieces of this data to your database,
- linked with their user account on your site,
- so your site can customize its experience based on their Patreon data.
- You will also want to save their $access_token and $refresh_token to your database,
- linked to their user account on your site,
- so that you can refresh their Patreon data on your own schedule.
- */
-
-?>
-```
-
-```javascript
-import url from 'url'
-import patreonAPI, { oauth as patreonOAuth } from 'patreon'
-
-const CLIENT_ID = 'pppp'
-const CLIENT_SECRET = 'pppp'
-const patreonOAuthClient = patreonOAuth(CLIENT_ID, CLIENT_SECRET)
-
-const redirectURL = 'http://mypatreonapp.com/oauth/redirect'
-
-function handleOAuthRedirectRequest(request, response) {
-    const oauthGrantCode = url.parse(request.url, true).query.code
-
-    patreonOAuthClient.getTokens(oauthGrantCode, redirectURL, (tokensError, { access_token }) => {
-        const patreonAPIClient = patreonAPI(access_token)
-
-        patreonAPIClient(`/current_user`, (currentUserError, apiResponse) => {
-            if (currentUserError) {
-                console.error(currentUserError)
-                response.end(currentUserError)
-            }
-
-            response.end(apiResponse);
-        })
-    })
-})
-```
-
-```java
-import com.patreon.OAuth;
-import com.patreon.API;
-import org.json.JSONObject;
-import org.json.JSONArray;
-...
-
-String clientID = null;        // Replace with your data
-String clientSecret = null;    // Replace with your data
-String creatorID = null;       // Replace with your data
-String redirectURI = null;     // Replace with your data
-String code = null;            // get from inbound HTTP request
-
-OAuth oauthClient = new OAuth(clientID, clientSecret);
-JSONObject tokens = oauthClient.getTokens(code, redirectURI);
-String accessToken = tokens.getString("access_token");
-
-API apiClient = new API(accessToken);
-JSONObject userResponse = apiClient.fetchUser();
-JSONObject user = userResponse.getJSONObject("data");
-JSONArray included = userResponse.getJSONArray("included");
-JSONObject pledge = null;
-if (included != null) {
-   for (int i = 0; i < included.length(); i++) {
-       JSONObject object = included.getJSONObject(i);
-       if (object.getString("type").equals("pledge") && object.getJSONObject("relationships").getJSONObject("creator").getJSONObject("data").getString("id").equals(creatorID)) {
-           pledge = object;
-           break;
-       }
-   }
-}
-
-   // use the user, pledge, and campaign objects as you desire
-```
-
-> Response:
-
-```json
-{
-  "data": {
-    "attributes": {
-      "about": null,
-      "created": "2017-10-20T21:36:23+00:00",
-      "discord_id": null,
-      "email": "corgi@example.com",
-      "facebook": null,
-      "facebook_id": null,
-      "first_name": "Corgi",
-      "full_name": "Corgi The Dev",
-      "gender": 0,
-      "has_password": true,
-      "image_url": "https://c8.patreon.com/2/400/0000000",
-      "is_deleted": false,
-      "is_email_verified": false,
-      "is_nuked": false,
-      "is_suspended": false,
-      "last_name": "The Dev",
-      "social_connections": {
-        "deviantart": null,
-        "discord": null,
-        "facebook": null,
-        "spotify": null,
-        "twitch": null,
-        "twitter": null,
-        "youtube": null
-      },
-      "thumb_url": "https://c8.patreon.com/2/100/0000000",
-      "twitch": null,
-      "twitter": null,
-      "url": "https://www.patreon.com/corgithedev",
-      "vanity": "corgithedev",
-      "youtube": null
-    },
-    "id": "0000000",
-    "relationships": {
-      "pledges": {
-        "data": []
-      }
-    },
-    "type": "user"
-  },
-  "links": {
-    "self": "https://www.patreon.com/api/user/0000000"
-  }
-}
-```
-
-This endpoint returns a JSON representation of the patron who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
-
-### HTTP Request
-
-`GET https://www.patreon.com/api/oauth2/api/current_user`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-includes | `rewards,creator,goals,pledge` | You can pass this `rewards`, `creator`, `goals`, or `pledge`
-
-<aside class="success">
-Remember — you must pass the correct <code>access_token</code> from the user.
-</aside>
 
 
 ## Advanced Usage
