@@ -709,19 +709,21 @@ For more information on requesting specific data, the <a href="http://jsonapi.or
 ### Pagination and sorting
 
 ```shell
-https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?page[count]=5&sort=-declined_since&page[cursor]=2012-01-19
+https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?page[count]=5&sort=-created&page[cursor]=2012-01-19
 ```
 
-Our API endpoints support pagination and sorting.
+Our API endpoints support pagination and sorting on some attributes.
 
 Parameter | Description
 --------- | -----------
 page[count] | Maximum number of results returned
-sort | Comma-separated attributes to sort by, in order of precedence. Each attribute can be prepended with `-` to indicate descending order.
+sort | Comma-separated attributes to sort by, in order of precedence. Each attribute can be prepended with `-` to indicate descending order. Currently, we support `created` and `modified` for pledges.
 page[cursor] | From the sorted results, start returning where the first attribute in `sort` equals this value.
 
-The example URL on the right is for 5 pledges with max `declined_since` before 2012-01-19, in descending order.
+The example URL on the right is for 5 pledges with max `created` before 2012-01-19, in reverse chronological order.
 
 <aside class="notice">
 For more information on sorting and pagination, the <a href="http://jsonapi.org/format/#fetching-sorting">JSONAPI documentation</a> may be useful.
 </aside>
+
+The `links` field of the response body contains URLs of first, prev, next, and last pages if they exist.

@@ -104,7 +104,7 @@ For more information, see the <a href="http://jsonapi.org/format/#fetching-spars
 }
 ```
 
-<aside><code>declined_since</code> indicates the date of the most recent payment if it failed,
+<aside class="notice"><code>declined_since</code> indicates the date of the most recent payment if it failed,
 or `null` if the most recent payment succeeded. A pledge with a non-null <code>declined_since</code> should
 be treated as <b>invalid</b>.
 </aside>
