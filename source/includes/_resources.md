@@ -23,12 +23,21 @@ Our JSON responses follow the [JSON-API standard](http://jsonapi.org), with the 
     "facebook": <string>
     "created": <date>
     "url": <string>
+    // optional properties
+    "like_count": <int>
+    "comment_count": <int>
   }
   "relationships": {
     "campaign": ...<campaign>...
   }
 }
 ```
+
+<aside class="success">To request optional attributes, e.g. <code>like_count</code> and <code>comment_count</code>,
+specify the <code>fields</code>
+parameter in the URL like <code>https://www.patreon.com/api/oauth2/api/current_user?fields[user]=like_count,comment_count</code>.
+For more information, see the <a href="http://jsonapi.org/format/#fetching-sparse-fieldsets">JSONAPI docs</a>.
+</aside>
 
 ## Campaign
 
@@ -77,16 +86,25 @@ Our JSON responses follow the [JSON-API standard](http://jsonapi.org), with the 
   "attributes": {
     "amount_cents": <int>
     "created_at": <date>
+    "declined_since": <date>
     "pledge_cap_cents": <int>
     "patron_pays_fees": <bool>
+    // optional properties
+    "total_historical_amount_cents": <int>
+    "is_paused": <bool>
+    "has_shipping_address": <bool>
+    "outstanding_payment_amount_cents": <int>
   }
   "relationships": {
     "patron": ...<user>...
     "reward": ...<reward>...
     "creator": ...<user>...
     "address": ...<address>...
-    "card": ...<card>...
-    "pledge_vat_location": ...<vat-location>...
   }
 }
 ```
+
+<aside><code>declined_since</code> indicates the date of the most recent payment if it failed,
+or `null` if the most recent payment succeeded. A pledge with a non-null <code>declined_since</code> should
+be treated as <b>invalid</b>.
+</aside>
