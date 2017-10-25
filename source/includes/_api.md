@@ -6,13 +6,13 @@
 Authorization: Bearer <access_token>
 ```
 
-Presently, there are three APIs available:
+Presently, there are three endpoints available:
 
 - [Fetching your own profile and campaign info](#fetch-your-own-profile-and-campaign-info)
 - [Paging through a list of pledges to you](#paging-through-a-list-of-pledges-to-you)
 - [Fetching a patron's profile info](#fetching-a-patron-39-s-profile-info)
 
-These APIs are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
+These endpoints are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
 
 When performing an API request, the information you are allowed to see is determined by which `access_token` you are using. Please be sure to select your `access_token` appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own access_token instead of the one created when they granted your client access, you will instead just get your own profile information.__
 
