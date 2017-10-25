@@ -1,22 +1,14 @@
 # API Libraries
-We've written some open source libraries to help you use our platform services.
+
+We've written some open source libraries to help you use our platform services. Our API follows the [JSON:API spec](http://jsonapi.org) which is pretty complex and these libraries make it a bit easier to work with.
+
 <aside class="notice">
-All of the libraries listed below require that you [register a client application](#clients-and-api-keys) and get API keys.
+All of the libraries listed below require that you <a href="#clients-and-api-keys">register a client application</a> and get API keys.
 </aside>
 
 
 ## Javascript
-```javascript
-import url from 'url'
-import patreonAPI, { oauth as patreonOAuth } from 'patreon'
 
-const CLIENT_ID = 'pppp'
-const CLIENT_SECRET = 'pppp'
-const patreonOAuthClient = patreonOAuth(CLIENT_ID, CLIENT_SECRET)
-
-const redirectURL = 'http://mypatreonapp.com/oauth/redirect'
-
-```
 Available on [npm](https://www.npmjs.com/package/patreon)
 
 ### Install
@@ -33,15 +25,18 @@ Available on [packagist](https://packagist.org/packages/patreon/patreon)
 View the source on [github](https://github.com/Patreon/patreon-php)
 
 ## Java
-Get the artifact from  [Maven](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.patreon%22%20AND%20a%3A%22patreon%22)
 
+```xml
+<dependency>
+    <groupId>com.patreon</groupId>
+    <artifactId>patreon</artifactId>
+    <version>0.1.1</version>
+</dependency>
 ```
-    <dependency>
-        <groupId>com.patreon</groupId>
-        <artifactId>patreon</artifactId>
-        <version>0.0.3</version>
-    </dependency>
-```
+
+Get the artifact from  
+
+[Maven](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.patreon%22%20AND%20a%3A%22patreon%22)
 
 View the source on [github](https://github.com/Patreon/patreon-java)
 

@@ -1,37 +1,22 @@
 # OAuth
-```javascript
-import url from 'url'
-import patreonAPI, { oauth as patreonOAuth } from 'patreon'
 
-const CLIENT_ID = 'pppp'
-const CLIENT_SECRET = 'pppp'
-const patreonOAuthClient = patreonOAuth(CLIENT_ID, CLIENT_SECRET)
+Patreon has an <a href="https://oauth.net/" target="_blank">OAuth</a> provider service — the technology that lets you log in to Medium with Twitter, log in to Disqus with Google+, and even login to Patreon with Facebook.
 
-const redirectURL = 'http://mypatreonapp.com/oauth/redirect'
+Below, you’ll find steps explaining how to begin integrating with us. It assumes understanding in HTTP protocol and OAuth, and that you have administrative access & developer control of the server that you wish to integrate with Patreon.
 
-function handleOAuthRedirectRequest(request, response) {
-    const oauthGrantCode = url.parse(request.url, true).query.code
+<aside class="notice">
+Here are some helpful resources regarding these technologies:
 
-    patreonOAuthClient.getTokens(oauthGrantCode, redirectURL, (tokensError, { access_token }) => {
-        const patreonAPIClient = patreonAPI(access_token)
+<a href="https://code.tutsplus.com/tutorials/http-the-protocol-every-web-developer-must-know-part-1--net-31177" target="_blank">HTTP the Protocol Every Web Developer Must Know</a> and
+<a href="https://www.digitalocean.com/community/tutorials/an-introduction-to-oauth-2" target="_blank">An Introduction to OAuth 2</a>
+</aside>
 
-        patreonAPIClient(`/current_user`, (currentUserError, apiResponse) => {
-            if (currentUserError) {
-                console.error(currentUserError)
-                response.end(currentUserError)
-            }
-
-            response.end(apiResponse);
-        })
-    })
-})
-```
-Patreon has an OAuth provider service — the technology that lets you log in to Medium with Twitter, log in to Disqus with Google+, and even login to Patreon with Facebook.
-Below, you’ll find a technical process document that explains how to begin integrating with us.
-This document assumes technical competency in HTTP protocols and URL structure,
-and administrative access & developer control of the server that you wish to integrate with Patreon.
+<aside class="notice">
+Looking to dive in to the <a href="#api">API</a>? You can use your <strong>Creator's Access Token</strong> you get when registering a Client in place of the token you'd get back from the OAuth flow to start exploring the different endpoints or building a single creator application or tool.
+</aside>
 
 ## Step 1 - Registering Your Client
+
 To set up OAuth, you will need to register your client application on the [Clients & API Keys](https://www.patreon.com/platform/documentation/clients) page.
 ## Step 2 - Making the Log In Button
 > Request [2]
@@ -59,7 +44,7 @@ response_type **_Required_** | OAuth grant type. Set this to `code`.
 client_id **_Required_** |   Your client id
 redirect_uri **_Required_** | One of your `redirect_uri`s that you provided in step 1
 scope | This optional parameter will default to `users pledges-to-me my-campaign`, which fetches user profile information, pledges to your creator, and your creator info. It will be displayed to the user in human-friendly terms when signing in with Patreon. If your client requires the ability to ask for pledges or campaign data of **other users** (not just your own campaign), please email [platform@patreon.com](mailto:platform@patreon.com), and we'll do our best to get back to you shortly.
-state | This optional parameter will be transparently appended as a query parameter when redirecting to your `redirect_uri`. This should be used as CSRF, and can be used as session/user identification as well. E.g. `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=123&redirect_uri=https://www.mysite.com/custom-uri&state=their_session_id`. On this page, users will be asked if they wish to grant your client access to their account info. When they grant or deny access, __they will be redirected to the provided redirect_uri (so long as it is pre-registered with us)__.
+state | This optional parameter will be transparently appended as a query parameter when redirecting to your `redirect_uri`. This should be used as [CSRF](https://medium.com/@charithra/introduction-to-csrf-a329badfca49), and can be used as session/user identification as well. E.g. `https://www.patreon.com/oauth2/authorize?response_type=code&client_id=123&redirect_uri=https://www.mysite.com/custom-uri&state=their_session_id`. On this page, users will be asked if they wish to grant your client access to their account info. When they grant or deny access, __they will be redirected to the provided redirect_uri (so long as it is pre-registered with us)__.
 
 ## Step 3 - Handling OAuth Redirect
 > Request [3]
@@ -71,7 +56,11 @@ GET https://www.mysite.com/custom-uri
 ```
 When the link in [Step 2](#step-2-making-the-log-in-button) redirects to the provided `redirect_uri`, e.g. https://www.mysite.com/custom-uri, it will bring extra HTTP query parameters as follows (assuming the user granted your client access):
 
-
+### Query Parameters
+Parameter | Description
+--------- | -----------
+code | Used to fetch access tokens for the session that just signed in with Patreon.
+state | Trasnparently appended from the state param you provided in your initial link in Step 2.
 
 ## Step 4 - Validating Receipt of the OAuth Token
 
@@ -85,9 +74,8 @@ POST www.patreon.com/api/oauth2/token
 	&client_secret=<your client secret>
 	&redirect_uri=<redirect_uri>
 ```
+
 Your server should handle GET requests in [Step 3](#step-3-handling-oauth-redirect) by performing the following request on the server (not as a redirect):
-
-
 
 > which will return a JSON response of:
 
@@ -102,7 +90,9 @@ Your server should handle GET requests in [Step 3](#step-3-handling-oauth-redire
 ```
 >to be stored on your server, one pair per user.
 
-<aside class="notice">Remember! - this step happens on your server.</aside>
+<aside class="notice">
+Remember! - this step happens on your server. Our <a href="#api-libraries">API Libraries</a> typically handle this step for you or if you want to see examples of this step in other programming languages.
+</aside>
 
 ## Step 5 - Using the OAuth Token
 You may use the received `access_token` to make [API](#api) calls. For example, a typical first usage of the new `access_token` would be to [fetch the user's profile info](#fetch-your-own-profile-and-campaign-info), and either merge that into their existing account on your site, or make a new account for them. You could then use their pledge level to show or hide certain parts of your site.
