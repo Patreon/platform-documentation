@@ -17,4 +17,4 @@ It's perfect for many of the use cases that would ordinarily require webhooks an
 Our Zapier plugin currently supports pledge activity (adds, updates and deletes). We plan to add more triggers in the future. If you would like to request a trigger, send the request to [platform@patreon.com](mailto:platform@patreon.com).
 
 ## Wordpress
-We have a wordpress plugin that allows creators to gate content on their wordpress page to patrons only. For more information [check it out](https://github.com/Patreon/patreon-wordpress).
+We have a wordpress plugin that allows creators to gate content on their wordpress page to patrons only. For more information [check it out](https://www.patreon.com/apps/wordpress).
