@@ -64,7 +64,7 @@ Want webhook functionality without the code? Check out our <a href="#zapier">Zap
 </aside>
 
 Webhooks allow you to receive real-time updates from our servers.
-While there will eventually be many events about which you can be notified,
+While eventually there will be many events about which you can be notified,
 we presently only support webhooks that trigger when you get a new patron, or an existing patron edits or deletes their pledge.
 
 By [creating a webhook](https://www.patreon.com/platform/documentation/webhooks),
