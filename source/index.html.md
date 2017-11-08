@@ -19,6 +19,7 @@ includes:
 - oauth
 - resources
 - api
+- usage
 - webhooks
 - external
 - errors

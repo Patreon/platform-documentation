@@ -6,13 +6,7 @@
 Authorization: Bearer <access_token>
 ```
 
-Presently, there are three endpoints available:
-
-- [Fetching a patron's profile info](#fetching-a-patron-39-s-profile-info)
-- [Fetching your own profile and campaign info](#fetch-your-own-profile-and-campaign-info)
-- [Paging through a list of pledges to you](#paging-through-a-list-of-pledges-to-you)
-
-These endpoints are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
+The three endpoints below are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
 
 When performing an API request, the information you are allowed is determined by which `access_token` you are using. Please be sure to select your `access_token` appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own Creator's Access Token instead of the one created when they granted your client access, you will instead just get your own profile information.__
 
@@ -205,7 +199,7 @@ if (included != null) {
 }
 ```
 
-This endpoint returns a JSON representation of the patron who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
+This endpoint returns a JSON representation of the [user](#user) who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
 
 ### HTTP Request
 
@@ -221,7 +215,7 @@ includes | `rewards,creator,goals,pledge` | You can pass this `rewards`, `creato
 Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
 
-## Fetch your own profile and campaign info
+## Fetch a creator profile and campaign info
 
 ```ruby
 require 'patreon'
@@ -486,7 +480,7 @@ if (included != null) {
 }
 ```
 
-This endpoint returns a JSON representation of the user's campaign, including its rewards and goals, and the pledges to it. If there are more than twenty pledges to the campaign, the first twenty will be returned, along with a link to the next page of pledges.
+This endpoint returns a JSON representation of the user's [campaign](#campaign), including its rewards and goals, and the pledges to it. If there are more than twenty pledges to the campaign, the first twenty will be returned, along with a link to the next page of pledges.
 
 ### HTTP Request
 
@@ -502,7 +496,7 @@ includes | `rewards,creator,goals,pledges` | You can pass this `rewards`, `creat
 Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
 
-## Paging through a list of pledges to you
+## Paging through a list of pledges
 
 ```ruby
 require 'patreon'
@@ -563,7 +557,7 @@ while True:
 
 ```shell
 curl --request GET \
-  --url https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges \
+  --url https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?include=patron.null \
   --header 'Authorization: Bearer <access_token>
 ```
 
@@ -613,17 +607,74 @@ while (true) {
 
 ```json
 {
-  "data": [],
-  "links": {
-    "first": "https://www.patreon.com/api/oauth2/api/campaigns/1111111/pledges?page%5Bcount%5D=10&sort=created"
-  },
-  "meta": {
-    "count": 0
-  }
+    "data": [
+        {
+            "attributes": {
+                "amount_cents": 100,
+                "created_at": "2016-07-25T20:59:52+00:00",
+                "declined_since": null,
+                "patron_pays_fees": false,
+                "pledge_cap_cents": null
+            },
+            "id": "2745627",
+            "relationships": {
+                "patron": {
+                    "data": {
+                        "id": "111111",
+                        "type": "user"
+                    },
+                    "links": {
+                        "related": "https://www.patreon.com/api/user/111111"
+                    }
+                }
+            },
+            "type": "pledge"
+        }
+    ],
+    "included": [
+        {
+            "attributes": {
+                "about": "sample about text",
+                "created": "2015-01-15T07:25:51+00:00",
+                "email": "foo@bar.com",
+                "facebook": null,
+                "first_name": "Foo",
+                "full_name": "Foo Bar",
+                "gender": 1,
+                "image_url": "",
+                "is_email_verified": true,
+                "last_name": "Bar",
+                "social_connections": {
+                    "deviantart": null,
+                    "discord": null,
+                    "facebook": null,
+                    "spotify": null,
+                    "twitch": null,
+                    "twitter": null,
+                    "youtube": null
+                },
+                "thumb_url": "",
+                "twitch": null,
+                "twitter": "foo",
+                "url": "https://www.patreon.com/foo",
+                "vanity": "foo",
+                "youtube": null
+            },
+            "id": "111111",
+            "type": "user"
+        }
+    ],
+    "links": {
+        "first": "https://www.patreon.com/api/oauth2/api/campaigns/70261/pledges?page%5Bcount%5D=10&sort=created",
+        "next": "https://www.patreon.com/api/oauth2/api/campaigns/70261/pledges?page%5Bcount%5D=10&sort=created&page%5Bcursor%5D=2017-08-21T20%3A16%3A49.258893%2B00%3A00"
+    },
+    "meta": {
+        "count": 18
+    }
 }
 ```
 
-This endpoint returns a JSON list of pledges to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
+This endpoint returns a JSON list of [pledges](#pledge) to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
 
 The API response will also contain a `links` field which may be used to fetch the next page of pledges, or go back to the first page.
 
@@ -633,7 +684,7 @@ When you made a creator page to gain API access, behind the scenes a <a href="#c
 
 ### HTTP Request
 
-`GET https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges`
+`GET https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?include=patron.null`
 
 
 ### Paging
@@ -643,40 +694,3 @@ Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
 
 You may only fetch your own list of pledges. If you attempt to fetch another creator's pledge list, the API call will return an HTTP 403. If you would like to create an application which can manage many creator's campaigns, please contact us at [platform@patreon.com](mailto:platform@patreon.com).
-
-
-## Advanced Usage
-
-### Requesting specific data
-
-```shell
-https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?include=reward&fields[pledge]=total_historical_amount_cents,is_paused
-```
-
-To retrieve specific attributes or relationships other than the defaults, you can pass `fields` and `include` parameters respectively, each being comma-separated lists of attributes or resources.
-
-<aside class="notice">
-For more information on requesting specific data, the <a href="http://jsonapi.org/format/#fetching-includes">JSONAPI documentation</a> may be useful.
-</aside>
-
-### Pagination and sorting
-
-```shell
-https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?page[count]=5&sort=-created&page[cursor]=2012-01-19
-```
-
-Our API endpoints support pagination and sorting on some attributes.
-
-Parameter | Description
---------- | -----------
-page[count] | Maximum number of results returned
-sort | Comma-separated attributes to sort by, in order of precedence. Each attribute can be prepended with `-` to indicate descending order. Currently, we support `created` and `modified` for pledges.
-page[cursor] | From the sorted results, start returning where the first attribute in `sort` equals this value.
-
-The example URL on the right is for 5 pledges with max `created` before 2012-01-19, in reverse chronological order.
-
-<aside class="notice">
-For more information on sorting and pagination, the <a href="http://jsonapi.org/format/#fetching-sorting">JSONAPI documentation</a> may be useful.
-</aside>
-
-The `links` field of the response body contains URLs of first, prev, next, and last pages if they exist.
