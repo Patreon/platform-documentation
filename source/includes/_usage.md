@@ -6,7 +6,10 @@
 https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?include=reward&fields[pledge]=total_historical_amount_cents,is_paused
 ```
 
+Want to retrieve the patrons for your pledges, or the goals for a given campaign?
+
 To retrieve specific attributes or relationships other than the defaults, you can pass `fields` and `include` parameters respectively, each being comma-separated lists of attributes or resources.
+You can see which attributes or relationships are requestable on a given resource in the [resources](#resources) section.
 
 <aside class="notice">
 For more information on requesting specific data, the <a href="http://jsonapi.org/format/#fetching-includes">JSONAPI documentation</a> may be useful.
