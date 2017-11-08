@@ -6,13 +6,7 @@
 Authorization: Bearer <access_token>
 ```
 
-Presently, there are three endpoints available:
-
-- [Fetching a patron's profile info](#fetching-a-patron-39-s-profile-info)
-- [Fetching your own profile and campaign info](#fetch-your-own-profile-and-campaign-info)
-- [Paging through a list of pledges to you](#paging-through-a-list-of-pledges-to-you)
-
-These endpoints are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
+The three endpoints below are accessed using an OAuth client `access_token` obtained from the [OAuth](#oauth) section. Please go there first if you do not yet have one.
 
 When performing an API request, the information you are allowed is determined by which `access_token` you are using. Please be sure to select your `access_token` appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own Creator's Access Token instead of the one created when they granted your client access, you will instead just get your own profile information.__
 
@@ -221,7 +215,7 @@ includes | `rewards,creator,goals,pledge` | You can pass this `rewards`, `creato
 Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
 
-## Fetch your own profile and campaign info
+## Fetch a creator profile and campaign info
 
 ```ruby
 require 'patreon'
@@ -502,7 +496,7 @@ includes | `rewards,creator,goals,pledges` | You can pass this `rewards`, `creat
 Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
 
-## Paging through a list of pledges to you
+## Paging through a list of pledges
 
 ```ruby
 require 'patreon'
