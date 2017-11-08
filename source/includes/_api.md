@@ -557,7 +557,7 @@ while True:
 
 ```shell
 curl --request GET \
-  --url https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges \
+  --url https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?include=patron.null \
   --header 'Authorization: Bearer <access_token>
 ```
 
@@ -607,13 +607,70 @@ while (true) {
 
 ```json
 {
-  "data": [],
-  "links": {
-    "first": "https://www.patreon.com/api/oauth2/api/campaigns/1111111/pledges?page%5Bcount%5D=10&sort=created"
-  },
-  "meta": {
-    "count": 0
-  }
+    "data": [
+        {
+            "attributes": {
+                "amount_cents": 100,
+                "created_at": "2016-07-25T20:59:52+00:00",
+                "declined_since": null,
+                "patron_pays_fees": false,
+                "pledge_cap_cents": null
+            },
+            "id": "2745627",
+            "relationships": {
+                "patron": {
+                    "data": {
+                        "id": "111111",
+                        "type": "user"
+                    },
+                    "links": {
+                        "related": "https://www.patreon.com/api/user/111111"
+                    }
+                }
+            },
+            "type": "pledge"
+        }
+    ],
+    "included": [
+        {
+            "attributes": {
+                "about": "sample about text",
+                "created": "2015-01-15T07:25:51+00:00",
+                "email": "foo@bar.com",
+                "facebook": null,
+                "first_name": "Foo",
+                "full_name": "Foo Bar",
+                "gender": 1,
+                "image_url": "",
+                "is_email_verified": true,
+                "last_name": "Bar",
+                "social_connections": {
+                    "deviantart": null,
+                    "discord": null,
+                    "facebook": null,
+                    "spotify": null,
+                    "twitch": null,
+                    "twitter": null,
+                    "youtube": null
+                },
+                "thumb_url": "",
+                "twitch": null,
+                "twitter": "foo",
+                "url": "https://www.patreon.com/foo",
+                "vanity": "foo",
+                "youtube": null
+            },
+            "id": "111111",
+            "type": "user"
+        }
+    ],
+    "links": {
+        "first": "https://www.patreon.com/api/oauth2/api/campaigns/70261/pledges?page%5Bcount%5D=10&sort=created",
+        "next": "https://www.patreon.com/api/oauth2/api/campaigns/70261/pledges?page%5Bcount%5D=10&sort=created&page%5Bcursor%5D=2017-08-21T20%3A16%3A49.258893%2B00%3A00"
+    },
+    "meta": {
+        "count": 18
+    }
 }
 ```
 
@@ -627,7 +684,7 @@ When you made a creator page to gain API access, behind the scenes a <a href="#c
 
 ### HTTP Request
 
-`GET https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges`
+`GET https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?include=patron.null`
 
 
 ### Paging
