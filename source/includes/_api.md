@@ -199,7 +199,7 @@ if (included != null) {
 }
 ```
 
-This endpoint returns a JSON representation of the patron who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
+This endpoint returns a JSON representation of the [user](#user) who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
 
 ### HTTP Request
 
@@ -480,7 +480,7 @@ if (included != null) {
 }
 ```
 
-This endpoint returns a JSON representation of the user's campaign, including its rewards and goals, and the pledges to it. If there are more than twenty pledges to the campaign, the first twenty will be returned, along with a link to the next page of pledges.
+This endpoint returns a JSON representation of the user's [campaign](#campaign), including its rewards and goals, and the pledges to it. If there are more than twenty pledges to the campaign, the first twenty will be returned, along with a link to the next page of pledges.
 
 ### HTTP Request
 
@@ -617,7 +617,7 @@ while (true) {
 }
 ```
 
-This endpoint returns a JSON list of pledges to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
+This endpoint returns a JSON list of [pledges](#pledge) to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
 
 The API response will also contain a `links` field which may be used to fetch the next page of pledges, or go back to the first page.
 
