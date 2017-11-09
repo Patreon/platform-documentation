@@ -2,12 +2,22 @@
 
 Welcome to the Patreon Platform! Get familiar with the Patreon platform products and tools using the tutorials and references below.
 
-For a general overview, check our our [developer portal](https://www.patreon.com/portal).
+These docs are intended to mainly be a reference. For an overview of use cases, check our our [developer portal](https://www.patreon.com/portal).
 
-While the Platform and this documentation are primarily geared towards developers for now, we do plan to have some more plug-n-play solutions in the coming months. Please contact [platform@patreon.com](mailto:platform@patreon.com) with any tips about how we can help you.
+<aside class="success">
+We'd love to hear from you.
+<br/>
+<ul>
+    <li>
+    For fastest technical help, our engineering team and community leaders are active on our forum at <a href="https://www.patreondevelopers.com">PatreonDevelopers.com</a>.
+    </li>
+    <li>
+    For rare questions involving sensitive information, you can reach us at <a href="mailto:platform@patreon.com">platform@patreon.com</a>.
+    </li>
+    <li>
+    If you're with a larger organization seeking non-technical coordination you can reach our partnerships team at <a href="mailto:partners@patreon.com">partners@patreon.com</a>.
+    </li>
+</ul>
+</aside>
 
-<aside class="notice">The Patreon Platform is new, and still under heavy development. Please check back frequently for new functionality, bug fixes, and other API changes.</aside>
-
-## Feedback
-
-If you find any errors in this document, please submit an issue or a pull request [github repo](https://github.com/Patreon/platform-documentation).
+If you find any errors in this document, do not hesitate to submit an issue or a pull request [github repo](https://github.com/Patreon/platform-documentation).
