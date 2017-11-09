@@ -2,7 +2,7 @@
 
 Welcome to the Patreon Platform! Get familiar with the Patreon platform products and tools using the tutorials and references below.
 
-These docs are intended to mainly be a reference. For an overview of use cases, check our our [developer portal](https://www.patreon.com/portal).
+Want more than a reference? For a broader overview and use cases, check our our [developer portal](https://www.patreon.com/portal).
 
 <aside class="success">
 We'd love to hear from you.
