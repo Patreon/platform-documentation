@@ -67,7 +67,7 @@ Webhooks allow you to receive real-time updates from our servers.
 While there will eventually be many events about which you can be notified,
 we presently only support webhooks that trigger when you get a new patron, or an existing patron edits or deletes their pledge.
 
-By [creating a webhook](https://www.patreon.com/platform/documentation/webhooks),
+By [creating a webhook](https://www.patreon.com/portal/registration/register-webhooks),
 you can specify a URL for us to send an HTTP POST to when one of these events occur.
 This POST request will contain the relevant data from the user action in JSON format. It will also have headers
 
