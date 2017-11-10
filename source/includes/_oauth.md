@@ -17,7 +17,7 @@ Looking to dive in to the <a href="#api">API</a>? You can use your <strong>Creat
 
 ## Step 1 - Registering Your Client
 
-To set up OAuth, you will need to register your client application on the [Clients & API Keys](https://www.patreon.com/platform/documentation/clients) page.
+To set up OAuth, you will need to register your client application on the [Clients & API Keys](https://www.patreon.com/portal/registration/register-clients) page.
 ## Step 2 - Making the Log In Button
 > Request [2]
 
@@ -111,16 +111,16 @@ If requests [4] and [5] were performed synchronously, then you can return a HTTP
 require_once('vendor/patreon/patreon/src/patreon.php');
 use Patreon\API;
 use Patreon\OAuth;
-// Get your current "Creator's Access Token" from https://www.patreon.com/platform/documentation/clients
+// Get your current "Creator's Access Token" from https://www.patreon.com/portal/registration/register-clients
 $access_token = null;
-// Get your "Creator's Refesh Token" from https://www.patreon.com/platform/documentation/clients
+// Get your "Creator's Refesh Token" from https://www.patreon.com/portal/registration/register-clients
 $refresh_token = null;
 $api_client = new Patreon\API($access_token);
 
 // If the token doesn't work, get a newer one
 if ($campaign_response['errors']) {
     // Make an OAuth client
-    // Get your Client ID and Secret from https://www.patreon.com/platform/documentation/clients
+    // Get your Client ID and Secret from https://www.patreon.com/portal/registration/register-clients
     $client_id = null;
     $client_secret = null;
     $oauth_client = new Patreon\OAuth($client_id, $client_secret);

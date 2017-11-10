@@ -2,7 +2,7 @@
 
 In order to authenticate with OAuth and interact with the Patreon API, you'll have to [register your Client(s)](https://www.patreon.com/platform/documentation/clients). This involves signing up on patreon.com and making a [creator account](https://www.patreon.com/create-on-patreon).
 
-[Register your client here](https://www.patreon.com/platform/documentation/clients)
+[Register your client here](https://www.patreon.com/portal/registration/register-clients)
 
 Once you've registered a Client you'll have access to a:
 
