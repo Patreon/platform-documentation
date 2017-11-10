@@ -90,3 +90,7 @@ A `trigger` is an event type. The syntax of a trigger is `[resource]:[action]` (
 
 Network conditions and temporary outages mean that sometimes events won't reach your server on the first try.
 Therefore, we store events so that the data isn't lost, and retry them at a tapering rate over the next month.
+
+### Programmatically Adding Webhooks
+
+In addition to manually adding webhooks, you can also create, read, update, delete and list webhooks with our API. This feature is currently in early beta. If you would like to know more please contact us at [platform@patreon.com](mailto:platform@patreon.com).

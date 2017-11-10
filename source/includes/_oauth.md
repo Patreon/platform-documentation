@@ -68,11 +68,17 @@ state | Trasnparently appended from the state param you provided in your initial
 
 ```
 POST www.patreon.com/api/oauth2/token
-	?code=<single use code, as passed in to GET route [2]>
-	&grant_type=authorization_code
-	&client_id=<your client id>
-	&client_secret=<your client secret>
-	&redirect_uri=<redirect_uri>
+
+code=<single use code, as passed in to GET route [2]>
+&grant_type=authorization_code
+&client_id=<your client id>
+&client_secret=<your client secret>
+&redirect_uri=<redirect_uri>
+```
+
+Make sure to also include this header:
+```
+Content-Type: application/x-www-form-urlencoded
 ```
 
 Your server should handle GET requests in [Step 3](#step-3-handling-oauth-redirect) by performing the following request on the server (not as a redirect):
