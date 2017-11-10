@@ -10,7 +10,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - java
 
 toc_footers:
-  - <a href='https://www.patreon.com/platform/documentation/clients'>Sign Up for an API Key</a>
+  - <a href='https://www.patreon.com/portal/registration/register-clients'>Sign Up for an API Key</a>
 
 includes:
 - intro
