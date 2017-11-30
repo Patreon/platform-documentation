@@ -75,9 +75,8 @@ $api_client = new Patreon\API($access_token);
 $patron_response = $api_client->fetch_user();
 $patron = $patron_response->get('data');
 $pledge = null;
-if ($user->has('relationships.pledges')) {
-    $pledges = $user->relationship('pledges')->resolve($user_response);
-    $pledge = $pledges[0];
+if ($patron->has('relationships.pledges')) {
+    $pledge = $patron->relationship('pledges')->get(0)->resolve($patron_response);
 }
 
 ?>
