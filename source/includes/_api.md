@@ -250,7 +250,7 @@ print_r($user->asArray(true));
 ```python
 import patreon
 
-accessToken = None   # Replace with your creator access token
+access_token = None   # Replace with your creator access token
 
 api_client = patreon.API(access_token)
 campaign_response = api_client.fetch_campaign()
