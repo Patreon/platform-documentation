@@ -26,7 +26,7 @@ Our API endpoints support pagination and sorting on some attributes.
 Parameter | Description
 --------- | -----------
 page[count] | Maximum number of results returned
-sort | Comma-separated attributes to sort by, in order of precedence. Each attribute can be prepended with `-` to indicate descending order. Currently, we support `created` and `modified` for pledges.
+sort | Comma-separated attributes to sort by, in order of precedence. Each attribute can be prepended with `-` to indicate descending order. Currently, we support `created` and `updated` for pledges.
 page[cursor] | From the sorted results, start returning where the first attribute in `sort` equals this value.
 
 The example URL on the right is for 5 pledges with max `created` before 2012-01-19, in reverse chronological order.
