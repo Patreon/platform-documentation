@@ -625,6 +625,15 @@ while (true) {
                     "links": {
                         "related": "https://www.patreon.com/api/user/111111"
                     }
+                },
+                "reward": {
+                    "data": {
+                        "id": "222222",
+                        "type": "reward"
+                    },
+                    "links": {
+                        "related": "https://www.patreon.com/api/rewards/222222"
+                    }
                 }
             },
             "type": "pledge"
@@ -661,6 +670,28 @@ while (true) {
             },
             "id": "111111",
             "type": "user"
+        },
+        {
+            "attributes": {
+                "amount_cents": 100,
+                "created_at": "2017-12-19T01:56:37.762679+00:00",
+                "description": "",
+                "discord_role_ids": None,
+                "edited_at": "2017-12-19T01:56:37.762679+00:00",
+                "image_url": None,
+                "patron_count": 1,
+                "post_count": None,
+                "published": True,
+                "published_at": "2017-12-19T01:56:37.762679+00:00",
+                "remaining": None,
+                "requires_shipping": False,
+                "title": "",
+                "unpublished_at": None,
+                "url": "/bePatron?c=12345&rid=222222",
+                "user_limit": None
+            },
+            "id": "222222",
+            "type": "reward"
         }
     ],
     "links": {
@@ -673,7 +704,8 @@ while (true) {
 }
 ```
 
-This endpoint returns a JSON list of [pledges](#pledge) to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the users who made each respective pledge.
+This endpoint returns a JSON list of [pledges](#pledge) to the provided `campaign_id`. They are sorted by the date the pledge was made, and provide relationship references to the **user** who made each respective pledge,
+as well as the **reward tier** pledged to.
 
 The API response will also contain a `links` field which may be used to fetch the next page of pledges, or go back to the first page.
 
