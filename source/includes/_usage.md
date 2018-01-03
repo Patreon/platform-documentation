@@ -15,6 +15,14 @@ You can see which attributes or relationships are requestable on a given resourc
 For more information on requesting specific data, the <a href="http://jsonapi.org/format/#fetching-includes">JSONAPI documentation</a> may be useful.
 </aside>
 
+### Restricting included resources
+
+By default, fetching or including a resource will follow that resource's relationship tree as well.
+
+- To fetch a resource without any relationships, set `include=null`.
+- To include a resource `foo` but not its relationships, set `include=foo.null`.
+- You can also extend this to multiple includes, e.g. `include=foo.null,bar.baz.null`.
+
 ## Pagination and sorting
 
 ```shell
