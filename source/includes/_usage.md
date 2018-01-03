@@ -23,6 +23,9 @@ By default, fetching or including a resource will follow that resource's relatio
 - To include a resource `foo` but not its relationships, set `include=foo.null`.
 - You can also extend this to multiple includes, e.g. `include=foo.null,bar.baz.null`.
 
+For a more explicit approach, you may instead set `json-api-use-default-includes=false`,
+which will limit relationships to only those specifically included.
+
 ## Pagination and sorting
 
 ```shell
