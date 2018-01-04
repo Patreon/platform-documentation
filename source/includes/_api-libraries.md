@@ -69,6 +69,3 @@ There are a number of third party libraries that the developer community has cre
 
 ##Go
 View the source on [github](https://github.com/mxpv/patreon-go)
-
-##.NET
-View the source on [github](https://github.com/shiftos-game/Patreon.NET)
