@@ -94,7 +94,6 @@ For more information, see the <a href="http://jsonapi.org/format/#fetching-spars
     "total_historical_amount_cents": <int>
     "is_paused": <bool>
     "has_shipping_address": <bool>
-    "outstanding_payment_amount_cents": <int>
   }
   "relationships": {
     "patron": ...<user>...
@@ -112,8 +111,4 @@ be treated as <b>invalid</b>.
 
 <aside class="notice"><code>total_historical_amount_cents</code> indicates the lifetime value
 this patron has paid to the campaign.
-</aside>
-
-<aside class="notice"><code>outstanding_payment_amount_cents</code> indicates the amount owed by a given patron.
-This amount will typically be charged at the end of the payment period (e.g. the beginning of next month)
 </aside>
