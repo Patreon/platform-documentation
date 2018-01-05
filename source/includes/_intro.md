@@ -1,6 +1,6 @@
 # Introduction
 
-Welcome to the Patreon Platform! Get familiar with the Patreon platform products and tools using the tutorials and references below.
+Welcome to the Patreon Platform! Get familiar with the Patreon API and tools using the tutorials and references below.
 
 Want more than a reference? For a broader overview and use cases, check our our [developer portal](https://www.patreon.com/portal).
 
@@ -23,4 +23,8 @@ We'd love to hear from you.
     </ul>
 </aside>
 
-If you find any errors in this document, do not hesitate to submit an issue or a pull request [github repo](https://github.com/Patreon/platform-documentation).
+## Make these docs better
+
+If you find any errors in our docs, we'd love to have you tell us! Submit an issue or a pull request [github repo](https://github.com/Patreon/platform-documentation) and we'll get them fixed up.
+
+<aside class="notice">The Patreon Platform is new, and still under heavy development. Please check back frequently for new functionality, bug fixes, and other API changes.</aside>
