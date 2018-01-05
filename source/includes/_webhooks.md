@@ -86,10 +86,24 @@ It's important you don't share or expose your webhook secret!
 
 A `trigger` is an event type. The syntax of a trigger is `[resource]:[action]` (e.g. `pledges:create`). You can add or remove triggers for a webhook to listen to on the webhooks page.
 
-### Retry Schedule
+### Robust Retries
 
-Network conditions and temporary outages mean that sometimes events won't reach your server on the first try.
-Therefore, we store events so that the data isn't lost, and retry them at a tapering rate over the next month.
+To ensure that you can rely exclusively on webhooks data, we've put measures in place to make sure your server does not miss a single event. 
+
+In case of failed delivery, perhaps due to network problems or server outages on your end, **we will store the events and make sure none were lost until your server is back up**. Over time, we’ll try to send them to you and re-try your server. The next successful call to your server will include all the past webhooks that accumulated.
+
+Our retry schedule is approximately as follows:
+
+- 1 hour after first failure
+- 3 hours later
+- 1 day later
+- 3 days later
+- 1 week later
+- 1 week later
+- 1 week later
+- Requires manual retry via our website
+
+You can also use our [webhooks page] (https://www.patreon.com/portal/registration/register-webhooks) to manually send yourself the queued messages.
 
 ### Programmatically Adding Webhooks
 
