@@ -104,6 +104,7 @@ Our retry schedule is approximately as follows:
 - Requires manual retry via our website
 
 You can also use our [webhooks page] (https://www.patreon.com/portal/registration/register-webhooks) to manually send yourself the queued messages.
+
 ### Programmatically Adding Webhooks
 
 In addition to manually adding webhooks, you can also create, read, update, delete and list webhooks with our API. This feature is currently in early beta. If you would like to know more please contact us at [platform@patreon.com](mailto:platform@patreon.com).
