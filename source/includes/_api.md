@@ -204,12 +204,6 @@ This endpoint returns a JSON representation of the [user](#user) who granted you
 
 `GET https://www.patreon.com/api/oauth2/api/current_user`
 
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-includes | `rewards,creator,goals,pledge` | You can pass this `rewards`, `creator`, `goals`, or `pledge`
-
 <aside class="success">
 Remember — you must pass the correct <code>access_token</code> from the user.
 </aside>
@@ -492,7 +486,7 @@ Parameter | Default | Description
 includes | `rewards,creator,goals,pledges` | You can pass this `rewards`, `creator`, `goals`, or `pledges`
 
 <aside class="success">
-Remember — you must pass the correct <code>access_token</code> from the user.
+Remember — you must pass a valid <code>access_token</code>.
 </aside>
 
 ## Paging through a list of pledges
@@ -721,7 +715,7 @@ When you made a creator page to gain API access, behind the scenes a <a href="#c
 ### Paging
 
 <aside class="success">
-Remember — you must pass the correct <code>access_token</code> from the user.
+Remember — you must pass a valid <code>access_token</code>.
 </aside>
 
 You may only fetch your own list of pledges. If you attempt to fetch another creator's pledge list, the API call will return an HTTP 403. If you would like to create an application which can manage many creator's campaigns, please contact us at [platform@patreon.com](mailto:platform@patreon.com).
