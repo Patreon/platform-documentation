@@ -4,6 +4,8 @@ Patreon has an <a href="https://oauth.net/" target="_blank">OAuth</a> provider s
 
 Below, you’ll find steps explaining how to begin integrating with us. It assumes understanding in HTTP protocol and OAuth, and that you have administrative access & developer control of the server that you wish to integrate with Patreon.
 
+All API calls must be made<strong>via HTTPS</strong>.
+
 <aside class="notice">
 Here are some helpful resources regarding these technologies:
 
@@ -34,7 +36,7 @@ GET www.patreon.com/oauth2/authorize
 
 Once your client is registered, you should create a “Log in with Patreon” and/or “Link your Patreon account” button on your site which directs users to the following URL:
 
-### HTTP Request
+### HTTPS Request
 `GET www.patreon.com/oauth2/authorize`
 
 ### Query Parameters
@@ -54,7 +56,7 @@ GET https://www.mysite.com/custom-uri
     ?code=<single use code>
     &state=<string>
 ```
-When the link in [Step 2](#step-2-making-the-log-in-button) redirects to the provided `redirect_uri`, e.g. https://www.mysite.com/custom-uri, it will bring extra HTTP query parameters as follows (assuming the user granted your client access):
+When the link in [Step 2](#step-2-making-the-log-in-button) redirects to the provided `redirect_uri`, e.g. https://www.mysite.com/custom-uri, it will bring extra HTTPS query parameters as follows (assuming the user granted your client access):
 
 ### Query Parameters
 Parameter | Description
@@ -110,7 +112,7 @@ To reiterate, requests [4] and [5] should be performed by your server (synchrono
 
 Once your calls are complete, you will have the user’s profile info and pledge level for your creator.
 
-If requests [4] and [5] were performed synchronously, then you can return a HTTP 302 for their GET in request [3], redirecting to a page with appropriate success dialogs & profile information. If the requests in requests [4] and [5] are being performed asynchronously, your response to request [3] should probably contain AJAX code that will notify the user once requests [4] and [5] are completed.
+If requests [4] and [5] were performed synchronously, then you can return a HTTPS 302 for their GET in request [3], redirecting to a page with appropriate success dialogs & profile information. If the requests in requests [4] and [5] are being performed asynchronously, your response to request [3] should probably contain AJAX code that will notify the user once requests [4] and [5] are completed.
 ## Step 7 - Keeping up to date
 ```php
 <?php

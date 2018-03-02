@@ -1,6 +1,6 @@
 #API
 
-> To use a given `access_token`, send it in the Authorization HTTP Header as follows:
+> To use a given `access_token`, send it in the Authorization HTTPS Header as follows:
 
 ```
 Authorization: Bearer <access_token>
@@ -200,7 +200,7 @@ if (included != null) {
 
 This endpoint returns a JSON representation of the [user](#user) who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
 
-### HTTP Request
+### HTTPS Request
 
 `GET https://www.patreon.com/api/oauth2/api/current_user`
 
@@ -475,7 +475,7 @@ if (included != null) {
 
 This endpoint returns a JSON representation of the user's [campaign](#campaign), including its rewards and goals, and the pledges to it. If there are more than twenty pledges to the campaign, the first twenty will be returned, along with a link to the next page of pledges.
 
-### HTTP Request
+### HTTPS Request
 
 `GET https://www.patreon.com/api/oauth2/api/current_user/campaigns`
 
@@ -707,7 +707,7 @@ The API response will also contain a `links` field which may be used to fetch th
 When you made a creator page to gain API access, behind the scenes a <a href="#campaign">campaign resource</a> was created. You can access this resource as described in <a href="#fetch-your-own-profile-and-campaign-info">Fetching your own profile and campaign info</a> after authenticating via OAuth with your creator account to gain your `campaign_id`.
 </aside>
 
-### HTTP Request
+### HTTPS Request
 
 `GET https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?include=patron.null`
 
@@ -718,4 +718,4 @@ When you made a creator page to gain API access, behind the scenes a <a href="#c
 Remember — you must pass a valid <code>access_token</code>.
 </aside>
 
-You may only fetch your own list of pledges. If you attempt to fetch another creator's pledge list, the API call will return an HTTP 403. If you would like to create an application which can manage many creator's campaigns, please contact us at [platform@patreon.com](mailto:platform@patreon.com).
+You may only fetch your own list of pledges. If you attempt to fetch another creator's pledge list, the API call will return an HTTPS 403. If you would like to create an application which can manage many creator's campaigns, please contact us at [platform@patreon.com](mailto:platform@patreon.com).
