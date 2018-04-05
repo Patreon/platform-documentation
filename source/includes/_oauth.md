@@ -4,7 +4,7 @@ Patreon has an <a href="https://oauth.net/" target="_blank">OAuth</a> provider s
 
 Below, you’ll find steps explaining how to begin integrating with us. It assumes understanding in HTTP protocol and OAuth, and that you have administrative access & developer control of the server that you wish to integrate with Patreon.
 
-All API calls must be made<strong>via HTTPS</strong>.
+All API calls must be made <strong>via HTTPS</strong>.
 
 <aside class="notice">
 Here are some helpful resources regarding these technologies:
