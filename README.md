@@ -3,7 +3,7 @@ This is the public resource that powers [docs.patreon.com](https://docs.patreon.
 
 ## Operations
 
-To deploy, ask a member of the platform team
+To deploy master, log into ansible bastion and run `ansible-playbook playbooks/docs.yml`
 
 ## Powered by slate
 
