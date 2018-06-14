@@ -1,4 +1,4 @@
-# Calling the API
+# More Data, Paging, and Sorting
 
 ## Requesting specific data
 
@@ -13,6 +13,17 @@ You can see which attributes or relationships are requestable on a given resourc
 
 <aside class="notice">
 For more information on requesting specific data, the <a href="http://jsonapi.org/format/#fetching-includes">JSONAPI documentation</a> may be useful.
+</aside>
+
+### Requesting optional attributes
+
+To fetch an optional property (for example `total_historical_amount_cents` and `is_paused` on `pledge`), use the `fields` query params.
+
+`GET https://www.patreon.com/api/oauth2/api/campaigns/<campaign_id>/pledges?fields[pledge]=total_historical_amount_cents,is_paused`
+
+<aside class="warning">
+A common gotcha is forgetting to URL-encode the square brackets.
+For instance, a raw cURL will only work if you replace <code>[</code> with <code>%5B</code> and <code>]</code> with <code>%5D</code>.
 </aside>
 
 ### Restricting included resources
@@ -41,6 +52,11 @@ sort | Comma-separated attributes to sort by, in order of precedence. Each attri
 page[cursor] | From the sorted results, start returning where the first attribute in `sort` equals this value.
 
 The example URL on the right is for 5 pledges with max `created` before 2012-01-19, in reverse chronological order.
+
+<aside class="warning">
+A common gotcha is forgetting to URL-encode the square brackets.
+For instance, a raw cURL will only work if you replace <code>[</code> with <code>%5B</code> and <code>]</code> with <code>%5D</code>.
+</aside>
 
 <aside class="notice">
 For more information on sorting and pagination, the <a href="http://jsonapi.org/format/#fetching-sorting">JSONAPI documentation</a> may be useful.
