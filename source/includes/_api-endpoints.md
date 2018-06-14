@@ -1,4 +1,4 @@
-#API
+#API Endpoints
 
 > To use a given `access_token`, send it in the Authorization HTTPS Header as follows:
 
