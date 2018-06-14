@@ -17,12 +17,14 @@ includes:
 - api-libraries
 - clients
 - oauth
+- errors
 - resources
 - api-endpoints
 - usage
 - webhooks
+- oauth_v2
+- endpoints_v2
 - external
-- errors
 - faqs
 
 search: true
