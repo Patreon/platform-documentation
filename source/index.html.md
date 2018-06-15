@@ -22,8 +22,8 @@ includes:
 - api-endpoints
 - usage
 - webhooks
-- oauth_v2
-- endpoints_v2
+- v2/oauth_v2
+- v2/endpoints_v2
 - external
 - faqs
 
