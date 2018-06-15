@@ -1,7 +1,7 @@
-# APIv2: OAuth (beta)
+# APIv2: OAuth
 
-<aside class="warning">
-Warning! APIv2 is still in beta, and while the scopes and endpoints are mostly stable, the docs are subject to change.
+<aside class="aside">
+APIv2 is still in beta, and while the scopes and endpoints are stable, the specific properties returned on the resources may change.
 </aside>
 
 Getting access to a Patreon user’s account in V2 works much the same as it did for V1, but we have reworked what scopes are available in the API to provide better access for developers and better security for our users. When using V2, make sure to request all required scopes when implementing OAuth. The creator’s access token will automatically have V2 scopes associated with it.
