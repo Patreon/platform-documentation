@@ -22,9 +22,9 @@ includes:
 - api-endpoints
 - usage
 - webhooks
-- v2/oauth_v2
-- v2/endpoints_v2
-- v2/webhooks_v2
+- oauth_v2
+- endpoints_v2
+- webhooks_v2
 - external
 - faqs
 
