@@ -27,7 +27,7 @@ To set up OAuth, you will need to register your client application on the [Clien
 GET www.patreon.com/oauth2/authorize
 	?response_type=code
 	&client_id=<your client id>
-	&redirect_uri=<one of your redirect_uris that you provided in step 0>
+	&redirect_uri=<one of your redirect_uris that you provided in step 1>
 	&scope=<optional list of requested scopes>
 	&state=<optional string>
 
