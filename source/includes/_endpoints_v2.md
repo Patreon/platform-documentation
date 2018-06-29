@@ -12,6 +12,27 @@ All API requests should use the hostname https://www.patreon.com
 
 This is the endpoint for accessing information about the current user with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will njot receive email address without that scope.
 
+### User Attributes
+
+Attribute  | Type | Description
+---------- | -----| -----------
+id | string | Unique identifier of this user
+type | string | Type of this object, value is always "user"
+first_name | string |
+last_name | string |
+vanity | string | The public "username" of the user. patreon.com/ goes to this user's creator page. Can be `null`, since non-creator users don't need vanities.
+email | string | The user's email address. Only accessible via the /me endpoint, with the `identity[email]` scope.
+about | string | The user's about text, which usually appears on the left of their profile page.
+image_url | string | The user's profile picture URL, scaled to width 400px.
+thumb_url | string | The user's profile picture URL, scaled to a square of size 100x100px.
+created | string | Datetime of this user's account creation.
+
+### User Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+memberships | List[Member] | *Depends on your scopes.* If you have the `identity.memberships` scope, you will receive a list of this user's memberships to all campaigns they're members of. If you lack the scope, you will receive a single-element list with the membership to your campaign only.
+
 ```json
 // Sample response with email scope
 {
@@ -93,6 +114,29 @@ Allowed includes: creator, rewards, goals.
 }
 ```
 
+### Campaign Attributes
+
+Attribute | Type | Description                                                                             
+--------- | ---- | -----------
+id | string | Unique identifier of this campaign                                                      
+type  | string | Type of this object, value is always "campaign"                                         
+summary  | string | The creator's summary of their campaign.                                                
+created_at  | string | Datetime that the creator first began the campaign creation process. See `published_at`.
+published_at | string | Datetime that the creator most recently published (made publicly visible) the campaign. 
+creation_name | string | The type of content the creator is creating, as in " is creating ". Can be `null`.      
+pay_per_name | string | The thing which patrons are paying per, as in " is making $1000 per ". Can be `null`.   
+one_liner | string | Pithy one-liner for this campaign, displayed on the creator page. Can be `null`.        
+main_video_embed | string | can be null
+main_video_url | string | can be null
+patron_count | integer | Number of patrons to this creator.
+pledge_url | string | URL path to the pledge checkout flow for this campaign.
+discord_server_id | string | can be null
+image_small_url  | string | URL for the small corner image.
+image_url  | string | Banner image URL for the campaign.
+is_charged_immediately | boolean | true if the campaign charges upfront, false otherwise.
+is_monthly  | boolean | true if the campaign charges per month, false if the campaign charges per-post.
+is_nsfw  | boolean |
+
 ## GET /api/oauth2/v2/members
 Gets the members for the token user’s campaign. Requires the `campaigns.members` scope.
 
@@ -158,6 +202,33 @@ We recommend using `currently_entitled_rewards` to see exactly what a member is 
     }
 }
 ```
+
+### Member Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+id | string | Unique identifier of this member
+type | string | Type of this object, value is always "member"
+patron_status | string | The current relationship of the member to the campaign. Always one of `['active_patron', 'declined_patron', 'former_patron', '']`.
+is_follower | boolean | true if the member is a follower and NOT a patron
+full_name | string | Full name of the member user
+last_charge_date | string | Datetime of last attempted charge. `null` if never charged.
+last_charge_status | string | The result of the last attempted charge. Possible values are `['Paid', 'Declined', 'Deleted', 'Pending', 'Refunded', 'Fraud', 'Other', null]`. The only successful status is `Paid`. `null` if never charged.
+lifetime_support_cents | integer | The total amount that the member has ever paid to the campaign. `0` if never paid.
+pledge_relationship_start | string | Datetime of beginning of most recent pledge chain from this member to the campaign. Pledge updates do not change this value.
+email | string | The member's email address. Requires the `campaigns.members[email]` scope. 
+discord_vanity | string | The Discord vanity (username) of the member's linked Discord account, if it exists. Otherwise, `null`.
+note | string | The creator's notes on the member. Can be `null`.
+currently_entitled_amount_cents | integer | The amount in cents that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
+
+### Member Relationships
+
+Relationship | Type | Description
+------------ | -----| -----------
+address | Address | The member's shipping address that they entered for the campaign. Requires the `campaign.members.address` scope
+campaign | Campaign | The campaign that the membership is for.
+currently_entitled_rewards | List[Reward] | The rewards that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
+user | User | The user who is pledging to the campaign.
 
 ## GET /api/oauth2/v2/members/{id}
 
