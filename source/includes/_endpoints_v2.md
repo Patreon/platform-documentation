@@ -8,6 +8,8 @@ APIv2 is still in beta, and while the scopes and endpoints are stable, the speci
 All API requests should use the hostname https://www.patreon.com
 </aside>
 
+With APIv2, all properties must be individually; there are no more default properties on resources.
+
 ## GET /api/oauth2/v2/me
 
 This is the endpoint for accessing information about the current user with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will njot receive email address without that scope.
@@ -34,7 +36,7 @@ Relationship | Type | Description
 memberships | List[Member] | *Depends on your scopes.* If you have the `identity.memberships` scope, you will receive a list of this user's memberships to all campaigns they're members of. If you lack the scope, you will receive a single-element list with the membership to your campaign only.
 
 ```json
-// Sample response with email scope
+// Sample response with email scope for https://www.patreon.com/api/oauth2/v2/me?fields[user]=about,created,email,first_name,full_name,image_url,last_name,social_connections,thumb_url,url,vanity
 {
     "data": {
         "attributes":
@@ -83,7 +85,7 @@ Gets the campaign data for the current user’s campaign. Requires the campaigns
 Allowed includes: creator, rewards, goals.
 
 ```json
-//Sample response
+//Sample response for https://www.patreon.com/api/oauth2/v2/campaigns?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,_is_nswf,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
 {
     "data":
         [{
@@ -145,7 +147,7 @@ Allowed includes: address (requires scope), currently_entitled_rewards, campaign
 We recommend using `currently_entitled_rewards` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
 
 ```json
-// Sample response with include=currently_entitled_rewards
+// Sample response for https://www.patreon.com/api/oauth2/v2/members?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&include=currently_entitled_rewards&fields[reward]=amount,amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url
 {
     "data": [
         {
@@ -179,17 +181,12 @@ We recommend using `currently_entitled_rewards` to see exactly what a member is 
             "description": "A reward",
             "discord_role_ids": ["1234567890"],
             "edited_at": "2018-04-01T02:55:36.963334+00:00",
-            "image_url": null,
             "patron_count": 32,
-            "post_count": 1,
             "published": true,
             "published_at": "2018-04-01T02:55:36.938342+00:00",
-            "remaining": null,
             "requires_shipping": false,
             "title": "Patron",
-            "unpublished_at": null,
             "url": "/bePatron?c=12345&rid=54321",
-            "user_limit": null
         },
         "id": "54321",
         "type": "reward",
@@ -239,7 +236,7 @@ Allowed includes: address (requires scope), currently_entitled_rewards, campaign
 We recommend using `currently_entitled_rewards` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
 
 ```json
-// Sample response:
+// Sample response for https://www.patreon.com/api/oauth2/v2/members/03ca69c3-ebea-4b9a-8fac-e4a837873254/?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,patron_status,currently_entitled_amount_cents,pledge_cap_amount_cents,pledge_relationship_start
 {
     "data": {
         "attributes": {
