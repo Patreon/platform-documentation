@@ -9,7 +9,7 @@ APIv2 is still in beta, and while the scopes and endpoints are stable, the speci
 Get the webhooks for the current user's campaign created by the API client. You will only be able to see webhooks created by your client. Requires the `w:campaigns.webhook` scope.
 
 ```json
-// Sample response:
+// Sample response https://www.patreon.com/api/oauth2/v2/webhooks/?fields[webhook]=last_attempted_at,num_consecutive_times_failed,paused,secret,triggers,uri
 {
     "data": [
         {
