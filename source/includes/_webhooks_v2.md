@@ -41,6 +41,9 @@ Trigger | Cause
 members:create | Triggered when a new member is created. Note that you may get more than one of these per patron if they delete and renew their membership. Member creation only occurs if there was no prior payment between patron and creator.
 members:update | Triggered when the membership information is changed. Includes updates on payment charging events
 members:delete | Triggered when a membership is deleted. Note that you may get more than one of these per patron if they delete and renew their membership. Deletion only occurs if no prior payment happened, otherwise pledge deletion is an update to member status.
+members:pledge:create | Triggered when a new pledge is created for a member. This includes when a member is created through pledging, and when a follower becomes a patron.
+members:pledge:update | Triggered when a member updates their pledge.
+members:pledge:delete | Triggered when a member deletes their pledge.
 
 <aside class="notice">
 Note: When the webhooks API was made available in a limited beta to API v1 customers, we allowed triggers on the pledge model. In API v2, pledge has been deprecated and member is the resource of record. Any existing webhooks on pledge will continue to work until API v1 is deprecated.
@@ -146,9 +149,8 @@ When a webhook fires, the data will look something like this. Note that there wi
 
 Update a webhook with the given id, if the webhook was created by your client. Requires the `w:campaigns.webhook scope.`
 
-<aside class="notice">
-NOTE: If and only if `num_consecutive_times_failed` > 0, you have unsent events due to your webhook being unreachable on our last attempt. To send all your queued events, you can `PATCH /api/oauth2/v2/webhooks/<webhook_id>` with attribute `is_paused: false`. We’ll attempt to send you all unsent events and report back with your client’s response to us.
-</aside>
+- NOTE: If and only if `num_consecutive_times_failed` > 0, you have unsent events due to your webhook being unreachable on our last attempt. To send all your queued events, you can `PATCH /api/oauth2/v2/webhooks/<webhook_id>` with attribute `is_paused: false`. We’ll attempt to send you all unsent events and report back with your client’s response to us.
+
 
 ```json
 // Sample PATCH payload

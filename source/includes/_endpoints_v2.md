@@ -8,11 +8,11 @@ APIv2 is still in beta, and while the scopes and endpoints are stable, the speci
 All API requests should use the hostname https://www.patreon.com
 </aside>
 
-With APIv2, all properties must be individually; there are no more default properties on resources.
+With APIv2, all properties must be individually requested; there are no more default properties on resources.
 
 ## GET /api/oauth2/v2/me
 
-This is the endpoint for accessing information about the current user with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will njot receive email address without that scope.
+This is the endpoint for accessing information about the current user with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will not receive email address without that scope.
 
 ### User Attributes
 
@@ -70,13 +70,11 @@ memberships | List[Member] | *Depends on your scopes.* If you have the `identity
 }
 ```
 
-You can request related data through includes, ie, `/api/oauth2/v2/me?include=memberships` and `/api/oauth2/v2/me?include=campaign`. If you request campaign and have the campaigns scope, you will receive information about the user’s campaign.
+You can request related data through includes, ie, `/api/oauth2/v2/me?include=memberships` and `/api/oauth2/v2/me?include=campaign`.
 
-If you request campaign and memberships, you will receive information about the user’s memberships and the campaigns they are members of.
-
-<aside class="warning">
-If you request memberships and DON’T have the `identity.memberships scope`, you will receive data about the user’s membership to your campaign. If you DO have the scope, you will receive data about all of the user’s memberships, to all the campaigns they’re members of.
-</aside>
+- If you request campaign and have the campaigns scope, you will receive information about the user’s campaign.
+- If you request campaign and memberships, you will receive information about the user’s memberships and the campaigns they are members of, provided you have the `campaigns` and `identity[memberships]` scopes.
+- If you request memberships and DON’T have the `identity.memberships` scope, you will receive data about the user’s membership to your campaign. If you DO have the scope, you will receive data about all of the user’s memberships, to all the campaigns they’re members of.
 
 ## GET /api/oauth2/v2/campaigns
 
