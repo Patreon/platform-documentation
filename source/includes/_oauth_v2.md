@@ -4,7 +4,20 @@
 APIv2 is still in beta, and while the scopes and endpoints are stable, the specific properties returned on the resources may change.
 </aside>
 
-Getting access to a Patreon user’s account in V2 works much the same as it did for V1, but we have reworked what scopes are available in the API to provide better access for developers and better security for our users. When using V2, make sure to request all required scopes when implementing OAuth. The creator’s access token will automatically have V2 scopes associated with it.
+### What's new?
+At a high level, the main differences between APIv1 and APIv2 are:
+
+1. The Pledges resource has been replaced by the Members resource. Members return more data about the relationship between a patron and a creator, including charge status and membership lifetime.
+2. The scopes have been improved. We have reworked what scopes are available in the API to provide better access for developers and better security for our users.
+3. Developers can now create webhooks on campaigns on behalf of the creator, so your application can get real-time updates about a creator's campaign.
+
+### What stays the same?
+
+1. Getting access to a Patreon user’s account via OAuth works much the same. Just make sure to request all required scopes. 
+2. The client creator’s access token will automatically have all V2 scopes associated with it.
+3. We will not be deprecating APIv1 in the next year at least.
+
+### Note to those with V1 tokens:
 
 You will be able to request tokens with any set of APIv2 scopes from your existing APIv1 client. If you choose to create an APIv2-specific client in the developer portal, that client will only be able to request V2 scopes.
 
@@ -29,6 +42,6 @@ V1 Scope | V2 Scopes Required
 -------- | ------------------
 campaigns | campaigns
 my-campaign | campaigns
-pledges | campaigns.members campaigns.members[email] campaigns.members.address
+pledges | campaigns.members, campaigns.members[email], campaigns.members.address
 pledges-to-me | identity.memberships
-users | identity identity[email]
+users | identity, identity[email]
