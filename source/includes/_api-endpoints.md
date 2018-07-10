@@ -113,10 +113,13 @@ function handleOAuthRedirectRequest(request, response) {
         })
 }
 
-//Example for finding the actual current user if you have been opted-in to additional scopes:
+//Get the raw json from the response. See for the expected format of the data
 var patreon_response = patreon_client('/current_user').then(function(result) {
   user_store = result.store
-  let data = result.rawJson
+  const data = result.rawJson
+  /*  data.data will contain the current_user, but there might be more users returned and loaded into the store. 
+   *  Get the id of the requested user, and find it in the store
+   */ 
   const myUserId = data.data.id
   creator = user_store.find('user', myUserId)
 })
