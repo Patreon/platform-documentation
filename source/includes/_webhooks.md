@@ -86,6 +86,12 @@ It's important you don't share or expose your webhook secret!
 
 A `trigger` is an event type. The syntax of a trigger is `[resource]:[action]` (e.g. `pledges:create`). You can add or remove triggers for a webhook to listen to on the webhooks page.
 
+Trigger | Description
+------- | -----------
+`pledge:create` | Fires when a user pledges to a creator. This trigger fires even if the charge is declined or fraudulent. The pledge object is still created, even if the user is not a valid patron due to charge status.
+`pledge:update` | Fires when a user's pledge changes. Notably, the pledge ID will change, because the underlying pledge object is different.
+`pledge:delete` | Fires when a user stops pledging or the pledge is cancelled altogether. Does _not_ stop for pledge pausing, as the pledge still exists.
+
 ### Robust Retries
 
 To ensure that you can rely exclusively on webhooks data, we've put measures in place to make sure your server does not miss a single event. 
