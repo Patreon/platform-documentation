@@ -88,9 +88,9 @@ A `trigger` is an event type. The syntax of a trigger is `[resource]:[action]` (
 
 Trigger | Description
 ------- | -----------
-`pledge:create` | Fires when a user pledges to a creator. This trigger fires even if the charge is declined or fraudulent. The pledge object is still created, even if the user is not a valid patron due to charge status.
-`pledge:update` | Fires when a user edits their pledge. Notably, the pledge ID will change, because the underlying pledge object is different. The user id should be the primary key to reference.
-`pledge:delete` | Fires when a user stops pledging or the pledge is cancelled altogether. Does _not_ fire for pledge pausing, as the pledge still exists.
+pledge:create | Fires when a user pledges to a creator. This trigger fires even if the charge is declined or fraudulent. The pledge object is still created, even if the user is not a valid patron due to charge status.
+pledge:update | Fires when a user edits their pledge. Notably, the pledge ID will change, because the underlying pledge object is different. The user id should be the primary key to reference.
+pledge:delete | Fires when a user stops pledging or the pledge is cancelled altogether. Does _not_ fire for pledge pausing, as the pledge still exists.
 
 ### Robust Retries
 
