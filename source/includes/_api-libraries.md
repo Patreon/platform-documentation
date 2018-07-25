@@ -69,3 +69,9 @@ There are a number of third party libraries that the developer community has cre
 
 ##Go
 View the source on [github](https://github.com/mxpv/patreon-go)
+
+##django-allauth
+Patreon is available as an OAuth backend in [django-allauth](http://django-allauth.readthedocs.io/en/latest/installation.html).
+
+##python-social-auth
+Patreon is available as an OAuth backend in [python-social-auth](http://python-social-auth-docs.readthedocs.io/en/latest/).
