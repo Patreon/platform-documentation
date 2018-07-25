@@ -25,7 +25,7 @@ You will be able to request tokens with any set of APIv2 scopes from your existi
 
 Scope | Description
 ----- | -----------
-identity | Provides read access to data about the user. See the /me endpoint documentation for details about what data is available.
+identity | Provides read access to data about the user. See the /identity endpoint documentation for details about what data is available.
 identity[email] | Provides read access to the user’s email.
 identity.memberships | Provides read access to the user’s memberships.
 campaigns | Provides read access to basic campaign data. See the /campaign endpoint documentation for details about what data is available.

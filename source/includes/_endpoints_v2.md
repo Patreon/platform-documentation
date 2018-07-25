@@ -10,7 +10,11 @@ All API requests should use the hostname https://www.patreon.com
 
 With APIv2, all properties must be individually requested; there are no more default properties on resources.
 
-## GET /api/oauth2/v2/me
+## GET /api/oauth2/v2/identity
+
+<aside>
+In earlier versions of the beta, this was /api/oauth2/v2/me
+</aside>
 
 This is the endpoint for accessing information about the current user with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will not receive email address without that scope.
 
@@ -23,7 +27,7 @@ type | string | Type of this object, value is always "user"
 first_name | string |
 last_name | string |
 vanity | string | The public "username" of the user. patreon.com/ goes to this user's creator page. Can be `null`, since non-creator users don't need vanities.
-email | string | The user's email address. Only accessible via the /me endpoint, with the `identity[email]` scope.
+email | string | The user's email address. Only accessible via the `/identity` endpoint, with the `identity[email]` scope.
 about | string | The user's about text, which usually appears on the left of their profile page.
 image_url | string | The user's profile picture URL, scaled to width 400px.
 thumb_url | string | The user's profile picture URL, scaled to a square of size 100x100px.
@@ -36,7 +40,7 @@ Relationship | Type | Description
 memberships | List[Member] | *Depends on your scopes.* If you have the `identity.memberships` scope, you will receive a list of this user's memberships to all campaigns they're members of. If you lack the scope, you will receive a single-element list with the membership to your campaign only.
 
 ```json
-// Sample response with email scope for https://www.patreon.com/api/oauth2/v2/me?fields[user]=about,created,email,first_name,full_name,image_url,last_name,social_connections,thumb_url,url,vanity
+// Sample response with email scope for https://www.patreon.com/api/oauth2/v2/identity?fields[user]=about,created,email,first_name,full_name,image_url,last_name,social_connections,thumb_url,url,vanity
 {
     "data": {
         "attributes":
@@ -70,7 +74,7 @@ memberships | List[Member] | *Depends on your scopes.* If you have the `identity
 }
 ```
 
-You can request related data through includes, ie, `/api/oauth2/v2/me?include=memberships` and `/api/oauth2/v2/me?include=campaign`.
+You can request related data through includes, ie, `/api/oauth2/v2/identity?include=memberships` and `/api/oauth2/v2/identity?include=campaign`.
 
 - If you request campaign and have the campaigns scope, you will receive information about the user’s campaign.
 - If you request campaign and memberships, you will receive information about the user’s memberships and the campaigns they are members of, provided you have the `campaigns` and `identity[memberships]` scopes.
@@ -78,7 +82,7 @@ You can request related data through includes, ie, `/api/oauth2/v2/me?include=me
 
 ## GET /api/oauth2/v2/campaigns
 
-Gets the campaign data for the current user’s campaign. Requires the campaigns scope.
+Requires the `campaigns` scope. The listing endpoint returns all available campaigns.
 
 Allowed includes: creator, rewards, goals.
 
@@ -137,15 +141,58 @@ is_charged_immediately | boolean | true if the campaign charges upfront, false o
 is_monthly  | boolean | true if the campaign charges per month, false if the campaign charges per-post.
 is_nsfw  | boolean |
 
-## GET /api/oauth2/v2/members
-Gets the members for the token user’s campaign. Requires the `campaigns.members` scope.
+## GET /api/oauth2/v2/campaigns/{campaign_id}
+
+Requires the `campaigns` scope. The single resource endpoint returns information about a single campaign, fetched by campaign ID.
+
+Allowed includes: creator, rewards, goals.
+
+```json
+//Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,_is_nswf,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
+{
+    "data":
+        {
+            "attributes": {
+                "created_at": "2018-04-01T15:27:11+00:00",
+                "creation_name": "online communities",
+                "discord_server_id": "1234567890",
+                "image_small_url": "https://example.url",
+                "image_url": "https://example.url",
+                "is_charged_immediately": false,
+                "is_monthly": true,
+                "is_nsfw": false,
+                "main_video_embed": null,
+                "main_video_url": null,
+                "one_liner": null,
+                "patron_count": 1000,
+                "pay_per_name": "month",
+                "pledge_url": "/bePatron?c=12345",
+                "published_at": "2018-04-01T18:15:34+00:00",
+                "summary": "The most creator-first API",
+                "thanks_embed": "",
+                "thanks_msg": null,
+                "thanks_video_url": null,
+            },
+           "id": "12345",
+           "type": "campaign"
+        },
+}
+```
+
+## GET /api/oauth2/v2/campaigns/{campaign_id}/members
+
+<aside>
+In earlier versions of the beta, this was /api/oauth2/v2/members
+</aside>
+
+Gets the members for a given campaign. Requires the `campaigns.members` scope.
 
 Allowed includes: address (requires scope), currently_entitled_rewards, campaign
 
 We recommend using `currently_entitled_rewards` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
 
 ```json
-// Sample response for https://www.patreon.com/api/oauth2/v2/members?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&include=currently_entitled_rewards&fields[reward]=amount,amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url
+// Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&include=currently_entitled_rewards&fields[reward]=amount,amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url
 {
     "data": [
         {
@@ -190,7 +237,7 @@ We recommend using `currently_entitled_rewards` to see exactly what a member is 
         "type": "reward",
     }],
     "links": {
-        "next": "https://www.patreon.com/api/oauth2/v2/members?page%5Bcursor%5D=12345678abcdefg",
+        "next": "https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?page%5Bcursor%5D=12345678abcdefg",
     },
     "meta": {
         "pagination": {"cursors": {"next": "q349287429sdfjhskdfjh"}}
