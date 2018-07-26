@@ -129,28 +129,28 @@ Allowed includes: creator, rewards, goals.
 
 Attribute | Type | Description
 --------- | ---- | -----------
-summary | string |  Can be null.
-creation_name | string |  Can be null.
-pay_per_name | string |  Can be null.
-one_liner | string |  Can be null.
+summary | string | The creator's summary of their campaign. Can be null.
+creation_name | string | The type of content the creator is creating, as in "`vanity` is creating `creation_name`". Can be null.
+pay_per_name | string | The thing which patrons are paying per, as in "`vanity` is making $1000 per `pay_per_name`". Can be null.
+one_liner | string | Pithy one-liner for this campaign, displayed on the creator page. Can be null.
 main_video_embed | string |  Can be null.
 main_video_url | string |  Can be null.
-image_url | string |
-image_small_url | string |
-thanks_video_url | string |  Can be null.
+image_url | string | Banner image URL for the campaign.
+image_small_url | string | URL for the campaign's profile image.
+thanks_video_url | string | URL for the video shown to patrons after they pledge to this campaign. Can be null.
 thanks_embed | string |  Can be null.
-thanks_msg | string |  Can be null.
-is_monthly | boolean |
+thanks_msg | string | Thank you message shown to patrons after they pledge to this campaign. Can be null.
+is_monthly | boolean | `true` if the campaign charges per month, `false` if the campaign charges per-post.
 has_rss | boolean | Whether this user has opted-in to rss feeds
-has_sent_rss_notify | boolean | Whether or not the creator has sent a one-time rss notification email
-rss_feed_title | string | The title of the campaigns rss feed
-rss_artwork_url | string | The url for the rss album artwork Can be null.
-is_nsfw | boolean |
-is_charged_immediately | boolean |  Can be null.
-created_at | string (UTC ISO format) |
-published_at | string (UTC ISO format) |  Can be null.
-pledge_url | string |
-patron_count | integer |
+has_sent_rss_notify | boolean | Whether or not the creator has sent a one-time rss notification email.
+rss_feed_title | string | The title of the campaigns rss feed.
+rss_artwork_url | string | The url for the rss album artwork. Can be null.
+is_nsfw | boolean | `true` if the creator has marked the campaign as containing nsfw content.
+is_charged_immediately | boolean | `true` if the campaign charges upfront, `false` otherwise. Can be null.
+created_at | string (UTC ISO format) | Datetime that the creator first began the campaign creation process. See `published_at`.
+published_at | string (UTC ISO format) | Datetime that the creator most recently published (made publicly visible) the campaign. Can be null.
+pledge_url | string | Relative (to patreon.com) URL for the pledge checkout flow for this campaign.
+patron_count | integer | Number of patrons pledging to this creator.
 discord_server_id | string | The ID of the external discord server that is linked to this campaign. Null if none. Can be null.
 google_analytics_id | string | The ID of the Google Analytics tracker that the creator wants metrics to be sent to. Null if none. Can be null.
 earnings_visibility | string | Controls the visibility of the total earnings in the campaign
@@ -327,24 +327,24 @@ Attribute | Type | Description
 --------- | ---- | -----------
 patron_status | string |  Can be null.
 is_follower | boolean | The user is not a pledging patron but has subscribed to updates about public posts.
-full_name | string |
-email | string |
-pledge_relationship_start | string (UTC ISO format) |  Can be null.
-lifetime_support_cents | integer |
-currently_entitled_amount_cents | integer |
-last_charge_date | string (UTC ISO format) |  Can be null.
-last_charge_status | string |  Can be null.
-note | string |
+full_name | string | Full name of the member user.
+email | string | The member's email address. Requires the `campaigns.members[email]` scope.
+pledge_relationship_start | string (UTC ISO format) | Datetime of beginning of most recent pledge chainfrom this member to the campaign. Pledge updates do not change this value. Can be null.
+lifetime_support_cents | integer | The total amount that the member has ever paid to the campaign. `0` if never paid.
+currently_entitled_amount_cents | integer | The amount in cents that the member is entitled to.This includes a current pledge, or payment that covers the current payment period.
+last_charge_date | string (UTC ISO format) | Datetime of last attempted charge. `null` if never charged. Can be null.
+last_charge_status | string | The result of the last attempted charge. Possible values are `['Paid', 'Declined', 'Deleted', 'Pending', 'Refunded', 'Fraud', 'Other', null]`. The only successful status is `Paid`. `null` if never charged. Can be null.
+note | string | The creator's notes on the member.
 will_pay_amount_cents | integer | The amount in cents the user will pay at the next pay cycle
 
 ### Member Relationships
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-address | address |
-campaign | campaign |
-currently_entitled_tiers | array[currently_entitled_tiers] |
-user | user |
+address | address | The member's shipping address that they entered for the campaign.Requires the `campaign.members.address` scope.
+campaign | campaign | The campaign that the membership is for.
+currently_entitled_tiers | array[currently_entitled_tiers] | The tiers that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
+user | user | The user who is pledging to the campaign.
 
 ### Address Attributes
 
