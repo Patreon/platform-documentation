@@ -20,24 +20,31 @@ This is the endpoint for accessing information about the current user with refer
 
 ### User Attributes
 
-Attribute  | Type | Description
----------- | -----| -----------
-id | string | Unique identifier of this user
-type | string | Type of this object, value is always "user"
-first_name | string |
-last_name | string |
-vanity | string | The public "username" of the user. patreon.com/ goes to this user's creator page. Can be `null`, since non-creator users don't need vanities.
-email | string | The user's email address. Only accessible via the `/identity` endpoint, with the `identity[email]` scope.
-about | string | The user's about text, which usually appears on the left of their profile page.
+Attribute | Type | Description
+--------- | ---- | -----------
+email | string | The user's email address. Requires certain scopes to access. See the scopes section of this documentation.
+first_name | string |  Can be null.
+last_name | string |  Can be null.
+full_name | string |
+is_email_verified | boolean |
+vanity | string | The public "username" of the user. patreon.com/<vanity> goes to this user's creator page. Non-creator users might not have a vanity. Can be null.
+about | string | The user's about text, which appears on their profile. Can be null.
 image_url | string | The user's profile picture URL, scaled to width 400px.
 thumb_url | string | The user's profile picture URL, scaled to a square of size 100x100px.
-created | string | Datetime of this user's account creation.
+can_see_nsfw | boolean | `true` if this user can view nsfw content. Can be null.
+created | string (UTC ISO format) | Datetime of this user's account creation.
+url | string | URL of this user's creator or patron profile.
+like_count | integer | How many posts this user has liked.
+hide_pledges | boolean | `true` if the user has chosen to keep private which creators they pledge to. Can be null.
+social_connections | string | Mapping from user's connected app names to external user id on the respective app.
 
 ### User Relationships
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-memberships | List[Member] | *Depends on your scopes.* If you have the `identity.memberships` scope, you will receive a list of this user's memberships to all campaigns they're members of. If you lack the scope, you will receive a single-element list with the membership to your campaign only.
+memberships | array[memberships] | Usually a zero or one-element array with the user's membership to the token creator's campaign, if they are a member. With the `identity.memberships` scope, this returns memberships to ALL campaigns the user is a member of.
+campaign | campaign |
+
 
 ```json
 // Sample response with email scope for https://www.patreon.com/api/oauth2/v2/identity?fields[user]=about,created,email,first_name,full_name,image_url,last_name,social_connections,thumb_url,url,vanity
@@ -120,26 +127,95 @@ Allowed includes: creator, rewards, goals.
 
 ### Campaign Attributes
 
-Attribute | Type | Description                                                                             
+Attribute | Type | Description
 --------- | ---- | -----------
-id | string | Unique identifier of this campaign                                                      
-type  | string | Type of this object, value is always "campaign"                                         
-summary  | string | The creator's summary of their campaign.                                                
-created_at  | string | Datetime that the creator first began the campaign creation process. See `published_at`.
-published_at | string | Datetime that the creator most recently published (made publicly visible) the campaign. 
-creation_name | string | The type of content the creator is creating, as in " is creating ". Can be `null`.      
-pay_per_name | string | The thing which patrons are paying per, as in " is making $1000 per ". Can be `null`.   
-one_liner | string | Pithy one-liner for this campaign, displayed on the creator page. Can be `null`.        
-main_video_embed | string | can be null
-main_video_url | string | can be null
-patron_count | integer | Number of patrons to this creator.
-pledge_url | string | URL path to the pledge checkout flow for this campaign.
-discord_server_id | string | can be null
-image_small_url  | string | URL for the small corner image.
-image_url  | string | Banner image URL for the campaign.
-is_charged_immediately | boolean | true if the campaign charges upfront, false otherwise.
-is_monthly  | boolean | true if the campaign charges per month, false if the campaign charges per-post.
-is_nsfw  | boolean |
+summary | string |  Can be null.
+creation_name | string |  Can be null.
+pay_per_name | string |  Can be null.
+one_liner | string |  Can be null.
+main_video_embed | string |  Can be null.
+main_video_url | string |  Can be null.
+image_url | string |
+image_small_url | string |
+thanks_video_url | string |  Can be null.
+thanks_embed | string |  Can be null.
+thanks_msg | string |  Can be null.
+is_monthly | boolean |
+has_rss | boolean | Whether this user has opted-in to rss feeds
+has_sent_rss_notify | boolean | Whether or not the creator has sent a one-time rss notification email
+rss_feed_title | string | The title of the campaigns rss feed
+rss_artwork_url | string | The url for the rss album artwork Can be null.
+is_nsfw | boolean |
+is_charged_immediately | boolean |  Can be null.
+created_at | string (UTC ISO format) |
+published_at | string (UTC ISO format) |  Can be null.
+pledge_url | string |
+patron_count | integer |
+discord_server_id | string | The ID of the external discord server that is linked to this campaign. Null if none. Can be null.
+google_analytics_id | string | The ID of the Google Analytics tracker that the creator wants metrics to be sent to. Null if none. Can be null.
+earnings_visibility | string | Controls the visibility of the total earnings in the campaign
+
+### Campaign Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+tiers | array[tiers] |
+creator | creator |
+benefits | array[benefits] |
+goals | array[goals] |
+
+### Tier Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+amount_cents | integer | Monetary amount associated with this tier (in U.S. cents).
+user_limit | integer | Maximum number of patrons this tier is limited to, if applicable. Can be null.
+remaining | integer | Remaining number of patrons who may subscribe, if there is a `user_limit`. Can be null.
+description | string | Tier display description.
+requires_shipping | boolean | `true` if this tier requires a shipping address from patrons.
+created_at | string (UTC ISO format) | Date this tier was created.
+url | string | Fully qualified URL associated with this tier.
+patron_count | integer | Number of patrons currently registered for this tier.
+post_count | integer | Number of posts published to this tier. Can be null.
+discord_role_ids | string | The discord role IDs granted by this tier. Null if None. Can be null.
+title | string | Tier display title.
+image_url | string | Full qualified image URL associated with this tier. Can be null.
+edited_at | string (UTC ISO format) | Date tier was last modified.
+published | boolean | `true` if the tier is currently published.
+published_at | string (UTC ISO format) | Date this tier was last published. Can be null.
+unpublished_at | string (UTC ISO format) | Date tier was unpublished, while applicable. Can be null.
+
+### Tier Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+campaign | campaign |
+tier_image | tier_image |
+benefits | array[benefits] |
+
+### Benefit Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+title | string | Benefit display title.
+description | string | Benefit display description. Can be null.
+benefit_type | string | Type of benefit, such as `custom` for creator-defined benefits. Can be null.
+rule_type | string | A rule type designation, such as `eom_monthly` or `one_time_immediate`. Can be null.
+created_at | string (UTC ISO format) | Date this benefit was created.
+delivered_deliverables_count | integer | Number of deliverables for this benefit that have been marked complete.
+not_delivered_deliverables_count | integer | Number of deliverables for this benefit that are due, for all dates.
+deliverables_due_today_count | integer | Number of deliverables for this benefit that are due today specifically.
+next_deliverable_due_date | string (UTC ISO format) | The next due date (after EOD today) for this benefit. Can be null.
+tiers_count | integer | Number of tiers containing this benefit.
+is_deleted | boolean | `true` if this benefit has been deleted.
+
+### Benefit Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+tiers | array[tiers] |
+deliverables | array[deliverables] |
+campaign | campaign |
 
 ## GET /api/oauth2/v2/campaigns/{campaign_id}
 
@@ -249,28 +325,49 @@ We recommend using `currently_entitled_rewards` to see exactly what a member is 
 
 Attribute | Type | Description
 --------- | ---- | -----------
-id | string | Unique identifier of this member
-type | string | Type of this object, value is always "member"
-patron_status | string | The current relationship of the member to the campaign. Always one of `['active_patron', 'declined_patron', 'former_patron', '']`.
-is_follower | boolean | true if the member is a follower and NOT a patron
-full_name | string | Full name of the member user
-last_charge_date | string | Datetime of last attempted charge. `null` if never charged.
-last_charge_status | string | The result of the last attempted charge. Possible values are `['Paid', 'Declined', 'Deleted', 'Pending', 'Refunded', 'Fraud', 'Other', null]`. The only successful status is `Paid`. `null` if never charged.
-lifetime_support_cents | integer | The total amount that the member has ever paid to the campaign. `0` if never paid.
-pledge_relationship_start | string | Datetime of beginning of most recent pledge chain from this member to the campaign. Pledge updates do not change this value.
-email | string | The member's email address. Requires the `campaigns.members[email]` scope. 
-discord_vanity | string | The Discord vanity (username) of the member's linked Discord account, if it exists. Otherwise, `null`.
-note | string | The creator's notes on the member. Can be `null`.
-currently_entitled_amount_cents | integer | The amount in cents that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
+patron_status | string |  Can be null.
+is_follower | boolean | The user is not a pledging patron but has subscribed to updates about public posts.
+full_name | string |
+email | string |
+pledge_relationship_start | string (UTC ISO format) |  Can be null.
+lifetime_support_cents | integer |
+currently_entitled_amount_cents | integer |
+last_charge_date | string (UTC ISO format) |  Can be null.
+last_charge_status | string |  Can be null.
+note | string |
+will_pay_amount_cents | integer | The amount in cents the user will pay at the next pay cycle
 
 ### Member Relationships
 
 Relationship | Type | Description
------------- | -----| -----------
-address | Address | The member's shipping address that they entered for the campaign. Requires the `campaign.members.address` scope
-campaign | Campaign | The campaign that the membership is for.
-currently_entitled_rewards | List[Reward] | The rewards that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
-user | User | The user who is pledging to the campaign.
+------------ | ---- | -----------
+address | address |
+campaign | campaign |
+currently_entitled_tiers | array[currently_entitled_tiers] |
+user | user |
+
+### Address Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+addressee | string | Full recipient name Can be null.
+line_1 | string | First line of street address Can be null.
+line_2 | string | Second line of street address Can be null.
+postal_code | string | Postal or zip code Can be null.
+city | string | City
+state | string | State or province name Can be null.
+country | string | Country
+phone_number | string | Telephone number Can be null.
+created_at | string (UTC ISO format) |
+confirmed | boolean | Whether the address was confirmed post creation
+confirmed_at | string (UTC ISO format) | When this address was last confirmed, set by `confirmed` action attribute Can be null.
+
+### Address Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+user | user |
+campaigns | array[campaigns] |
 
 ## GET /api/oauth2/v2/members/{id}
 

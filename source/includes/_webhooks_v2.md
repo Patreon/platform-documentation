@@ -31,6 +31,24 @@ Get the webhooks for the current user's campaign created by the API client. You 
 }
 ```
 
+### WebHook Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+triggers | collection | List of events that will trigger this webhook.
+uri | string | Fully qualified uri where webhook will be sent (e.g. https://www.example.com/webhooks/incoming).
+paused | boolean | `true` if the webhook is paused as a result of repeated failed attempts to post to `uri`. Set to `false` to attempt to re-enable a previously failing webhook.
+last_attempted_at | string (UTC ISO format) | Last date that the webhook was attempted or used.
+num_consecutive_times_failed | integer | Number of times the webhook has failed consecutively, when in an error state.
+secret | string | Secret used to sign your webhook message body, so you can validate authenticity upon receipt.
+
+### WebHook Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+client | client |
+campaign | campaign |
+
 ## POST /api/oauth2/v2/webhooks
 Create a webhook on the current user’s campaign. Requires the `w:campaigns.webhook` scope.
 
