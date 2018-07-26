@@ -167,7 +167,7 @@ When a webhook fires, the data will look something like this. Note that there wi
 
 Update a webhook with the given id, if the webhook was created by your client. Requires the `w:campaigns.webhook scope.`
 
-- NOTE: If and only if `num_consecutive_times_failed` > 0, you have unsent events due to your webhook being unreachable on our last attempt. To send all your queued events, you can `PATCH /api/oauth2/v2/webhooks/<webhook_id>` with attribute `is_paused: false`. We’ll attempt to send you all unsent events and report back with your client’s response to us.
+- NOTE: If and only if `num_consecutive_times_failed` > 0, you have unsent events due to your webhook being unreachable on our last attempt. To send all your queued events, you can `PATCH /api/oauth2/v2/webhooks/{webhook_id}` with attribute `is_paused: false`. We’ll attempt to send you all unsent events and report back with your client’s response to us.
 
 
 ```json
