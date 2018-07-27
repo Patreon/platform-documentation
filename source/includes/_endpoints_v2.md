@@ -141,7 +141,7 @@ thanks_video_url | string | URL for the video shown to patrons after they pledge
 thanks_embed | string |  Can be null.
 thanks_msg | string | Thank you message shown to patrons after they pledge to this campaign. Can be null.
 is_monthly | boolean | `true` if the campaign charges per month, `false` if the campaign charges per-post.
-has_rss | boolean | Whether this user has opted-in to rss feeds
+has_rss | boolean | Whether this user has opted-in to rss feeds.
 has_sent_rss_notify | boolean | Whether or not the creator has sent a one-time rss notification email.
 rss_feed_title | string | The title of the campaigns rss feed.
 rss_artwork_url | string | The url for the rss album artwork. Can be null.
@@ -151,9 +151,9 @@ created_at | string (UTC ISO format) | Datetime that the creator first began the
 published_at | string (UTC ISO format) | Datetime that the creator most recently published (made publicly visible) the campaign. Can be null.
 pledge_url | string | Relative (to patreon.com) URL for the pledge checkout flow for this campaign.
 patron_count | integer | Number of patrons pledging to this creator.
-discord_server_id | string | The ID of the external discord server that is linked to this campaign. Null if none. Can be null.
-google_analytics_id | string | The ID of the Google Analytics tracker that the creator wants metrics to be sent to. Null if none. Can be null.
-earnings_visibility | string | Controls the visibility of the total earnings in the campaign
+discord_server_id | string | The ID of the external discord server that is linked to this campaign. Can be null.
+google_analytics_id | string | The ID of the Google Analytics tracker that the creator wants metrics to be sent to. Can be null.
+earnings_visibility | string | Controls the visibility of the total earnings in the campaign.
 
 ### Campaign Relationships
 
@@ -173,17 +173,17 @@ user_limit | integer | Maximum number of patrons this tier is limited to, if app
 remaining | integer | Remaining number of patrons who may subscribe, if there is a `user_limit`. Can be null.
 description | string | Tier display description.
 requires_shipping | boolean | `true` if this tier requires a shipping address from patrons.
-created_at | string (UTC ISO format) | Date this tier was created.
+created_at | string (UTC ISO format) | Datetime this tier was created.
 url | string | Fully qualified URL associated with this tier.
 patron_count | integer | Number of patrons currently registered for this tier.
 post_count | integer | Number of posts published to this tier. Can be null.
-discord_role_ids | string | The discord role IDs granted by this tier. Null if None. Can be null.
+discord_role_ids | string | The discord role IDs granted by this tier. Can be null.
 title | string | Tier display title.
 image_url | string | Full qualified image URL associated with this tier. Can be null.
-edited_at | string (UTC ISO format) | Date tier was last modified.
+edited_at | string (UTC ISO format) | Datetime tier was last modified.
 published | boolean | `true` if the tier is currently published.
-published_at | string (UTC ISO format) | Date this tier was last published. Can be null.
-unpublished_at | string (UTC ISO format) | Date tier was unpublished, while applicable. Can be null.
+published_at | string (UTC ISO format) | Datetime this tier was last published. Can be null.
+unpublished_at | string (UTC ISO format) | Datetime tier was unpublished, while applicable. Can be null.
 
 ### Tier Relationships
 
@@ -201,7 +201,7 @@ title | string | Benefit display title.
 description | string | Benefit display description. Can be null.
 benefit_type | string | Type of benefit, such as `custom` for creator-defined benefits. Can be null.
 rule_type | string | A rule type designation, such as `eom_monthly` or `one_time_immediate`. Can be null.
-created_at | string (UTC ISO format) | Date this benefit was created.
+created_at | string (UTC ISO format) | Datetime this benefit was created.
 delivered_deliverables_count | integer | Number of deliverables for this benefit that have been marked complete.
 not_delivered_deliverables_count | integer | Number of deliverables for this benefit that are due, for all dates.
 deliverables_due_today_count | integer | Number of deliverables for this benefit that are due today specifically.
@@ -335,7 +335,7 @@ currently_entitled_amount_cents | integer | The amount in cents that the member 
 last_charge_date | string (UTC ISO format) | Datetime of last attempted charge. `null` if never charged. Can be null.
 last_charge_status | string | The result of the last attempted charge. Possible values are `['Paid', 'Declined', 'Deleted', 'Pending', 'Refunded', 'Fraud', 'Other', null]`. The only successful status is `Paid`. `null` if never charged. Can be null.
 note | string | The creator's notes on the member.
-will_pay_amount_cents | integer | The amount in cents the user will pay at the next pay cycle
+will_pay_amount_cents | integer | The amount in cents the user will pay at the next pay cycle.
 
 ### Member Relationships
 
@@ -350,17 +350,17 @@ user | user | The user who is pledging to the campaign.
 
 Attribute | Type | Description
 --------- | ---- | -----------
-addressee | string | Full recipient name Can be null.
-line_1 | string | First line of street address Can be null.
-line_2 | string | Second line of street address Can be null.
-postal_code | string | Postal or zip code Can be null.
+addressee | string | Full recipient name. Can be null.
+line_1 | string | First line of street address. Can be null.
+line_2 | string | Second line of street address. Can be null.
+postal_code | string | Postal or zip code. Can be null.
 city | string | City
-state | string | State or province name Can be null.
+state | string | State or province name. Can be null.
 country | string | Country
-phone_number | string | Telephone number Can be null.
-created_at | string (UTC ISO format) |
-confirmed | boolean | Whether the address was confirmed post creation
-confirmed_at | string (UTC ISO format) | When this address was last confirmed, set by `confirmed` action attribute Can be null.
+phone_number | string | Telephone number. Can be null.
+created_at | string (UTC ISO format) | Datetime this address was created.
+confirmed | boolean | `true` if the address was confirmed post creation.
+confirmed_at | string (UTC ISO format) | When this address was last confirmed, set by `confirmed` action attribute. Can be null.
 
 ### Address Relationships
 
