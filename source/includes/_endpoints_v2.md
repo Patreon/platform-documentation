@@ -25,8 +25,8 @@ Attribute | Type | Description
 email | string | The user's email address. Requires certain scopes to access. See the scopes section of this documentation.
 first_name | string |  Can be null.
 last_name | string |  Can be null.
-full_name | string |
-is_email_verified | boolean |
+full_name | string | Combined first and last name.
+is_email_verified | boolean | `true` if the user has confirmed their email.
 vanity | string | The public "username" of the user. patreon.com/{vanity} goes to this user's creator page. Non-creator users might not have a vanity. Can be null.
 about | string | The user's about text, which appears on their profile. Can be null.
 image_url | string | The user's profile picture URL, scaled to width 400px.
