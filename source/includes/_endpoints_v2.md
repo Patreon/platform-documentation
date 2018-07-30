@@ -13,7 +13,7 @@ With APIv2, all properties must be individually requested; there are no more def
 ## GET /api/oauth2/v2/identity
 
 <aside>
-In earlier versions of the beta, this was /api/oauth2/v2/me
+In earlier versions of the beta, this was /api/oauth2/v2/me. This is currently available at /api/oauth2/vNext/identity until the public beta goes live.
 </aside>
 
 This is the endpoint for accessing information about the current user with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will not receive email address without that scope.
@@ -88,6 +88,10 @@ You can request related data through includes, ie, `/api/oauth2/v2/identity?incl
 - If you request memberships and DON’T have the `identity.memberships` scope, you will receive data about the user’s membership to your campaign. If you DO have the scope, you will receive data about all of the user’s memberships, to all the campaigns they’re members of.
 
 ## GET /api/oauth2/v2/campaigns
+
+<aside>
+This is also available at /api/oauth2/vNext/campaigns/{campaign_id} until the public beta goes live.
+</aside>
 
 Requires the `campaigns` scope. The listing endpoint returns all available campaigns.
 
@@ -219,6 +223,10 @@ campaign | campaign |
 
 ## GET /api/oauth2/v2/campaigns/{campaign_id}
 
+<aside>
+This is currently available at /api/oauth2/vNext/campaigns/{campaign_id} until the public beta goes live.
+</aside>
+
 Requires the `campaigns` scope. The single resource endpoint returns information about a single campaign, fetched by campaign ID.
 
 Allowed includes: creator, rewards, goals.
@@ -258,7 +266,7 @@ Allowed includes: creator, rewards, goals.
 ## GET /api/oauth2/v2/campaigns/{campaign_id}/members
 
 <aside>
-In earlier versions of the beta, this was /api/oauth2/v2/members
+In earlier versions of the beta, this was /api/oauth2/v2/members. This is currently available at /api/oauth2/vNext/campaigns/{campaign_id}/members until the public beta goes live.
 </aside>
 
 Gets the members for a given campaign. Requires the `campaigns.members` scope.
@@ -370,6 +378,10 @@ user | user |
 campaigns | array[campaigns] |
 
 ## GET /api/oauth2/v2/members/{id}
+
+<aside>
+This is currently available at /api/oauth2/vNext/members/{member_id}/members until the public beta goes live.
+</aside>
 
 Get a particular member by id. Requires the `campaigns.members` scope.
 
