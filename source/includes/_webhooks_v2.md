@@ -6,7 +6,7 @@ APIv2 is still in beta, and while the scopes and endpoints are stable, the speci
 
 ## GET /api/oauth2/v2/webhooks
 
-Get the webhooks for the current user's campaign created by the API client. You will only be able to see webhooks created by your client. Requires the `w:campaigns.webhook` scope.
+Get the [Webhooks](/#webhook) for the current user's [Campaign](/#campaign-v2) created by the API client. You will only be able to see webhooks created by your client. Requires the `w:campaigns.webhook` scope.
 
 ```json
 // Sample response https://www.patreon.com/api/oauth2/v2/webhooks/?fields[webhook]=last_attempted_at,num_consecutive_times_failed,paused,secret,triggers,uri
@@ -31,26 +31,8 @@ Get the webhooks for the current user's campaign created by the API client. You 
 }
 ```
 
-### WebHook Attributes
-
-Attribute | Type | Description
---------- | ---- | -----------
-triggers | collection | List of events that will trigger this webhook.
-uri | string | Fully qualified uri where webhook will be sent (e.g. https://www.example.com/webhooks/incoming).
-paused | boolean | `true` if the webhook is paused as a result of repeated failed attempts to post to `uri`. Set to `false` to attempt to re-enable a previously failing webhook.
-last_attempted_at | string (UTC ISO format) | Last date that the webhook was attempted or used.
-num_consecutive_times_failed | integer | Number of times the webhook has failed consecutively, when in an error state.
-secret | string | Secret used to sign your webhook message body, so you can validate authenticity upon receipt.
-
-### WebHook Relationships
-
-Relationship | Type | Description
------------- | ---- | -----------
-client | client |
-campaign | campaign |
-
 ## POST /api/oauth2/v2/webhooks
-Create a webhook on the current user’s campaign. Requires the `w:campaigns.webhook` scope.
+Create a [Webhook](/#webhook) on the current user’s campaign. Requires the `w:campaigns.webhook` scope.
 
 ## Triggers
 

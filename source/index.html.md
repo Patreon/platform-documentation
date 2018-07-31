@@ -25,6 +25,7 @@ includes:
 - oauth_v2
 - endpoints_v2
 - webhooks_v2
+- resources_v2
 - external
 - faqs
 
