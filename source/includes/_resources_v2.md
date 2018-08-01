@@ -1,62 +1,63 @@
 # APIv2: Resources
 
-## Member
+## Address
 
-### Member Attributes
+A [User](/#user)'s address, normally supplied when requested in the pledge flow.
 
-Attribute | Type | Description
---------- | ---- | -----------
-patron_status | string |  Can be null.
-is_follower | boolean | The user is not a pledging patron but has subscribed to updates about public posts.
-full_name | string | Full name of the member user.
-email | string | The member's email address. Requires the `campaigns.members[email]` scope.
-pledge_relationship_start | string (UTC ISO format) | Datetime of beginning of most recent pledge chainfrom this member to the campaign. Pledge updates do not change this value. Can be null.
-lifetime_support_cents | integer | The total amount that the member has ever paid to the campaign. `0` if never paid.
-currently_entitled_amount_cents | integer | The amount in cents that the member is entitled to.This includes a current pledge, or payment that covers the current payment period.
-last_charge_date | string (UTC ISO format) | Datetime of last attempted charge. `null` if never charged. Can be null.
-last_charge_status | string | The result of the last attempted charge. Possible values are `['Paid', 'Declined', 'Deleted', 'Pending', 'Refunded', 'Fraud', 'Other', null]`. The only successful status is `Paid`. `null` if never charged. Can be null.
-note | string | The creator's notes on the member.
-will_pay_amount_cents | integer | The amount in cents the user will pay at the next pay cycle.
-
-### Member Relationships
-
-Relationship | Type | Description
------------- | ---- | -----------
-address | [Address](/#address) | The member's shipping address that they entered for the campaign.Requires the `campaign.members.address` scope.
-campaign | [Campaign](/#campaign-v2) | The campaign that the membership is for.
-currently_entitled_tiers | array[[Tier](/#tier)] | The tiers that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
-user | [User](/#user-v2) | The user who is pledging to the campaign.
-
-## User v2
-
-### User Attributes
+### Address Attributes
 
 Attribute | Type | Description
 --------- | ---- | -----------
-email | string | The user's email address. Requires certain scopes to access. See the scopes section of this documentation.
-first_name | string | First name. Can be null.
-last_name | string | Last name. Can be null.
-full_name | string | Combined first and last name.
-is_email_verified | boolean | `true` if the user has confirmed their email.
-vanity | string | The public "username" of the user. patreon.com/<vanity> goes to this user's creator page. Non-creator users might not have a vanity. Can be null.
-about | string | The user's about text, which appears on their profile. Can be null.
-image_url | string | The user's profile picture URL, scaled to width 400px.
-thumb_url | string | The user's profile picture URL, scaled to a square of size 100x100px.
-can_see_nsfw | boolean | `true` if this user can view nsfw content. Can be null.
-created | string (UTC ISO format) | Datetime of this user's account creation.
-url | string | URL of this user's creator or patron profile.
-like_count | integer | How many posts this user has liked.
-hide_pledges | boolean | `true` if the user has chosen to keep private which creators they pledge to. Can be null.
-social_connections | string | Mapping from user's connected app names to external user id on the respective app.
+addressee | string | Full recipient name. Can be null.
+line_1 | string | First line of street address. Can be null.
+line_2 | string | Second line of street address. Can be null.
+postal_code | string | Postal or zip code. Can be null.
+city | string | City.
+state | string | State or province name. Can be null.
+country | string | Country.
+phone_number | string | Telephone number. Can be null.
+created_at | string (UTC ISO format) | Datetime address was first created.
+confirmed | boolean | `true` if the address was confirmed after creation.
+confirmed_at | string (UTC ISO format) | When this address was last confirmed, set by `confirmed` action attribute. Can be null.
 
-### User Relationships
+### Address Relationships
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-memberships | array[[Member](/#member)] | Usually a zero or one-element array with the user's membership to the token creator's campaign, if they are a member. With the `identity.memberships` scope, this returns memberships to ALL campaigns the user is a member of.
-campaign | [Campaign](/#campaign-v2) |
+user | [User](/#user) |
+campaigns | array[[Campaign](/#campaign)] |
+
+## Benefit
+
+A benefit added to the [Campaign](/#campaign), which can be added to a tier to be delivered to the patron.
+
+### Benefit Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+title | string | Benefit display title.
+description | string | Benefit display description. Can be null.
+benefit_type | string | Type of benefit, such as `custom` for creator-defined benefits. Can be null.
+rule_type | string | A rule type designation, such as `eom_monthly` or `one_time_immediate`. Can be null.
+created_at | string (UTC ISO format) | Datetime this benefit was created.
+delivered_deliverables_count | integer | Number of deliverables for this benefit that have been marked complete.
+not_delivered_deliverables_count | integer | Number of deliverables for this benefit that are due, for all dates.
+deliverables_due_today_count | integer | Number of deliverables for this benefit that are due today specifically.
+next_deliverable_due_date | string (UTC ISO format) | The next due date (after EOD today) for this benefit. Can be null.
+tiers_count | integer | Number of tiers containing this benefit.
+is_deleted | boolean | `true` if this benefit has been deleted.
+
+### Benefit Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+tiers | array[[Tier](/#tier)] |
+deliverables | array[[Deliverable](/#deliverable)] |
+campaign | [Campaign](/#campaign) |
 
 ## Campaign v2
+
+The creator's page, and the top-level object for accessing lists of members, tiers, etc.
 
 ### Campaign Attributes
 
@@ -93,11 +94,134 @@ earnings_visibility | string | Controls the visibility of the total earnings in 
 Relationship | Type | Description
 ------------ | ---- | -----------
 tiers | array[[Tier](/#tier)] |
-creator | [User](/#user-v2) |
+creator | [User](/#user) |
 benefits | array[[Benefit](/#benefit)] |
-goals | array[Goal] |
+goals | array[[Goal](/#goal)] |
+
+## Deliverable
+
+The record of whether or not a patron has been delivered the benefitthey are owed because of their member tier.
+
+### Deliverable Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+completed_at | string (UTC ISO format) | When the creator marked the deliverable as completed or fulfilled to the patron. Can be null.
+delivery_status | string | One of 'not_delivered', 'delivered', 'wont_deliver'.
+due_at | string (UTC ISO format) | When the deliverable is due to the patron.
+
+### Deliverable Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+campaign | [Campaign](/#campaign) |
+benefit | [Benefit](/#benefit) |
+member | [Member](/#member)[Member](/#member)[Member](/#member)[Member](/#member) | The member who has been granted the deliverable.
+user | [User](/#user) | The user who has been granted the deliverable. This user is the same as the member user.
+
+## Goal
+
+A funding goal in USD set by a creator on a campaign.
+
+### Goal Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+amount_cents | integer | Goal amount in USD cents.
+title | string | Goal title.
+description | string | Goal description. Can be null.
+created_at | string (UTC ISO format) | When the goal was created for the campaign.
+reached_at | string (UTC ISO format) | When the campaign reached the goal. Can be null.
+completed_percentage | integer | Equal to (pledge_sum/goal amount)*100, helpful when a creator
+                wants to hide their pledge sum but still wants their goals to be cash based
+
+### Goal Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+campaign | [Campaign](/#campaign) | The campaign trying to reach the goal
+
+## Media
+
+A file uploaded to patreon.com, usually an image.
+
+### Media Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+file_name | string | File name.
+size_bytes | integer | Size of file in bytes.
+mimetype | string | Mimetype of uploaded file, eg: "application/jpeg".
+state | string | Upload availability state of the file.
+owner_type | string | Type of the resource that owns the file.
+owner_id | string | Ownership id (See also `owner_type`).
+owner_relationship | string | Ownership relationship type for multi-relationship medias.
+upload_expires_at | string (UTC ISO format) | When the upload URL expires.
+upload_url | string | The URL to perform a POST request to in order to upload the media file.
+upload_parameters | string | All the parameters that have to be added to the upload form request.
+download_url | string | The URL to download this media. Valid for 24 hours.
+created_at | string (UTC ISO format) | When the file was created.
+metadata | string | Metadata related to the file. Can be null.
+
+## Member
+
+The record of a user's membership to a campaign. Remains consistent across months of pledging.
+
+### Member Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+patron_status | string |  Can be null.
+is_follower | boolean | The user is not a pledging patron but has subscribed to updates about public posts.
+full_name | string | Full name of the member user.
+email | string | The member's email address. Requires the `campaigns.members[email]` scope.
+pledge_relationship_start | string (UTC ISO format) | Datetime of beginning of most recent pledge chainfrom this member to the campaign. Pledge updates do not change this value. Can be null.
+lifetime_support_cents | integer | The total amount that the member has ever paid to the campaign. `0` if never paid.
+currently_entitled_amount_cents | integer | The amount in cents that the member is entitled to.This includes a current pledge, or payment that covers the current payment period.
+last_charge_date | string (UTC ISO format) | Datetime of last attempted charge. `null` if never charged. Can be null.
+last_charge_status | string | The result of the last attempted charge. Possible values are `['Paid', 'Declined', 'Deleted', 'Pending', 'Refunded', 'Fraud', 'Other', null]`. The only successful status is `Paid`. `null` if never charged. Can be null.
+note | string | The creator's notes on the member.
+will_pay_amount_cents | integer | The amount in cents the user will pay at the next pay cycle.
+
+### Member Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+address | [Address](/#address) | The member's shipping address that they entered for the campaign.Requires the `campaign.members.address` scope.
+campaign | [Campaign](/#campaign) | The campaign that the membership is for.
+currently_entitled_tiers | array[[Tier](/#tier)] | The tiers that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
+user | [User](/#user) | The user who is pledging to the campaign.
+
+## OAuthClient
+
+A client created by a developer, used for getting OAuth2 access tokens.
+
+### OAuthClient Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+client_secret | string |
+name | string |
+description | string |
+author_name | string |
+domain | string |
+version | integer |
+icon_url | string |
+privacy_policy_url | string |  Can be null.
+tos_url | string |  Can be null.
+redirect_uris | string |
+default_scopes | string |
+
+### OAuthClient Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+user | [User](/#user) |
+campaign | [Campaign](/#campaign) |
 
 ## Tier
+
+A membership level on a campaign, which can have benefits attached to it.
 
 ### Tier Attributes
 
@@ -124,64 +248,46 @@ unpublished_at | string (UTC ISO format) | Datetime tier was unpublished, while 
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-campaign | [Campaign](/#campaign-v2) |
-tier_image | [Media](/#media) |
-benefits | array[[Benefit](/#benefit)] |
+campaign | [Campaign](/#campaign) | The campaign the tier belongs to.
+tier_image | [Media](/#media) | The image file associated with the tier.
+benefits | array[[Benefit](/#benefit)] | The benefits attached to the tier, which are used for generating deliverables
 
-## Benefit
+## User v2
 
-### Benefit Attributes
+The Patreon user, which can be both patron and creator.
 
-Attribute | Type | Description
---------- | ---- | -----------
-title | string | Benefit display title.
-description | string | Benefit display description. Can be null.
-benefit_type | string | Type of benefit, such as `custom` for creator-defined benefits. Can be null.
-rule_type | string | A rule type designation, such as `eom_monthly` or `one_time_immediate`. Can be null.
-created_at | string (UTC ISO format) | Datetime this benefit was created.
-delivered_deliverables_count | integer | Number of deliverables for this benefit that have been marked complete.
-not_delivered_deliverables_count | integer | Number of deliverables for this benefit that are due, for all dates.
-deliverables_due_today_count | integer | Number of deliverables for this benefit that are due today specifically.
-next_deliverable_due_date | string (UTC ISO format) | The next due date (after EOD today) for this benefit. Can be null.
-tiers_count | integer | Number of tiers containing this benefit.
-is_deleted | boolean | `true` if this benefit has been deleted.
-
-### Benefit Relationships
-
-Relationship | Type | Description
------------- | ---- | -----------
-tiers | array[[Tier](/#tier)] |
-deliverables | array[[Deliverable](/#deliverable)] |
-campaign | [Campaign](/#campaign-v2) |
-
-## Address
-
-### Address Attributes
+### User Attributes
 
 Attribute | Type | Description
 --------- | ---- | -----------
-addressee | string | Full recipient name. Can be null.
-line_1 | string | First line of street address. Can be null.
-line_2 | string | Second line of street address. Can be null.
-postal_code | string | Postal or zip code. Can be null.
-city | string | City.
-state | string | State or province name. Can be null.
-country | string | Country.
-phone_number | string | Telephone number. Can be null.
-created_at | string (UTC ISO format) | Datetime address was first created.
-confirmed | boolean | `true` if the address was confirmed after creation.
-confirmed_at | string (UTC ISO format) | When this address was last confirmed, set by `confirmed` action attribute. Can be null.
+email | string | The user's email address. Requires certain scopes to access. See the scopes section of this documentation.
+first_name | string | First name. Can be null.
+last_name | string | Last name. Can be null.
+full_name | string | Combined first and last name.
+is_email_verified | boolean | `true` if the user has confirmed their email.
+vanity | string | The public "username" of the user. patreon.com/<vanity> goes to this user's creator page. Non-creator users might not have a vanity. Can be null.
+about | string | The user's about text, which appears on their profile. Can be null.
+image_url | string | The user's profile picture URL, scaled to width 400px.
+thumb_url | string | The user's profile picture URL, scaled to a square of size 100x100px.
+can_see_nsfw | boolean | `true` if this user can view nsfw content. Can be null.
+created | string (UTC ISO format) | Datetime of this user's account creation.
+url | string | URL of this user's creator or patron profile.
+like_count | integer | How many posts this user has liked.
+hide_pledges | boolean | `true` if the user has chosen to keep private which creators they pledge to. Can be null.
+social_connections | string | Mapping from user's connected app names to external user id on the respective app.
 
-### Address Relationships
+### User Relationships
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-user | [User](/#user-v2) |
-campaigns | array[[Campaign](/#campaign-v2)] |
+memberships | array[[Member](/#member)] | Usually a zero or one-element array with the user's membership to the token creator's campaign, if they are a member. With the `identity.memberships` scope, this returns memberships to ALL campaigns the user is a member of.
+campaign | [Campaign](/#campaign) |
 
-## WebHook
+## Webhook
 
-### WebHook Attributes
+Webhooks are fired based on events happening on a particular campaign.
+
+### Webhook Attributes
 
 Attribute | Type | Description
 --------- | ---- | -----------
@@ -192,48 +298,9 @@ last_attempted_at | string (UTC ISO format) | Last date that the webhook was att
 num_consecutive_times_failed | integer | Number of times the webhook has failed consecutively, when in an error state.
 secret | string | Secret used to sign your webhook message body, so you can validate authenticity upon receipt.
 
-### WebHook Relationships
+### Webhook Relationships
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-client | client |
-campaign | [Campaign](/#campaign-v2) |
-
-## Deliverable
-
-### Deliverable Attributes
-
-Attribute | Type | Description
---------- | ---- | -----------
-completed_at | string (UTC ISO format) | When the creator marked the deliverable as completed or fulfilled to the patron. Can be null.
-delivery_status | string | One of 'not_delivered', 'delivered', 'wont_deliver'.
-due_at | string (UTC ISO format) | When the deliverable is due to the patron.
-
-### Deliverable Relationships
-
-Relationship | Type | Description
------------- | ---- | -----------
-campaign | [Campaign](/#campaign-v2) |
-benefit | [Benefit](/#benefit) |
-member | [Member](/#member) | The member who has been granted the deliverable.
-user | [User](/#user-v2) | The user who has been granted the deliverable. This user is the same as the member user.
-
-## Media
-
-### Media Attributes
-
-Attribute | Type | Description
---------- | ---- | -----------
-file_name | string |
-size_bytes | integer |
-mimetype | string |
-state | string | Upload availability state of the file.
-owner_type | string | Type of the resource that owns the file.
-owner_id | string | Ownership id (See also `owner_type`).
-owner_relationship | string | Ownership relationship type for multi-relationship medias.
-upload_expires_at | string (UTC ISO format) |
-upload_url | string | The URL to perform a POST request to in order to upload the media file.
-upload_parameters | string | All the parameters that have to be added to the upload form request.
-download_url | string | The URL to download this media. Valid for 24 hours.
-created_at | string (UTC ISO format) |
-metadata | string |  Can be null.
+client | [OAuth-Client](/#oauthclient) | The client which created the webhook
+campaign | [Campaign](/#campaign) | The campaign whose events trigger the webhook.
