@@ -16,7 +16,7 @@ With APIv2, all properties must be individually requested; there are no more def
 In earlier versions of the beta, this was /api/oauth2/v2/me. This is currently available at /api/oauth2/vNext/identity until the public beta goes live.
 </aside>
 
-Fetches the [User](/#user-v2) resource.
+Fetches the [User](/#user-v2) resource. Top-level `include`s: [`memberships`](/#member), [`campaign`](/#campaign-v2).
 
 This is the endpoint for accessing information about the current [User](/#user-v2) with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will not receive email address without that scope.
 
@@ -67,7 +67,7 @@ You can request related data through includes, ie, `/api/oauth2/v2/identity?incl
 This is also available at /api/oauth2/vNext/campaigns/{campaign_id} until the public beta goes live.
 </aside>
 
-Requires the `campaigns` scope. The listing endpoint returns all available [Campaign](/#campaign-v2)s.
+Requires the `campaigns` scope. The listing endpoint returns all available [Campaign](/#campaign-v2)s. Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
 
 Allowed includes: [creator](/#user-v2), [tiers](/#tier), goals.
 
@@ -111,7 +111,7 @@ This is currently available at /api/oauth2/vNext/campaigns/{campaign_id} until t
 
 Requires the `campaigns` scope. The single resource endpoint returns information about a single [Campaign](/#campaign-v2), fetched by campaign ID.
 
-Allowed includes: [creator](/#user-v2), [tiers](/#tier), goals.
+Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
 
 ```json
 //Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,_is_nswf,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
@@ -151,7 +151,7 @@ Allowed includes: [creator](/#user-v2), [tiers](/#tier), goals.
 In earlier versions of the beta, this was /api/oauth2/v2/members. This is currently available at /api/oauth2/vNext/campaigns/{campaign_id}/members until the public beta goes live.
 </aside>
 
-Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope.
+Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope. Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
 
 We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#member) is entitled to, either as an include on the members list or on the member get.
 
@@ -215,9 +215,8 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
 This is currently available at /api/oauth2/vNext/members/{member_id}/members until the public beta goes live.
 </aside>
 
-Get a particular member by id. Requires the `campaigns.members` scope.
+Get a particular member by id. Requires the `campaigns.members` scope. Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
 
-Allowed includes: [address](/#address) (requires scope), [currently_entitled_tiers](/#tier), [campaign](/#campaign-v2)
 
 We recommend using `currently_entitled_rewards` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
 
