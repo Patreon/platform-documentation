@@ -187,7 +187,7 @@ will_pay_amount_cents | integer | The amount in cents the user will pay at the n
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-address | [Address](/#address) | The member's shipping address that they entered for the campaign.Requires the `campaign.members.address` scope.
+address | [Address](/#address) | The member's shipping address that they entered for the campaign. Requires the `campaign.members.address` scope.
 campaign | [Campaign](/#campaign) | The campaign that the membership is for.
 currently_entitled_tiers | array[[Tier](/#tier)] | The tiers that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
 user | [User](/#user) | The user who is pledging to the campaign.
@@ -200,17 +200,17 @@ A client created by a developer, used for getting OAuth2 access tokens.
 
 Attribute | Type | Description
 --------- | ---- | -----------
-client_secret | string |
-name | string |
-description | string |
-author_name | string |
-domain | string |
-version | integer |
-icon_url | string |
-privacy_policy_url | string |  Can be null.
-tos_url | string |  Can be null.
-redirect_uris | string |
-default_scopes | string |
+client_secret | string | Secret token generated when you registered your client.
+name | string | Display name for your app.
+description | string | Details about client's functionality.
+author_name | string | Author name for app attribution.
+domain | string | Company domain, e.g. www.patreon.com.
+version | integer | Client API version, e.g `2` for APIv2.
+icon_url | string | Fully qualified url for your app icon, shown on oauth screen.
+privacy_policy_url | string | Fully qualified url to our privacy policy, linked on oauth screen. Can be null.
+tos_url | string |  Terms of Service url for your app. Can be null.
+redirect_uris | string | Space-separated list of fully qualified uris that your oauth is trusted to redirect to after connection.
+default_scopes | string | Space-separated list of Patreon scopes you wish to associate with this oauth session.
 
 ### OAuthClient Relationships
 
@@ -264,7 +264,7 @@ email | string | The user's email address. Requires certain scopes to access. Se
 first_name | string | First name. Can be null.
 last_name | string | Last name. Can be null.
 full_name | string | Combined first and last name.
-is_email_verified | boolean | `true` if the user has confirmed their email.
+is_email_verified | boolean | `true` if the user has confirmed their email. Requires certain scopes to access. See the scopes section of this documentation.
 vanity | string | The public "username" of the user. patreon.com/<vanity> goes to this user's creator page. Non-creator users might not have a vanity. Can be null.
 about | string | The user's about text, which appears on their profile. Can be null.
 image_url | string | The user's profile picture URL, scaled to width 400px.
