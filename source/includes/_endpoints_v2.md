@@ -12,10 +12,6 @@ With APIv2, all properties must be individually requested; there are no more def
 
 ## GET /api/oauth2/v2/identity
 
-<aside>
-In earlier versions of the beta, this was /api/oauth2/v2/me. This is currently available at /api/oauth2/vNext/identity until the public beta goes live.
-</aside>
-
 Fetches the [User](/#user-v2) resource.
 
 Top-level `include`s: [`memberships`](/#member), [`campaign`](/#campaign-v2).
@@ -62,10 +58,6 @@ You can request related data through includes, ie, `/api/oauth2/v2/identity?incl
 
 ## GET /api/oauth2/v2/campaigns
 
-<aside>
-This is also available at /api/oauth2/vNext/campaigns until the public beta goes live.
-</aside>
-
 Requires the `campaigns` scope. Returns a list of [Campaign](/#campaign-v2)s owned by the authorized user.
 
 Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
@@ -104,10 +96,6 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#ben
 
 ## GET /api/oauth2/v2/campaigns/{campaign_id}
 
-<aside>
-This is currently available at /api/oauth2/vNext/campaigns/{campaign_id} until the public beta goes live.
-</aside>
-
 Requires the `campaigns` scope. The single resource endpoint returns information about a single [Campaign](/#campaign-v2), fetched by campaign ID.
 
 Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
@@ -145,10 +133,6 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#ben
 ```
 
 ## GET /api/oauth2/v2/campaigns/{campaign_id}/members
-
-<aside>
-In earlier versions of the beta, this was /api/oauth2/v2/members. This is currently available at /api/oauth2/vNext/campaigns/{campaign_id}/members until the public beta goes live.
-</aside>
 
 Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope.
 
@@ -210,16 +194,17 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
         "next": "https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?page%5Bcursor%5D=12345678abcdefg",
     },
     "meta": {
-        "pagination": {"cursors": {"next": "q349287429sdfjhskdfjh"}}
+        "pagination": {
+            "cursors": {
+                "next": "12345678abcdefg"
+            },
+            "total": 100
+        }
     }
 }
 ```
 
 ## GET /api/oauth2/v2/members/{id}
-
-<aside>
-This is currently available at /api/oauth2/vNext/members/{member_id} until the public beta goes live.
-</aside>
 
 Get a particular member by id. Requires the `campaigns.members` scope.
 

@@ -83,13 +83,10 @@ Note: When the webhooks API was made available in a limited beta to API v1 custo
       },
       "id":"3955",
       "type":"webhook"
-   },
-   "links":{  
-      "self":"https://www.patreon.com/api/webhooks/3955"
    }
 }
 ```
-
+ q
 ## Webhook Responses
 
 When a webhook fires, the data will look something like this. Note that there will be a `X-Patreon-Signature` header, which is the HEX digest of the message body HMAC signed (with MD5) using your webhook's secret. We suggest you use this to verify authenticity of the webhook event. Webhook secrets should not be shared.
@@ -117,9 +114,6 @@ When a webhook fires, the data will look something like this. Note that there wi
         "data": {
           "id": "123456",
           "type": "campaign"
-        },
-        "links": {
-          "related": "https://www.patreon.com/api/campaigns/123456"
         }
       },
       "currently_entitled_tiers": {
@@ -129,9 +123,6 @@ When a webhook fires, the data will look something like this. Note that there wi
         "data": {
           "id": "987654321",
           "type": "user"
-        },
-        "links": {
-          "related": "https://www.patreon.com/api/user/987654321"
         }
       }
     },
@@ -140,10 +131,7 @@ When a webhook fires, the data will look something like this. Note that there wi
   "included": [
     ...campaign data...
     ...user data...
-  ],
-  "links": {
-    "self": "https://www.patreon.com/api/members/d485d5ac-6c82-42c6-9c08-c50cf01b73d7"
-  }
+  ]
 }
 ```
 
