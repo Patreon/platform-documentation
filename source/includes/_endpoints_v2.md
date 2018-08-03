@@ -68,7 +68,7 @@ This is also available at /api/oauth2/vNext/campaigns until the public beta goes
 
 Requires the `campaigns` scope. The listing endpoint returns all available [Campaign](/#campaign-v2)s.
 
-Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
+Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#benefit), [`goals`](/#goal).
 
 ```json
 //Sample response for https://www.patreon.com/api/oauth2/v2/campaigns?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,is_nsfw,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url,has_rss,has_sent_rss_notify,rss_feed_title,rss_artwork_url,patron_count,discord_server_id,google_analytics_id,earnings_visibility
@@ -121,7 +121,7 @@ This is currently available at /api/oauth2/vNext/campaigns/{campaign_id} until t
 
 Requires the `campaigns` scope. The single resource endpoint returns information about a single [Campaign](/#campaign-v2), fetched by campaign ID.
 
-Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
+Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#benefit), [`goals`](/#goal).
 
 ```json
 //Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,_is_nswf,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
@@ -163,7 +163,7 @@ In earlier versions of the beta, this was /api/oauth2/v2/members. This is curren
 
 Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope.
 
-Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
+Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
 
 We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#member) is entitled to, either as an include on the members list or on the member get.
 
@@ -234,7 +234,7 @@ This is currently available at /api/oauth2/vNext/members/{member_id} until the p
 
 Get a particular member by id. Requires the `campaigns.members` scope.
 
-Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
+Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
 
 
 We recommend using `currently_entitled_tiers` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
