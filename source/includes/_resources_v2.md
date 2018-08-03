@@ -116,7 +116,7 @@ Relationship | Type | Description
 ------------ | ---- | -----------
 campaign | [Campaign](/#campaign) |
 benefit | [Benefit](/#benefit) |
-member | [Member](/#member)[Member](/#member)[Member](/#member)[Member](/#member) | The member who has been granted the deliverable.
+member | [Member](/#member) | The member who has been granted the deliverable.
 user | [User](/#user) | The user who has been granted the deliverable. This user is the same as the member user.
 
 ## Goal
