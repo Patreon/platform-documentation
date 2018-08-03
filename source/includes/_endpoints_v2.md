@@ -51,9 +51,6 @@ This is the endpoint for accessing information about the current [User](/#user-v
         "id": "12345",
         "type": "user",
     },
-    "links": {
-        "self": "https://www.patreon.com/api/user/12345"
-    },
 }
 ```
 
@@ -66,10 +63,10 @@ You can request related data through includes, ie, `/api/oauth2/v2/identity?incl
 ## GET /api/oauth2/v2/campaigns
 
 <aside>
-This is also available at /api/oauth2/vNext/campaigns/{campaign_id} until the public beta goes live.
+This is also available at /api/oauth2/vNext/campaigns until the public beta goes live.
 </aside>
 
-Requires the `campaigns` scope. The listing endpoint returns all available [Campaign](/#campaign-v2)s.
+Requires the `campaigns` scope. Returns a list of [Campaign](/#campaign-v2)s owned by the authorized user.
 
 Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
 
@@ -160,7 +157,7 @@ Top-level `include`s: [`address`](/#address) (requires `campaign.members.address
 We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#member) is entitled to, either as an include on the members list or on the member get.
 
 ```json
-// Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&include=currently_entitled_tiers&fields[tier]=amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url
+// Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?include=currently_entitled_tiers,address&fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&fields[tier]=amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url
 {
     "data": [
         {
@@ -175,6 +172,12 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
            },
            "id": "03ca69c3-ebea-4b9a-8fac-e4a837873254",
            "relationships": {
+                "address": {
+                    "data": {
+                        "id": "12345",
+                        "type": "address"
+                    }
+                },
                 "currently_entitled_tiers": {
                     "data": [{
                         "id": "54321",
@@ -246,9 +249,6 @@ We recommend using `currently_entitled_tiers` to see exactly what a member is en
                 "data": {
                     "id": "123456",
                     "type": "address"
-                },
-                "links": {
-                    "related": "https://www.patreon.com/api/addresses/123456"
                 }
             },
             "currently_entitled_tiers": {
