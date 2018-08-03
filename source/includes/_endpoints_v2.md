@@ -215,7 +215,7 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
 ## GET /api/oauth2/v2/members/{id}
 
 <aside>
-This is currently available at /api/oauth2/vNext/members/{member_id}/members until the public beta goes live.
+This is currently available at /api/oauth2/vNext/members/{member_id} until the public beta goes live.
 </aside>
 
 Get a particular member by id. Requires the `campaigns.members` scope.
