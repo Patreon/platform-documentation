@@ -2,7 +2,7 @@
 
 ## Address
 
-A [User](/#user)'s address, normally supplied when requested in the pledge flow.
+A [User](/#user-v2)'s address, normally supplied when requested in the pledge flow.
 
 ### Address Attributes
 
@@ -24,12 +24,12 @@ confirmed_at | string (UTC ISO format) | When this address was last confirmed, s
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-user | [User](/#user) |
-campaigns | array[[Campaign](/#campaign)] |
+user | [User](/#user-v2) |
+campaigns | array[[Campaign](/#campaign-v2)] |
 
 ## Benefit
 
-A benefit added to the [Campaign](/#campaign), which can be added to a tier to be delivered to the patron.
+A benefit added to the [Campaign](/#campaign-v2), which can be added to a tier to be delivered to the patron.
 
 ### Benefit Attributes
 
@@ -53,7 +53,7 @@ Relationship | Type | Description
 ------------ | ---- | -----------
 tiers | array[[Tier](/#tier)] |
 deliverables | array[[Deliverable](/#deliverable)] |
-campaign | [Campaign](/#campaign) |
+campaign | [Campaign](/#campaign-v2) |
 
 ## Campaign v2
 
@@ -94,7 +94,7 @@ earnings_visibility | string | Controls the visibility of the total earnings in 
 Relationship | Type | Description
 ------------ | ---- | -----------
 tiers | array[[Tier](/#tier)] |
-creator | [User](/#user) |
+creator | [User](/#user-v2) |
 benefits | array[[Benefit](/#benefit)] |
 goals | array[[Goal](/#goal)] |
 
@@ -114,10 +114,10 @@ due_at | string (UTC ISO format) | When the deliverable is due to the patron.
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-campaign | [Campaign](/#campaign) |
+campaign | [Campaign](/#campaign-v2) |
 benefit | [Benefit](/#benefit) |
 member | [Member](/#member) | The member who has been granted the deliverable.
-user | [User](/#user) | The user who has been granted the deliverable. This user is the same as the member user.
+user | [User](/#user-v2) | The user who has been granted the deliverable. This user is the same as the member user.
 
 ## Goal
 
@@ -139,7 +139,7 @@ completed_percentage | integer | Equal to (pledge_sum/goal amount)*100, helpful 
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-campaign | [Campaign](/#campaign) | The campaign trying to reach the goal
+campaign | [Campaign](/#campaign-v2) | The campaign trying to reach the goal
 
 ## Media
 
@@ -188,9 +188,9 @@ will_pay_amount_cents | integer | The amount in cents the user will pay at the n
 Relationship | Type | Description
 ------------ | ---- | -----------
 address | [Address](/#address) | The member's shipping address that they entered for the campaign. Requires the `campaign.members.address` scope.
-campaign | [Campaign](/#campaign) | The campaign that the membership is for.
+campaign | [Campaign](/#campaign-v2) | The campaign that the membership is for.
 currently_entitled_tiers | array[[Tier](/#tier)] | The tiers that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
-user | [User](/#user) | The user who is pledging to the campaign.
+user | [User](/#user-v2) | The user who is pledging to the campaign.
 
 ## OAuthClient
 
@@ -216,8 +216,8 @@ default_scopes | string | Space-separated list of Patreon scopes you wish to ass
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-user | [User](/#user) |
-campaign | [Campaign](/#campaign) |
+user | [User](/#user-v2) |
+campaign | [Campaign](/#campaign-v2) |
 
 ## Tier
 
@@ -248,7 +248,7 @@ unpublished_at | string (UTC ISO format) | Datetime tier was unpublished, while 
 
 Relationship | Type | Description
 ------------ | ---- | -----------
-campaign | [Campaign](/#campaign) | The campaign the tier belongs to.
+campaign | [Campaign](/#campaign-v2) | The campaign the tier belongs to.
 tier_image | [Media](/#media) | The image file associated with the tier.
 benefits | array[[Benefit](/#benefit)] | The benefits attached to the tier, which are used for generating deliverables
 
@@ -281,7 +281,7 @@ social_connections | string | Mapping from user's connected app names to externa
 Relationship | Type | Description
 ------------ | ---- | -----------
 memberships | array[[Member](/#member)] | Usually a zero or one-element array with the user's membership to the token creator's campaign, if they are a member. With the `identity.memberships` scope, this returns memberships to ALL campaigns the user is a member of.
-campaign | [Campaign](/#campaign) |
+campaign | [Campaign](/#campaign-v2) |
 
 ## Webhook
 
@@ -303,4 +303,4 @@ secret | string | Secret used to sign your webhook message body, so you can vali
 Relationship | Type | Description
 ------------ | ---- | -----------
 client | [OAuth-Client](/#oauthclient) | The client which created the webhook
-campaign | [Campaign](/#campaign) | The campaign whose events trigger the webhook.
+campaign | [Campaign](/#campaign-v2) | The campaign whose events trigger the webhook.

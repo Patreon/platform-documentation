@@ -60,37 +60,48 @@ You can request related data through includes, ie, `/api/oauth2/v2/identity?incl
 
 Requires the `campaigns` scope. Returns a list of [Campaign](/#campaign-v2)s owned by the authorized user.
 
-Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
+Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#benefit), [`goals`](/#goal).
 
 ```json
-//Sample response for https://www.patreon.com/api/oauth2/v2/campaigns?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,_is_nswf,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
+//Sample response for https://www.patreon.com/api/oauth2/v2/campaigns?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,is_nsfw,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url,has_rss,has_sent_rss_notify,rss_feed_title,rss_artwork_url,patron_count,discord_server_id,google_analytics_id,earnings_visibility
 {
-    "data":
-        [{
+    "data": [
+        {
             "attributes": {
-                "created_at": "2018-04-01T15:27:11+00:00",
+                "created_at": "2018-05-04T23:34:08+00:00",
                 "creation_name": "online communities",
                 "discord_server_id": "1234567890",
+                "google_analytics_id": "1234567890",
+                "has_rss": true,
+                "has_sent_rss_notify": true,
                 "image_small_url": "https://example.url",
                 "image_url": "https://example.url",
                 "is_charged_immediately": false,
-                "is_monthly": true,
+                "is_monthly": false,
                 "is_nsfw": false,
                 "main_video_embed": null,
-                "main_video_url": null,
+                "main_video_url": "https://example.url",
                 "one_liner": null,
-                "patron_count": 1000,
-                "pay_per_name": "month",
-                "pledge_url": "/bePatron?c=12345",
-                "published_at": "2018-04-01T18:15:34+00:00",
-                "summary": "The most creator-first API",
-                "thanks_embed": "",
+                "patron_count": 2,
+                "pay_per_name": "creation",
+                "pledge_url": "/bePatron?c=1234560",
+                "published_at": "2018-05-09T17:12:01+00:00",
+                "rss_artwork_url": "https://example.url",
+                "rss_feed_title": "My custom feed",
+                "summary": "Putting the internet to work for creators.",
+                "thanks_embed": null,
                 "thanks_msg": null,
-                "thanks_video_url": null,
+                "thanks_video_url": null
             },
-           "id": "12345",
-           "type": "campaign"
-        }],
+            "id": "1234560",
+            "type": "campaign"
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 1
+        }
+    }
 }
 ```
 
@@ -98,7 +109,7 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#ben
 
 Requires the `campaigns` scope. The single resource endpoint returns information about a single [Campaign](/#campaign-v2), fetched by campaign ID.
 
-Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
+Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#benefit), [`goals`](/#goal).
 
 ```json
 //Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,_is_nswf,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
@@ -136,7 +147,7 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#ben
 
 Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope.
 
-Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
+Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
 
 We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#member) is entitled to, either as an include on the members list or on the member get.
 
@@ -208,7 +219,7 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
 
 Get a particular member by id. Requires the `campaigns.members` scope.
 
-Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
+Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
 
 
 We recommend using `currently_entitled_tiers` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
