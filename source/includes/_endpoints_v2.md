@@ -96,7 +96,7 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#ben
                 "published_at": "2018-05-09T17:12:01+00:00",
                 "rss_artwork_url": "https://example.url",
                 "rss_feed_title": "My custom feed",
-                "summary": "The most creator-first API",
+                "summary": "Putting the internet to work for creators.",
                 "thanks_embed": null,
                 "thanks_msg": null,
                 "thanks_video_url": null
