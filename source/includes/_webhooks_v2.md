@@ -62,7 +62,7 @@ Note: When the webhooks API was made available in a limited beta to API v1 custo
     },
     "relationships": {
       "campaign": {
-        "data": {"type": "campaign", "id": "foo"},
+        "data": {"type": "campaign", "id": "12345"},
       },
     },
   },
@@ -72,12 +72,14 @@ Note: When the webhooks API was made available in a limited beta to API v1 custo
 {  
    "data":{  
       "attributes":{  
-         "enabled":true,
+         "last_attempted_at": null,
+         "paused":false,
          "num_consecutive_times_failed":0,
          "secret":"abcdefghiklmnopqrstuvwyz",
-         "trigger":"pledges:create",
-         "triggers":[  
-            "pledges:create"
+         "triggers":[
+            "members:create",
+            "members:update",
+            "members:delete"
          ],
          "uri":"https://example.com/hooks/patreon"
       },
@@ -86,7 +88,7 @@ Note: When the webhooks API was made available in a limited beta to API v1 custo
    }
 }
 ```
- q
+
 ## Webhook Responses
 
 When a webhook fires, the data will look something like this. Note that there will be a `X-Patreon-Signature` header, which is the HEX digest of the message body HMAC signed (with MD5) using your webhook's secret. We suggest you use this to verify authenticity of the webhook event. Webhook secrets should not be shared.
@@ -139,7 +141,7 @@ When a webhook fires, the data will look something like this. Note that there wi
 
 Update a webhook with the given id, if the webhook was created by your client. Requires the `w:campaigns.webhook scope.`
 
-- NOTE: If and only if `num_consecutive_times_failed` > 0, you have unsent events due to your webhook being unreachable on our last attempt. To send all your queued events, you can `PATCH /api/oauth2/v2/webhooks/{webhook_id}` with attribute `is_paused: false`. We’ll attempt to send you all unsent events and report back with your client’s response to us.
+- NOTE: If and only if `num_consecutive_times_failed` > 0, you have unsent events due to your webhook being unreachable on our last attempt. To send all your queued events, you can `PATCH /api/oauth2/v2/webhooks/{webhook_id}` with attribute `paused: false`. We’ll attempt to send you all unsent events and report back with your client’s response to us.
 
 
 ```json
@@ -151,8 +153,8 @@ Update a webhook with the given id, if the webhook was created by your client. R
     "attributes": {
       "triggers": ["members:create", "members:delete"],
       "uri": "https://www.example2.com",
-      "is_paused": "false" // <- do this if you’re attempting to send missed events, see NOTE in Example Webhook Payload
-    },
-  },
+      "paused": "false" // <- do this if you’re attempting to send missed events, see NOTE in Example Webhook Payload
+    }
+  }
 }
 ```
