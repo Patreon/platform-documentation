@@ -16,7 +16,9 @@ With APIv2, all properties must be individually requested; there are no more def
 In earlier versions of the beta, this was /api/oauth2/v2/me. This is currently available at /api/oauth2/vNext/identity until the public beta goes live.
 </aside>
 
-Fetches the [User](/#user-v2) resource. Top-level `include`s: [`memberships`](/#member), [`campaign`](/#campaign-v2).
+Fetches the [User](/#user-v2) resource.
+
+Top-level `include`s: [`memberships`](/#member), [`campaign`](/#campaign-v2).
 
 This is the endpoint for accessing information about the current [User](/#user-v2) with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will not receive email address without that scope.
 
@@ -67,7 +69,9 @@ You can request related data through includes, ie, `/api/oauth2/v2/identity?incl
 This is also available at /api/oauth2/vNext/campaigns/{campaign_id} until the public beta goes live.
 </aside>
 
-Requires the `campaigns` scope. The listing endpoint returns all available [Campaign](/#campaign-v2)s. Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
+Requires the `campaigns` scope. The listing endpoint returns all available [Campaign](/#campaign-v2)s.
+
+Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#benefit), [`goals`](/#goal).
 
 ```json
 //Sample response for https://www.patreon.com/api/oauth2/v2/campaigns?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,_is_nswf,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
@@ -149,12 +153,14 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user), [`benefits`](/#ben
 In earlier versions of the beta, this was /api/oauth2/v2/members. This is currently available at /api/oauth2/vNext/campaigns/{campaign_id}/members until the public beta goes live.
 </aside>
 
-Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope. Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
+Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope.
+
+Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
 
 We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#member) is entitled to, either as an include on the members list or on the member get.
 
 ```json
-// Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&include=currently_entitled_rewards&fields[reward]=amount,amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url
+// Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&include=currently_entitled_tiers&fields[tier]=amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url
 {
     "data": [
         {
@@ -169,10 +175,10 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
            },
            "id": "03ca69c3-ebea-4b9a-8fac-e4a837873254",
            "relationships": {
-                "currently_entitled_rewards": {
+                "currently_entitled_tiers": {
                     "data": [{
                         "id": "54321",
-                        "type": "reward",
+                        "type": "tier",
                     }]
                 }
            },
@@ -182,10 +188,9 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
     ],
     "included": [{
         "attributes": {
-            "amount": 100,
             "amount_cents": 100,
             "created_at": "2018-04-01T04:15:41.403645+00:00",
-            "description": "A reward",
+            "description": "A tier",
             "discord_role_ids": ["1234567890"],
             "edited_at": "2018-04-01T02:55:36.963334+00:00",
             "patron_count": 32,
@@ -196,7 +201,7 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
             "url": "/bePatron?c=12345&rid=54321",
         },
         "id": "54321",
-        "type": "reward",
+        "type": "tier",
     }],
     "links": {
         "next": "https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?page%5Bcursor%5D=12345678abcdefg",
@@ -213,10 +218,12 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
 This is currently available at /api/oauth2/vNext/members/{member_id}/members until the public beta goes live.
 </aside>
 
-Get a particular member by id. Requires the `campaigns.members` scope. Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
+Get a particular member by id. Requires the `campaigns.members` scope.
+
+Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user).
 
 
-We recommend using `currently_entitled_rewards` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
+We recommend using `currently_entitled_tiers` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
 
 ```json
 // Sample response for https://www.patreon.com/api/oauth2/v2/members/03ca69c3-ebea-4b9a-8fac-e4a837873254/?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,patron_status,currently_entitled_amount_cents,pledge_cap_amount_cents,pledge_relationship_start
