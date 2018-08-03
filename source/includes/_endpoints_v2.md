@@ -226,21 +226,81 @@ Top-level `include`s: [`address`](/#address) (requires `campaign.members.address
 We recommend using `currently_entitled_tiers` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
 
 ```json
-// Sample response for https://www.patreon.com/api/oauth2/v2/members/03ca69c3-ebea-4b9a-8fac-e4a837873254/?fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,patron_status,currently_entitled_amount_cents,pledge_cap_amount_cents,pledge_relationship_start
+// Sample response for https://www.patreon.com/api/oauth2/v2/members/03ca69c3-ebea-4b9a-8fac-e4a837873254?fields[member]=full_name,is_follower,email,last_charge_date,last_charge_status,lifetime_support_cents,patron_status,currently_entitled_amount_cents,pledge_relationship_start,will_pay_amount_cents&fields%5Btier%5D=title&fields%5Buser%5D=full_name,hide_pledges
 {
     "data": {
         "attributes": {
             "full_name": "Platform Team",
+            "email": "platform@team.com,
             "is_follower": false,
             "last_charge_date": "2018-04-01T21:28:06+00:00",
             "last_charge_status": "Paid",
             "lifetime_support_cents": 400,
             "patron_status": "active_patron",
             "currently_entitled_amount_cents": 100,
-            "pledge_cap_amount_cents": 100,
-            "pledge_relationship_start": "2018-04-01T16:33:27.861405+00:00"},
+            "pledge_relationship_start": "2018-04-01T16:33:27.861405+00:00",
+            "will_pay_amount_cents": 100},
        "id": "03ca69c3-ebea-4b9a-8fac-e4a837873254",
+       "relationships": {
+            "address": {
+                "data": {
+                    "id": "123456",
+                    "type": "address"
+                },
+                "links": {
+                    "related": "https://www.patreon.com/api/addresses/123456"
+                }
+            },
+            "currently_entitled_tiers": {
+                "data": [
+                    {
+                        "id": "99001122",
+                        "type": "tier"
+                    }
+                ]
+            },
+            "user": {
+                "data": {
+                    "id": "654321",
+                    "type": "user"
+                }
+            }
+       },
        "type": "member",
     },
+    "included": [
+        {
+            "attributes": {
+                "addressee": "Platform Team",
+                "city": "San Francisco",
+                "confirmed": true,
+                "confirmed_at": null,
+                "country": "US",
+                "created_at": "2018-06-03T16:23:38+00:00",
+                "line_1": "555 Main St",
+                "line_2": "",
+                "phone_number": null,
+                "postal_code": "94103",
+                "state": "CA"
+            },
+            "id": "1511589",
+            "type": "address"
+        },
+        {
+            "attributes": {
+                "full_name": "Platform Team",
+                "hide_pledges": false,
+            },
+            "id": "654321",
+            "type": "user"
+        },
+        {
+            "attributes": {
+                "title": "Tshirt Tier"
+            },
+            "id": "99001122",
+            "type": "tier"
+        }
+    ]
 }
 ```
