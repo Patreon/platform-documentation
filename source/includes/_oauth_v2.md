@@ -8,12 +8,13 @@ APIv2 is still in beta, and while the scopes and endpoints are stable, the speci
 At a high level, the main differences between APIv1 and APIv2 are:
 
 1. The Pledges resource has been replaced by the Members resource. Members return more data about the relationship between a patron and a creator, including charge status and membership lifetime.
-2. The scopes have been improved. We have reworked what scopes are available in the API to provide better access for developers and better security for our users.
-3. Developers can now create webhooks on campaigns on behalf of the creator, so your application can get real-time updates about a creator's campaign.
+2. **All data attributes and relationships must be explicitly requested** with the `fields` and `include` [query params](/#requesting-specific-data). In v1, the server would return certain attributes and relationships by default. Now, in v2, no data other than type and id will be returned for a resource unless it is requested.
+3. The scopes have been improved. We have reworked what scopes are available in the API to provide better access for developers and better security for our users.
+4. Developers can now create webhooks on campaigns on behalf of the creator, so your application can get real-time updates about a creator's campaign.
 
 ### What stays the same?
 
-1. Getting access to a Patreon user’s account via OAuth works much the same. Just make sure to request all required scopes. 
+1. Getting access to a Patreon user’s account via OAuth works much the same. Just make sure to request all required scopes.
 2. The client creator’s access token will automatically have all V2 scopes associated with it.
 3. We will not be deprecating APIv1 in the next year at least.
 
