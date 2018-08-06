@@ -8,7 +8,7 @@ APIv2 is still in beta, and while the scopes and endpoints are stable, the speci
 At a high level, the main differences between APIv1 and APIv2 are:
 
 1. The Pledges resource has been replaced by the Members resource. Members return more data about the relationship between a patron and a creator, including charge status and membership lifetime.
-2. **All data attributes and relationships must be explicitly requested** with the `fields` and `include` [query params](/#requesting-specific-data). In the past, the server would return certain attributes and relationships by default, whereas some had to be requested explicitly, which was confusing.
+2. **All data attributes and relationships must be explicitly requested** with the `fields` and `include` [query params](/#requesting-specific-data). In v1, the server would return certain attributes and relationships by default. Now, in v2, no data other than type and id will be returned for a resource unless it is requested.
 3. The scopes have been improved. We have reworked what scopes are available in the API to provide better access for developers and better security for our users.
 4. Developers can now create webhooks on campaigns on behalf of the creator, so your application can get real-time updates about a creator's campaign.
 
