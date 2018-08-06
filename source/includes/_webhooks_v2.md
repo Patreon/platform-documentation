@@ -36,7 +36,7 @@ Top-level `include`s: [`client`](/#oauthclient), [`campaign`](/#campaign-v2).
 ## POST /api/oauth2/v2/webhooks
 Create a [Webhook](/#webhook) on the current user’s campaign. Requires the `w:campaigns.webhook` scope.
 
-## Triggers
+## Triggers v2
 
 Trigger | Cause
 ------- | -----
