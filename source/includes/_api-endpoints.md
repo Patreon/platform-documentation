@@ -10,7 +10,10 @@ The three endpoints below are accessed using an OAuth client `access_token` obta
 
 When performing an API request, the information you are allowed is determined by which `access_token` you are using. Please be sure to select your `access_token` appropriately. For example, __if someone has granted your OAuth client access to their profile information, and you try to fetch it using your own Creator's Access Token instead of the one created when they granted your client access, you will instead just get your own profile information.__
 
+During the transition period from APIv1 to APIv2, it is possible to use [v2 scopes on v1 endpoints](#using-apiv2-with-apiv1). If you do this, note that you may have more scope than you had in v1, and so the set of data returned will be much greater.
+
 ## Fetching a patron's profile info
+
 ```ruby
 require 'patreon'
 
@@ -109,6 +112,17 @@ function handleOAuthRedirectRequest(request, response) {
             response.end(err)
         })
 }
+
+//Get the raw json from the response. See for the expected format of the data
+var patreon_response = patreon_client('/current_user').then(function(result) {
+  user_store = result.store
+  const data = result.rawJson
+  /*  data.data will contain the current_user, but there might be more users returned and loaded into the store. 
+   *  Get the id of the requested user, and find it in the store
+   */ 
+  const myUserId = data.data.id
+  creator = user_store.find('user', myUserId)
+})
 ```
 
 ```java
@@ -199,6 +213,11 @@ if (included != null) {
 ```
 
 This endpoint returns a JSON representation of the [user](#user) who granted your OAuth client an `access_token`. It is most typically used in the [OAuth "Log in with Patreon flow"](https://www.patreon.com/platform/documentation/oauth) to create or update the patron's account info in your application.
+
+The Patreon JS library uses a data store pattern for storing inflated objects from the returned results of API calls. In some cases, especially if you have been granted the scopes for being a multi-campaign client or are opted-in to some API beta programs, the JS client calling `/current_user` will fetch the current user's campaign, as well as all the patron users connected to that campaign.
+
+This can result in the user store in the JS library having a larger list of users than expected for a call to `/current_user`, but the current user's `user` object will be in that list.
+
 
 ### HTTPS Request
 
