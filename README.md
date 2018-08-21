@@ -14,9 +14,10 @@ Documentation for platform models visible on [docs.patreon.com](https://docs.pat
 3. In your terminal window, or tmux session, copy the relevant sections of the generated markdown output (everything following `Checking Webhook`) into `platform-documentation/source/includes/_resources_v2.md`.
 4. Commit that update to a new branch and have it reviewed and merged into master.
 5. Deploy the documentation using:
-   1. `ssh ansible`
+   1. `ssh ansible-bastion`
    2. `cd ansible`
-   3. `ansible-playbook playbooks/docs.yml`
+   3. `git checkout master; git pull`
+   4. `ansible-playbook playbooks/docs.yml`
 
 ## Powered by slate
 
