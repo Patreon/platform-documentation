@@ -2,7 +2,7 @@
 
 ## Address
 
-A [User](/#user-v2)'s address, normally supplied when requested in the pledge flow.
+A [User](/#user-v2)'s shipping address.
 
 ### Address Attributes
 
@@ -15,7 +15,7 @@ postal_code | string | Postal or zip code. Can be null.
 city | string | City.
 state | string | State or province name. Can be null.
 country | string | Country.
-phone_number | string | Telephone number. Can be null.
+phone_number | string | Telephone number. Specified for non-US addresses. Can be null.
 created_at | string (UTC ISO format) | Datetime address was first created.
 confirmed | boolean | `true` if the address was confirmed after creation.
 confirmed_at | string (UTC ISO format) | When this address was last confirmed, set by `confirmed` action attribute. Can be null.

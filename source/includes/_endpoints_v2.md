@@ -184,7 +184,24 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
         },
         ...other members...,    
     ],
-    "included": [{
+    "included": [
+        {
+            "attributes": {
+                "addressee": "Platform Team",
+                "city": "San Francisco",
+                "confirmed": true,
+                "confirmed_at": null,
+                "country": "US",
+                "created_at": "2018-06-03T16:23:38+00:00",
+                "line_1": "555 Main St",
+                "line_2": "",
+                "phone_number": null,
+                "postal_code": "94103",
+                "state": "CA"
+            },
+            "id": "12345",
+            "type": "address"
+        },{
         "attributes": {
             "amount_cents": 100,
             "created_at": "2018-04-01T04:15:41.403645+00:00",
@@ -279,7 +296,7 @@ We recommend using `currently_entitled_tiers` to see exactly what a member is en
                 "postal_code": "94103",
                 "state": "CA"
             },
-            "id": "1511589",
+            "id": "123456",
             "type": "address"
         },
         {
