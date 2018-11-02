@@ -274,7 +274,7 @@ created | string (UTC ISO format) | Datetime of this user's account creation.
 url | string | URL of this user's creator or patron profile.
 like_count | integer | How many posts this user has liked.
 hide_pledges | boolean | `true` if the user has chosen to keep private which creators they pledge to. Can be null.
-social_connections | string | Mapping from user's connected app names to external user id on the respective app.
+social_connections | object | Mapping from user's connected app names to and object containing the external user id and a profile URL in the respective app.
 
 ### User Relationships
 

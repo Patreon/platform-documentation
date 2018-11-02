@@ -117,9 +117,9 @@ function handleOAuthRedirectRequest(request, response) {
 var patreon_response = patreon_client('/current_user').then(function(result) {
   user_store = result.store
   const data = result.rawJson
-  /*  data.data will contain the current_user, but there might be more users returned and loaded into the store. 
+  /*  data.data will contain the current_user, but there might be more users returned and loaded into the store.
    *  Get the id of the requested user, and find it in the store
-   */ 
+   */
   const myUserId = data.data.id
   creator = user_store.find('user', myUserId)
 })
@@ -186,6 +186,7 @@ if (included != null) {
         "deviantart": null,
         "discord": null,
         "facebook": null,
+        "reddit": null,
         "spotify": null,
         "twitch": null,
         "twitter": null,
@@ -408,6 +409,7 @@ if (included != null) {
           "deviantart": null,
           "discord": null,
           "facebook": null,
+          "reddit": null,
           "spotify": null,
           "twitch": null,
           "twitter": null,
@@ -669,6 +671,7 @@ while (true) {
                     "deviantart": null,
                     "discord": null,
                     "facebook": null,
+                    "reddit": null,
                     "spotify": null,
                     "twitch": null,
                     "twitter": null,
