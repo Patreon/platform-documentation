@@ -35,6 +35,7 @@ This is the endpoint for accessing information about the current [User](/#user-v
                     "deviantart": null,
                     "discord": null,
                     "facebook": null,
+                    "reddit": null,
                     "spotify": null,
                     "twitch": null,
                     "twitter": {"user_id": "12345"},
@@ -182,7 +183,7 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
            },
            "type": "member",
         },
-        ...other members...,    
+        ...other members...,
     ],
     "included": [
         {
