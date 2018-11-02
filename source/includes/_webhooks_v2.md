@@ -69,9 +69,9 @@ Note: When the webhooks API was made available in a limited beta to API v1 custo
 }
 
 // Example API response
-{  
-   "data":{  
-      "attributes":{  
+{
+   "data":{
+      "attributes":{
          "last_attempted_at": null,
          "paused":false,
          "num_consecutive_times_failed":0,
@@ -93,11 +93,14 @@ Note: When the webhooks API was made available in a limited beta to API v1 custo
 
 When a webhook fires, the data will look something like this. Note that there will be a `X-Patreon-Signature` header, which is the HEX digest of the message body HMAC signed (with MD5) using your webhook's secret. We suggest you use this to verify authenticity of the webhook event. Webhook secrets should not be shared.
 
+See [Campaign](/#campaign-v2), [User](/#user-v2), [Tier](/#tier), and [Address](/#address) for details of the attributes of the included data.
+
 ```json
 {
   "data": {
     "attributes": {
       "currently_entitled_amount_cents": null,
+      "email": "platform-team@patreon.com",
       "full_name": "Platform",
       "is_follower": true,
       "last_charge_date": null,
@@ -105,7 +108,8 @@ When a webhook fires, the data will look something like this. Note that there wi
       "lifetime_support_cents": 0,
       "note": "",
       "patron_status": null,
-      "pledge_relationship_start": null
+      "pledge_relationship_start": null,
+      "will_pay_amount_cents": 0
     },
     "id": "d485d5ac-6c82-42c6-9c08-c50cf01b73d7",
     "relationships": {
@@ -116,7 +120,9 @@ When a webhook fires, the data will look something like this. Note that there wi
         "data": {
           "id": "123456",
           "type": "campaign"
-        }
+        },
+        "links": {
+          "related": "https://www.patreon.com/api/oauth2/v2/campaigns/123456"
       },
       "currently_entitled_tiers": {
         "data": []
@@ -133,6 +139,8 @@ When a webhook fires, the data will look something like this. Note that there wi
   "included": [
     ...campaign data...
     ...user data...
+    ...tier data...
+    ...address data...
   ]
 }
 ```
