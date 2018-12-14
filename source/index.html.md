@@ -18,14 +18,14 @@ includes:
 - clients
 - oauth
 - errors
-- resources
-- api-endpoints
-- usage
-- webhooks
 - oauth_v2
 - endpoints_v2
 - webhooks_v2
 - resources_v2
+- resources
+- api-endpoints
+- usage
+- webhooks
 - external
 - faqs
 
