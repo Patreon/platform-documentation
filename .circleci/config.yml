@@ -34,9 +34,10 @@ jobs:
                   name: Build docs
                   command: bundle exec middleman build --clean
             - persist_to_workspace:
-                root: build
+                root: "."
                 paths:
-                  - "./*"
+                  - build/*
+                  - publish_to_s3.sh
 
     deploy_to_s3:
         working_directory: ~/platform-documentation
@@ -44,7 +45,7 @@ jobs:
             - *ruby_image
         steps:
             - attach_workspace:
-                at: ./build
+                at: .
             - run:
                 command: sudo apt-get install awscli
             - deploy:
