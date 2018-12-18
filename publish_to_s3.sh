@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e # exit this script if any command fails
 
-BUCKET=studio.patreon.com
+BUCKET=docs.patreon.com
 BUILD_DIR=build
 
 #
