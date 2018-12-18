@@ -13,7 +13,6 @@ _helpers:
           name: Print debug information
           command: |
             ruby --version
-  
     - &setup3
       run:
           name: Install ruby dependencies
@@ -31,7 +30,6 @@ jobs:
             - *setup1
             - *setup2
             - *setup3
-
             - run:
                   name: Build docs
                   command: bundle exec middleman build --clean
@@ -49,11 +47,6 @@ jobs:
                 at: ./build
             - run:
                 command: sudo apt-get install awscli
-            - *setup1
-            - *setup2
-            - *setup3
-
-
             - deploy:
                   name: Uploading Styleguidist bundles to S3
                   command: /bin/bash publish_to_s3.sh
