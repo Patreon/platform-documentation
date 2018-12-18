@@ -49,7 +49,7 @@ jobs:
             - run:
                 command: sudo apt-get install awscli
             - deploy:
-                name: Uploading Styleguidist bundles to S3
+                name: Uploading Docs to S3
                 command: /bin/bash publish_to_s3.sh
 
 workflows:
