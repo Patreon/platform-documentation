@@ -10,13 +10,13 @@ _helpers:
     - &setup1 checkout
     - &setup2
       run:
-          name: Print debug information
-          command: |
+        name: Print debug information
+        command: |
             ruby --version
     - &setup3
-      run:
-          name: Install ruby dependencies
-          command: bundle
+        run:
+            name: Install ruby dependencies
+            command: bundle
 
 machine:
     timezone: America/Los_Angeles
@@ -31,13 +31,13 @@ jobs:
             - *setup2
             - *setup3
             - run:
-                  name: Build docs
-                  command: bundle exec middleman build --clean
+                name: Build docs
+                command: bundle exec middleman build --clean
             - persist_to_workspace:
                 root: "."
                 paths:
-                  - build/*
-                  - publish_to_s3.sh
+                    - build/*
+                    - publish_to_s3.sh
 
     deploy_to_s3:
         working_directory: ~/platform-documentation
@@ -49,8 +49,8 @@ jobs:
             - run:
                 command: sudo apt-get install awscli
             - deploy:
-                  name: Uploading Styleguidist bundles to S3
-                  command: /bin/bash publish_to_s3.sh
+                name: Uploading Styleguidist bundles to S3
+                command: /bin/bash publish_to_s3.sh
 
 workflows:
     version: 2
