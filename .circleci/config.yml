@@ -35,15 +35,24 @@ jobs:
             - run:
                   name: Build docs
                   command: bundle exec middleman build --clean
+            - persist_to_workspace:
+                root: build
+                paths:
+                  - *
 
     deploy_to_s3:
         working_directory: ~/platform-documentation
         docker:
             - *ruby_image
         steps:
+            - attach_workspace:
+                at: ./build
+            - run:
+                command: apt-get install awscli
             - *setup1
             - *setup2
             - *setup3
+
 
             - deploy:
                   name: Uploading Styleguidist bundles to S3
