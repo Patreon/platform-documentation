@@ -8,12 +8,14 @@ set -e # exit this script if any command fails
 
 BUCKET=docs.patreon.com
 BUILD_DIR=build
+REGION="${BUCKET_REGION:us-west-1}"
 
 #
 # Files on master branch get double-posted to the root directory
 #
 if [[ "${CIRCLE_BRANCH}" == "master" ]]; then
     aws s3 cp \
+        --region ${REGION} \
         --recursive \
         --metadata-directive REPLACE \
         --include "*" \
@@ -23,6 +25,7 @@ else
     # Files go under a branch-delimited directory
     #
     aws s3 cp \
+        --region ${REGION} \
         --recursive \
         --metadata-directive REPLACE \
         --include "*" \
