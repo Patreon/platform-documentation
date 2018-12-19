@@ -8,7 +8,7 @@ set -e # exit this script if any command fails
 
 BUCKET=docs.patreon.com
 BUILD_DIR=build
-REGION="${BUCKET_REGION:us-west-1}"
+REGION="${BUCKET_REGION:-us-west-1}"
 
 #
 # Files on master branch get double-posted to the root directory
