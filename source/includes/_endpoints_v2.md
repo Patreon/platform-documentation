@@ -248,7 +248,7 @@ We recommend using `currently_entitled_tiers` to see exactly what a member is en
     "data": {
         "attributes": {
             "full_name": "Platform Team",
-            "email": "platform@team.com,
+            "email": "platform@team.com",
             "is_follower": false,
             "last_charge_date": "2018-04-01T21:28:06+00:00",
             "last_charge_status": "Paid",
@@ -280,7 +280,7 @@ We recommend using `currently_entitled_tiers` to see exactly what a member is en
                 }
             }
        },
-       "type": "member",
+       "type": "member"
     },
     "included": [
         {
@@ -303,7 +303,7 @@ We recommend using `currently_entitled_tiers` to see exactly what a member is en
         {
             "attributes": {
                 "full_name": "Platform Team",
-                "hide_pledges": false,
+                "hide_pledges": false
             },
             "id": "654321",
             "type": "user"
