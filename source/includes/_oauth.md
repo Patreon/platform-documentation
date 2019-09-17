@@ -62,7 +62,7 @@ When the link in [Step 2](#step-2-making-the-log-in-button) redirects to the pro
 Parameter | Description
 --------- | -----------
 code | Used to fetch access tokens for the session that just signed in with Patreon.
-state | Trasnparently appended from the state param you provided in your initial link in Step 2.
+state | Transparently appended from the state param you provided in your initial link in Step 2.
 
 ## Step 4 - Validating Receipt of the OAuth Token
 
