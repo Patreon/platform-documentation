@@ -44,7 +44,8 @@ deliverables_due_today_count | integer | Number of deliverables for this benefit
 next_deliverable_due_date | string (UTC ISO format) | The next due date (after EOD today) for this benefit. Can be null.
 tiers_count | integer | Number of tiers containing this benefit.
 is_deleted | boolean | `true` if this benefit has been deleted.
-is_published | boolean | `true` if this benefit is ready to be shown to patrons.
+is_published | boolean | `true` if this benefit is ready to be fulfilled to patrons.
+is_ended | boolean | `true` if this benefit is no longer available to new patrons
 app_external_id | string | The third-party external ID this reward is associated with, if any. Can be null.
 app_meta | object | Any metadata the third-party app included with this benefit on creation. Can be null.
 
@@ -89,7 +90,9 @@ pledge_url | string | Relative (to patreon.com) URL for the pledge checkout flow
 patron_count | integer | Number of patrons pledging to this creator.
 discord_server_id | string | The ID of the external discord server that is linked to this campaign. Can be null.
 google_analytics_id | string | The ID of the Google Analytics tracker that the creator wants metrics to be sent to. Can be null.
-earnings_visibility | string | The visibility of the campaign's total earnings. One of `private`, `public`, `patrons_only`.
+show_earnings | boolean | Whether the campaign's total earnings are shown publicly
+vanity | string | The campaign's vanity. Can be null.
+url | string | A URL to access this campaign on patreon.com
 
 ### Campaign v2 Relationships
 
@@ -99,6 +102,7 @@ tiers | array[[Tier](/#tier)] | The campaign's tiers.
 creator | [User](/#user-v2) | The campaign owner.
 benefits | array[[Benefit](/#benefit)] | The campaign's benefits.
 goals | array[[Goal](/#goal)] | The campaign's goals.
+campaign_installations | array[Campaign-Installation] |
 
 ## Deliverable
 
@@ -154,7 +158,7 @@ Attribute | Type | Description
 file_name | string | File name.
 size_bytes | integer | Size of file in bytes.
 mimetype | string | Mimetype of uploaded file, eg: "application/jpeg".
-state | string | Upload availability state of the file.
+state | string | The state of the file.
 owner_type | string | Type of the resource that owns the file.
 owner_id | string | Ownership id (See also `owner_type`).
 owner_relationship | string | Ownership relationship type for multi-relationship medias.
@@ -162,6 +166,7 @@ upload_expires_at | string (UTC ISO format) | When the upload URL expires.
 upload_url | string | The URL to perform a POST request to in order to upload the media file.
 upload_parameters | object | All the parameters that have to be added to the upload form request.
 download_url | string | The URL to download this media. Valid for 24 hours.
+image_urls | object | The resized image URLs for this media. Valid for 2 weeks.
 created_at | string (UTC ISO format) | When the file was created.
 metadata | object | Metadata related to the file. Can be null.
 
@@ -173,7 +178,7 @@ The record of a user's membership to a campaign. Remains consistent across month
 
 Attribute | Type | Description
 --------- | ---- | -----------
-patron_status | string | One of `active_patron`, `declined_patron`, `former_patron`. Can be null.
+patron_status | string | One of `active_patron`, `declined_patron`, `former_patron`. A null value indicates the member has never pledged. Can be null.
 is_follower | boolean | The user is not a pledging patron but has subscribed to updates about public posts.
 full_name | string | Full name of the member user.
 email | string | The member's email address. Requires the `campaigns.members[email]` scope.
@@ -193,6 +198,7 @@ address | [Address](/#address) | The member's shipping address that they entered
 campaign | [Campaign](/#campaign-v2) | The campaign that the membership is for.
 currently_entitled_tiers | array[[Tier](/#tier)] | The tiers that the member is entitled to. This includes a current pledge, or payment that covers the current payment period.
 user | [User](/#user-v2) | The user who is pledging to the campaign.
+pledge_history | array[[Pledge Event](/#pledgeevent)] | The pledge history of the member
 
 ## OAuthClient
 
@@ -269,7 +275,7 @@ first_name | string | First name. Can be null.
 last_name | string | Last name. Can be null.
 full_name | string | Combined first and last name.
 is_email_verified | boolean | `true` if the user has confirmed their email.
-vanity | string | The public "username" of the user. patreon.com/<vanity> goes to this user's creator page. Non-creator users might not have a vanity. Can be null.
+vanity | string | The public "username" of the user. patreon.com/<vanity> goes to this user's creator page. Non-creator users might not have a vanity. [Deprecated! use campaign.vanity] Can be null.
 about | string | The user's about text, which appears on their profile. Can be null.
 image_url | string | The user's profile picture URL, scaled to width 400px.
 thumb_url | string | The user's profile picture URL, scaled to a square of size 100x100px.
@@ -308,3 +314,24 @@ Relationship | Type | Description
 ------------ | ---- | -----------
 client | [OAuth Client](/#oauthclient) | The client which created the webhook
 campaign | [Campaign](/#campaign-v2) | The campaign whose events trigger the webhook.
+
+## PledgeEvent
+
+The record of a pleding action taken by the user, or that action's failure.
+
+### PledgeEvent Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+type | string | Event type. One of `pledge_start`, `pledge_upgrade`, `pledge_downgrade`, `pledge_delete`, `subscription`
+date | string (UTC ISO format) | The date which this event occurred.
+payment_status | string | Status of underlying payment. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Other`
+tier_title | string | Title of the reward tier associated with the pledge
+tier_id | string | Id of the tier associated with the pledge
+
+### PledgeEvent Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+patron | [User](/#user-v2) | The pledging user
+campaign | [Campaign](/#campaign-v2) | The campaign being pledged to.
