@@ -46,6 +46,9 @@ members:delete | Triggered when a membership is deleted. Note that you may get m
 members:pledge:create | Triggered when a new pledge is created for a member. This includes when a member is created through pledging, and when a follower becomes a patron.
 members:pledge:update | Triggered when a member updates their pledge.
 members:pledge:delete | Triggered when a member deletes their pledge.
+posts:publish | Triggered when a post is published on a campaign.
+posts:update | Triggered when a post is updated on a campaign.
+posts:delete | Triggered when a post is deleted on a campaign.
 
 <aside class="notice">
 Note: When the webhooks API was made available in a limited beta to API v1 customers, we allowed triggers on the pledge model. In API v2, pledge has been deprecated and member is the resource of record. Any existing webhooks on pledge will continue to work until API v1 is deprecated.

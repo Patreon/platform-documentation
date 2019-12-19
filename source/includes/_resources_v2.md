@@ -229,6 +229,55 @@ campaign | [Campaign](#campaign-v2) | The campaign of the user who created the O
 creator_token | OAuth Token | The token of the user who created the client.
 apps | array[Platform App] | (Alpha) The apps that this client controls.
 
+## Pledge Event
+
+The record of a pledging action taken by the user, or that action's failure.
+
+### Pledge Event Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+type | string | Event type. One of `pledge_start`, `pledge_upgrade`, `pledge_downgrade`, `pledge_delete`, `subscription`
+date | string (UTC ISO format) | The date which this event occurred.
+payment_status | string | Status of underlying payment. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Other`
+tier_title | string | Title of the reward tier associated with the pledge
+tier_id | string | Id of the tier associated with the pledge
+amount_cents | integer | Amount of the underlying event
+currency_code | string | ISO code of the currency of the event
+
+### Pledge Event Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+patron | [User](#user-v2) | The pledging user
+campaign | [Campaign](#campaign-v2) | The campaign being pledged to.
+
+## Post v2
+
+Content posted by a creator on a campaign page.
+
+### Post v2 Attributes
+
+Attribute | Type | Description
+--------- | ---- | -----------
+title | string |  Can be null.
+content | string |  Can be null.
+is_paid | boolean | True if the post incurs a bill as part of a pay-per-post campaign Can be null.
+is_public | boolean | True if the post is viewable by anyone,False if only patrons (or a subset of patrons) can view Can be null.
+published_at | string (UTC ISO format) | Datetime that the creator most recently published (made publicly visible) the post. Can be null.
+url | string | A URL to access this post on patreon.com
+embed_data | object | An object containing embed data if media is embedded in the post,None if there is no embed
+embed_url | string | Embed media url Can be null.
+app_id | integer | Platform app id. Can be null.
+app_status | string | Processing status of the post. Can be null.
+
+### Post v2 Relationships
+
+Relationship | Type | Description
+------------ | ---- | -----------
+user | [User](#user-v2) | The author of the post.
+campaign | [Campaign](#campaign-v2) | The campaign that the membership is for.
+
 ## Tier
 
 A membership level on a campaign, which can have benefits attached to it.
@@ -314,26 +363,3 @@ Relationship | Type | Description
 ------------ | ---- | -----------
 client | [OAuth Client](#oauthclient) | The client which created the webhook
 campaign | [Campaign](#campaign-v2) | The campaign whose events trigger the webhook.
-
-## Pledge Event
-
-The record of a pledging action taken by the user, or that action's failure.
-
-### Pledge Event Attributes
-
-Attribute | Type | Description
---------- | ---- | -----------
-type | string | Event type. One of `pledge_start`, `pledge_upgrade`, `pledge_downgrade`, `pledge_delete`, `subscription`
-date | string (UTC ISO format) | The date which this event occurred.
-payment_status | string | Status of underlying payment. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Other`
-tier_title | string | Title of the reward tier associated with the pledge
-tier_id | string | Id of the tier associated with the pledge
-amount_cents | integer | Amount of the underlying event
-currency_code | string | ISO code of the currency of the event
-
-### Pledge Event Relationships
-
-Relationship | Type | Description
------------- | ---- | -----------
-patron | [User](#user-v2) | The pledging user
-campaign | [Campaign](#campaign-v2) | The campaign being pledged to.

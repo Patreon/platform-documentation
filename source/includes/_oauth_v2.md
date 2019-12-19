@@ -34,6 +34,7 @@ w:campaigns.webhook | Provides read, write, update, and delete access to the cam
 campaigns.members | Provides read access to data about a campaign’s members. See the /members endpoint documentation for details about what data is available. Also allows the same information to be sent via webhooks created by your client.
 campaigns.members[email] | Provides read access to the member’s email. Also allows the same information to be sent via webhooks created by your client.
 campaigns.members.address | Provides read access to the member’s address, if an address was collected in the pledge flow. Also allows the same information to be sent via webhooks created by your client.
+campaigns.posts | Provides read access to the posts on a campaign.
 
 ## Using APIv2 with APIv1
 
