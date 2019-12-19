@@ -318,3 +318,11 @@ We recommend using `currently_entitled_tiers` to see exactly what a member is en
     ]
 }
 ```
+
+## GET /api/oauth2/v2/campaigns/{campaign_id}/posts
+
+Get a list of all the [Posts](/#post-v2) on a given [Campaign](/#campaign-v2) by campaign ID. Requires the `campaigns.posts` scope.
+
+## GET /api/oauth2/v2/posts/{id}
+
+Get a particular [Post](/#post-v2) by ID. Requires the `campaigns.posts` scope.
