@@ -240,8 +240,8 @@ Attribute | Type | Description
 type | string | Event type. One of `pledge_start`, `pledge_upgrade`, `pledge_downgrade`, `pledge_delete`, `subscription`
 date | string (UTC ISO format) | The date which this event occurred.
 payment_status | string | Status of underlying payment. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Other`
-tier_title | string | Title of the reward tier associated with the pledge
-tier_id | string | Id of the tier associated with the pledge
+tier_title | string | Title of the reward tier associated with the pledge. Can be null.
+tier_id | string | Id of the tier associated with the pledge. Can be null.
 amount_cents | integer | Amount of the underlying event
 currency_code | string | ISO code of the currency of the event
 
