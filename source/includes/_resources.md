@@ -85,24 +85,29 @@ For more information, see the <a href="http://jsonapi.org/format/#fetching-spars
   "type": "pledge"
   "id": <string>
   "attributes": {
-    "amount_cents": <int>
+    "amount_cents": <int> // Amount cents in the currency used by the patron
     "created_at": <date>
+    "currency": <string> // Currency code of the pledge event (USD, GBP, EUR etc.)
     "declined_since": <date>
-    "pledge_cap_cents": <int>
     "patron_pays_fees": <bool>
+    "pledge_cap_cents": <int>
     // optional properties
     "total_historical_amount_cents": <int>
     "is_paused": <bool>
+    "status": <string> // The status of this pledge (valid, declined, pending, disabled)
     "has_shipping_address": <bool>
   }
   "relationships": {
     "patron": ...<user>...
-    "reward": ...<reward>...
+    "reward": ...<reward>... // Tier associated with this pledge
     "creator": ...<user>...
     "address": ...<address>...
   }
 }
 ```
+
+
+<aside class="notice"><code>amount_cents</code> is based in the <b>patron</b> currency which may be different from the campaign and tier currency.</aside>
 
 <aside class="notice"><code>declined_since</code> indicates the date of the most recent payment if it failed,
 or `null` if the most recent payment succeeded. A pledge with a non-null <code>declined_since</code> should
