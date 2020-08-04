@@ -103,6 +103,7 @@ creator | [User](#user-v2) | The campaign owner.
 benefits | array[[Benefit](#benefit)] | The campaign's benefits.
 goals | array[[Goal](#goal)] | The campaign's goals.
 campaign_installations | array[Campaign-Installation] |
+categories | array[Category] | The campaign's categories.
 
 ## Deliverable
 
@@ -240,10 +241,10 @@ Attribute | Type | Description
 type | string | Event type. One of `pledge_start`, `pledge_upgrade`, `pledge_downgrade`, `pledge_delete`, `subscription`
 date | string (UTC ISO format) | The date which this event occurred.
 payment_status | string | Status of underlying payment. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Other`
-tier_title | string | Title of the reward tier associated with the pledge
-tier_id | string | Id of the tier associated with the pledge
-amount_cents | integer | Amount of the underlying event
-currency_code | string | ISO code of the currency of the event
+tier_title | string | Title of the reward tier associated with the pledge.
+tier_id | string | Id of the tier associated with the pledge.
+amount_cents | integer | Amount (in the currency in which the patron paid) of the underlying event.
+currency_code | string | ISO code of the currency of the event.
 
 ### Pledge Event Relationships
 
@@ -251,6 +252,7 @@ Relationship | Type | Description
 ------------ | ---- | -----------
 patron | [User](#user-v2) | The pledging user
 campaign | [Campaign](#campaign-v2) | The campaign being pledged to.
+tier | [Tier](#tier) | The tier associated with this pledge event.
 
 ## Post v2
 
@@ -309,7 +311,7 @@ Relationship | Type | Description
 ------------ | ---- | -----------
 campaign | [Campaign](#campaign-v2) | The campaign the tier belongs to.
 tier_image | [Media](#media) | The image file associated with the tier.
-benefits | array[[Benefit](#benefit)] | The benefits attached to the tier, which are used for generating deliverables
+benefits | array[[Benefit](#benefit)] | The benefits attached to the tier, which are used for generating deliverables.
 
 ## User v2
 
@@ -363,3 +365,5 @@ Relationship | Type | Description
 ------------ | ---- | -----------
 client | [OAuth Client](#oauthclient) | The client which created the webhook
 campaign | [Campaign](#campaign-v2) | The campaign whose events trigger the webhook.
+
+
