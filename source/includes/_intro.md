@@ -20,7 +20,7 @@ We'd love to hear from you.
         </li>
         <li>
             If you're with a larger organization seeking non-technical coordination
-            you can reach our partnerships team at <a href="mailto:partners@patreon.com">partners@patreon.com</a>.
+            you can reach our partnerships team at <a href="mailto:partnerships@patreon.com">partnerships@patreon.com</a>.
         </li>
     </ul>
 </aside>
