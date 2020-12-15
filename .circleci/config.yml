@@ -47,7 +47,9 @@ jobs:
             - attach_workspace:
                 at: .
             - run:
-                command: sudo apt-get install awscli
+                command: |
+                  sudo apt-get update
+                  sudo apt-get install awscli
             - deploy:
                 name: Uploading Docs to S3
                 command: /bin/bash publish_to_s3.sh

@@ -8,46 +8,54 @@ APIv2 is still in beta, and while the scopes and endpoints are stable, the speci
 All API requests should use the hostname https://www.patreon.com
 </aside>
 
-With APIv2, all properties must be individually requested; there are no more default properties on resources.
+With APIv2, all properties must be individually requested; there are no more default properties on resources. This is done by including the desired proprties in the fields parameter i.e.: `fields[address]=addressee,city`
 
 ## GET /api/oauth2/v2/identity
 
 Fetches the [User](/#user-v2) resource.
 
-Top-level `include`s: [`memberships`](/#member), [`campaign`](/#campaign-v2).
+Top-level `includes`: [`memberships`](/#member), [`campaign`](/#campaign-v2).
 
 This is the endpoint for accessing information about the current [User](/#user-v2) with reference to the oauth token. With the basic scope of identity, you will receive the user’s public profile information. If you have the `identity[email]` scope, you will also get the user’s email address. You will not receive email address without that scope.
 
+Fields for each include must be explicitly requested i.e. `fields[campaign]=summary,is_monthly&fields[user]=full_name,email` but url encode the brackets i.e.`fields%5Bcampaign%5D=summary,is_monthly&fields%5Buser%5D=full_name,email`
+
+
 ```json
-// Sample response with email scope for https://www.patreon.com/api/oauth2/v2/identity?fields[user]=about,created,email,first_name,full_name,image_url,last_name,social_connections,thumb_url,url,vanity
+// Sample response with email scope for (url decoded) https://www.patreon.com/api/oauth2/v2/identity?fields[user]=about,created,email,first_name,full_name,image_url,last_name,social_connections,thumb_url,url,vanity
 {
     "data": {
-        "attributes":
-            {
-                "about": "A Patreon Platform User",
-                "created": "2018-04-01T00:36:26+00:00",
-                "email": "platform@patreon.com",
-                "first_name": "Platform",
-                "full_name": "Platform Team",
-                "image_url": "https://url.example",
-                "last_name": "Platform",
-                "social_connections": {
-                    "deviantart": null,
-                    "discord": null,
-                    "facebook": null,
-                    "reddit": null,
-                    "spotify": null,
-                    "twitch": null,
-                    "twitter": {"user_id": "12345"},
-                    "youtube": null
+        "attributes": {
+            "email": "some_email@email.com",
+            "full_name": "Platform Team"
+        },
+        "id": "id",
+        "relationships": {
+            "campaign": {
+                "data": {
+                    "id": "id",
+                    "type": "campaign"
                 },
-                "thumb_url": "https://url.example",
-                "url": "https://www.patreon.com/example",
-                "vanity": "platform"
-            },
-        "id": "12345",
-        "type": "user",
+                "links": {
+                    "related": "https://www.patreon.com/api/oauth2/v2/campaigns/id"
+                }
+            }
+        },
+        "type": "user"
     },
+    "included": [
+        {
+            "attributes": {
+                "is_monthly": true,
+                "summary": "Hi There"
+            },
+            "id": "id",
+            "type": "campaign"
+        }
+    ],
+    "links": {
+        "self": "https://www.patreon.com/api/oauth2/v2/user/id"
+    }
 }
 ```
 
@@ -61,10 +69,13 @@ You can request related data through includes, ie, `/api/oauth2/v2/identity?incl
 
 Requires the `campaigns` scope. Returns a list of [Campaign](/#campaign-v2)s owned by the authorized user.
 
-Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#benefit), [`goals`](/#goal).
+Top-level `includes`: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#benefit), [`goals`](/#goal).
+
+Fields for each include must be explicitly requested i.e. `fields[tier]=currently_entitled_tiers` but url encode the brackets i.e.`fields%5Btier%5D=currently_entitled_tiers`
+
 
 ```json
-//Sample response for https://www.patreon.com/api/oauth2/v2/campaigns?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,is_nsfw,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url,has_rss,has_sent_rss_notify,rss_feed_title,rss_artwork_url,patron_count,discord_server_id,google_analytics_id,earnings_visibility
+//Sample response for (url decoded) https://www.patreon.com/api/oauth2/v2/campaigns?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,is_nsfw,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url,has_rss,has_sent_rss_notify,rss_feed_title,rss_artwork_url,patron_count,discord_server_id,google_analytics_id
 {
     "data": [
         {
@@ -110,10 +121,12 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#
 
 Requires the `campaigns` scope. The single resource endpoint returns information about a single [Campaign](/#campaign-v2), fetched by campaign ID.
 
-Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#benefit), [`goals`](/#goal).
+Top-level `includes`: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#benefit), [`goals`](/#goal).
+
+Fields for each include must be explicitly requested i.e. `fields[campaign]=created_at,creation_name` but url encode the brackets i.e.`fields%5Bcampaign%5D=created_at,creation_name`
 
 ```json
-//Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,_is_nswf,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
+//Sample response for (url decoded) https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}?fields[campaign]=created_at,creation_name,discord_server_id,image_small_url,image_url,is_charged_immediately,is_monthly,main_video_embed,main_video_url,one_liner,one_liner,patron_count,pay_per_name,pledge_url,published_at,summary,thanks_embed,thanks_msg,thanks_video_url
 {
     "data":
         {
@@ -125,7 +138,6 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#
                 "image_url": "https://example.url",
                 "is_charged_immediately": false,
                 "is_monthly": true,
-                "is_nsfw": false,
                 "main_video_embed": null,
                 "main_video_url": null,
                 "one_liner": null,
@@ -148,12 +160,14 @@ Top-level `include`s: [`tiers`](/#tier), [`creator`](/#user-v2), [`benefits`](/#
 
 Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope.
 
-Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
+Top-level `includes`: [`address`](/#address) (requires `campaigns.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
+
+Fields for each include must be explicitly requested i.e. `fields[tier]=currently_entitled_tiers` but url encode the brackets i.e.`fields%5Btier%5D=currently_entitled_tiers`
 
 We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#member) is entitled to, either as an include on the members list or on the member get.
 
 ```json
-// Sample response for https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?include=currently_entitled_tiers,address&fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&fields[tier]=amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url
+// Sample response for (url decoded) https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?include=currently_entitled_tiers,address&fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&fields[tier]=amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url&fields[address]=addressee,city,line_1,line_2,phone_number,postal_code,state
 {
     "data": [
         {
@@ -190,8 +204,6 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
             "attributes": {
                 "addressee": "Platform Team",
                 "city": "San Francisco",
-                "confirmed": true,
-                "confirmed_at": null,
                 "country": "US",
                 "created_at": "2018-06-03T16:23:38+00:00",
                 "line_1": "555 Main St",
@@ -214,18 +226,15 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
             "published_at": "2018-04-01T02:55:36.938342+00:00",
             "requires_shipping": false,
             "title": "Patron",
-            "url": "/bePatron?c=12345&rid=54321",
+            "url": "/bePatron?c=1231345&rid=54512321",
         },
         "id": "54321",
         "type": "tier",
     }],
-    "links": {
-        "next": "https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?page%5Bcursor%5D=12345678abcdefg",
-    },
     "meta": {
         "pagination": {
             "cursors": {
-                "next": "12345678abcdefg"
+                "next": "12345678ab1231cdefg"
             },
             "total": 100
         }
@@ -237,85 +246,65 @@ We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#m
 
 Get a particular member by id. Requires the `campaigns.members` scope.
 
-Top-level `include`s: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
+Top-level `includes`: [`address`](/#address) (requires `campaign.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
 
+Fields for each include must be explicitly requested i.e. `fields[address]=line_1,city` but url encode the brackets i.e.`fields%5Baddress%5D=line_1,city`
 
 We recommend using `currently_entitled_tiers` to see exactly what a member is entitled to, either as an include on the members list or on the member get.
 
 ```json
-// Sample response for https://www.patreon.com/api/oauth2/v2/members/03ca69c3-ebea-4b9a-8fac-e4a837873254?include=address,currently_entitled_tiers,user&fields[member]=full_name,is_follower,email,last_charge_date,last_charge_status,lifetime_support_cents,patron_status,currently_entitled_amount_cents,pledge_relationship_start,will_pay_amount_cents&fields%5Btier%5D=title&fields%5Buser%5D=full_name,hide_pledges
+// Sample response for (url decoded) https://www.patreon.com/api/oauth2/v2/members/{member_id}?fields[address]=line_1,line_2,addressee,postal_code,city&fields[member]=full_name,is_follower,last_charge_date&include=address,user
 {
     "data": {
         "attributes": {
-            "full_name": "Platform Team",
-            "email": "platform@team.com",
+            "full_name": "first last",
             "is_follower": false,
-            "last_charge_date": "2018-04-01T21:28:06+00:00",
-            "last_charge_status": "Paid",
-            "lifetime_support_cents": 400,
-            "patron_status": "active_patron",
-            "currently_entitled_amount_cents": 100,
-            "pledge_relationship_start": "2018-04-01T16:33:27.861405+00:00",
-            "will_pay_amount_cents": 100},
-       "id": "03ca69c3-ebea-4b9a-8fac-e4a837873254",
-       "relationships": {
+            "last_charge_date": "2020-10-01T11:18:36.000+00:00"
+        },
+        "id": "123-456-789",
+        "relationships": {
             "address": {
                 "data": {
-                    "id": "123456",
+                    "id": "123",
                     "type": "address"
+                },
+                "links": {
+                    "related": "https://www.patreon.com/api/oauth2/v2/address/123"
                 }
-            },
-            "currently_entitled_tiers": {
-                "data": [
-                    {
-                        "id": "99001122",
-                        "type": "tier"
-                    }
-                ]
             },
             "user": {
                 "data": {
-                    "id": "654321",
+                    "id": "123",
                     "type": "user"
+                },
+                "links": {
+                    "related": "https://www.patreon.com/api/oauth2/v2/user/123"
                 }
             }
-       },
-       "type": "member"
+        },
+        "type": "member"
     },
     "included": [
         {
             "attributes": {
-                "addressee": "Platform Team",
-                "city": "San Francisco",
-                "confirmed": true,
-                "confirmed_at": null,
-                "country": "US",
-                "created_at": "2018-06-03T16:23:38+00:00",
-                "line_1": "555 Main St",
-                "line_2": "",
-                "phone_number": null,
-                "postal_code": "94103",
-                "state": "CA"
+                "addressee": "123",
+                "city": "city",
+                "line_1": "line 1",
+                "line_2": "Apt. 101",
+                "postal_code": "123"
             },
-            "id": "123456",
+            "id": "123",
             "type": "address"
         },
         {
-            "attributes": {
-                "full_name": "Platform Team",
-                "hide_pledges": false
-            },
-            "id": "654321",
+            "attributes": {},
+            "id": "123",
             "type": "user"
-        },
-        {
-            "attributes": {
-                "title": "Tshirt Tier"
-            },
-            "id": "99001122",
-            "type": "tier"
         }
-    ]
+    ],
+    "links": {
+        "self": "https://www.patreon.com/api/oauth2/v2/members/123-456-789"
+    }
 }
 ```
 
