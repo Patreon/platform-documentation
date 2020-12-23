@@ -4,6 +4,8 @@ We've written some open source libraries to help you use our platform services. 
 
 <aside class="notice">
 All of the libraries listed below require that you <a href="#clients-and-api-keys">register a client application</a> and get API keys.
+
+Also these libraries *might* be out of date. At the moment if you need to use APIv2 these *may* or *may* not call any of the APIv2 endpoints and so you *may* not get the results that you *may* be expecting the server *might* give you null for them instead. So if you make the client APIv2 you *would probably* have to update the libraries yourself.
 </aside>
 
 ## Python
