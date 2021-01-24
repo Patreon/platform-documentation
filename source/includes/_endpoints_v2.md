@@ -61,9 +61,9 @@ Fields for each include must be explicitly requested i.e. `fields[campaign]=summ
 
 You can request related data through includes, ie, `/api/oauth2/v2/identity?include=memberships` and `/api/oauth2/v2/identity?include=campaign`.
 
-- If you request [Campaign](/#campaign-v2) and have the campaigns scope, you will receive information about the user’s [Campaign](/#campaign-v2).
-- If you request [Campaign](/#campaign-v2) and memberships, you will receive information about the user’s [memberships](/#member) and the [Campaign](/#campaign-v2)s they are [Member](/#member) of, provided you have the `campaigns` and `identity[memberships]` scopes.
-- If you request memberships and DON’T have the `identity.memberships` scope, you will receive data about the user’s membership to your campaign. If you DO have the scope, you will receive data about all of the user’s memberships, to all the campaigns they’re members of.
+- If you request `include=campaign` and have the campaigns scope, you will receive information about the user’s [Campaign](/#campaign-v2).
+- If you request `include=memberships.campaign`, you will receive information about the user’s [memberships](/#member) and the [Campaign](/#campaign-v2)s they are [Member](/#member) of, provided you have the `identity[memberships]` scopes.
+- If you request `include=memberships` and DON’T have the `identity.memberships` scope, you will receive data about the user’s membership to your campaign. If you DO have the scope, you will receive data about all of the user’s memberships, to all the campaigns they’re members of.
 
 ## GET /api/oauth2/v2/campaigns
 
