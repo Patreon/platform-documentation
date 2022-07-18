@@ -2,61 +2,57 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
+version: 2.1
 
-_helpers:
-    - &ruby_image
-      image: circleci/ruby:2.5.1
-    - &setup1 checkout
-    - &setup2
-      run:
-        name: Print debug information
-        command: |
-            ruby --version
-    - &setup3
-        run:
-            name: Install ruby dependencies
-            command: bundle
-
-machine:
-    timezone: America/Los_Angeles
-
+executors:
+  ruby:
+    docker:
+      - image: circleci/ruby:2.5.1
+        environment:
+          TZ: "America/Los_Angeles"
 jobs:
-    build:
-        working_directory: ~/platform-documentation
-        docker:
-            - *ruby_image
-        steps:
-            - *setup1
-            - *setup2
-            - *setup3
-            - run:
-                name: Build docs
-                command: bundle exec middleman build --clean
-            - persist_to_workspace:
-                root: "."
-                paths:
-                    - build/*
-                    - publish_to_s3.sh
+  build:
+    working_directory: ~/platform-documentation
+    executor: ruby
+    steps:
+      - checkout
+      - run:
+          name: Print debug information
+          command: |
+            ruby --version
+      - run:
+          name: Install ruby dependencies
+          command: bundle
+      - run:
+          name: Build docs
+          command: bundle exec middleman build --clean
+      - persist_to_workspace:
+          root: "."
+          paths:
+            - build/*
+            - publish_to_s3.sh
 
-    deploy_to_s3:
-        working_directory: ~/platform-documentation
-        docker:
-            - *ruby_image
-        steps:
-            - attach_workspace:
-                at: .
-            - run:
-                command: sudo apt-get install awscli
-            - deploy:
-                name: Uploading Docs to S3
-                command: /bin/bash publish_to_s3.sh
+  deploy_to_s3:
+    working_directory: ~/platform-documentation
+    executor: ruby
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            sudo apt-get update
+            sudo apt-get install awscli
+      - deploy:
+          name: Uploading Docs to S3
+          command: /bin/bash publish_to_s3.sh
 
 workflows:
-    version: 2
-    primary_workflow:
-        jobs:
+  version: 2
+  primary_workflow:
+    jobs:
+      - build
+      - deploy_to_s3:
+          context:
+            - platform-documentation
+          requires:
             - build
-            - deploy_to_s3:
-                requires:
-                    - build
