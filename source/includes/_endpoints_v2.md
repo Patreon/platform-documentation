@@ -166,6 +166,8 @@ Fields for each include must be explicitly requested i.e. `fields[tier]=currentl
 
 We recommend using `currently_entitled_tiers` to see exactly what a [Member](/#member) is entitled to, either as an include on the members list or on the member get.
 
+Returns from this endpoint have 1000 results in one page. If pledge events are requested in includes, it has 500 results in one page. Do make sure to paginate your results by using next pagination cursor and cycle until there is no next page cursor in the API return.
+
 ```json
 // Sample response for (url decoded) https://www.patreon.com/api/oauth2/v2/campaigns/{campaign_id}/members?include=currently_entitled_tiers,address&fields[member]=full_name,is_follower,last_charge_date,last_charge_status,lifetime_support_cents,currently_entitled_amount_cents,patron_status&fields[tier]=amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url&fields[address]=addressee,city,line_1,line_2,phone_number,postal_code,state
 {
