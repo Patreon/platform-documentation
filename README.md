@@ -7,7 +7,7 @@ To run locally:
 
 ## Operations
 
-To deploy, ask a member of the platform team
+Changes to this repo are automatically deployed some time after merging code.
 
 ## Powered by slate
 
