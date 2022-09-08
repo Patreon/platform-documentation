@@ -15,12 +15,10 @@ We'd love to hear from you.
             <a href="https://www.patreondevelopers.com">PatreonDevelopers.com</a>.
         </li>
         <li>
-            For rare questions involving sensitive information, you can reach us at
-            <a href="mailto:platform@patreon.com">platform@patreon.com</a>.
+            If you are an organization looking to partner with Patreon you can reach us at <a href="mailto:partnerships@patreon.com">partnerships@patreon.com</a>.
         </li>
         <li>
-            If you're with a larger organization seeking non-technical coordination
-            you can reach our partnerships team at <a href="mailto:partnerships@patreon.com">partnerships@patreon.com</a>.
+            If you are a third party developer looking to get your app added to our app directory, follow the instructions <a href="https://www.patreon.com/portal/how-to/build-for-creators" target="_blank">here.</a>
         </li>
     </ul>
 </aside>

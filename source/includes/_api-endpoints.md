@@ -740,4 +740,4 @@ When you made a creator page to gain API access, behind the scenes a <a href="#c
 Remember — you must pass a valid <code>access_token</code>.
 </aside>
 
-You may only fetch your own list of pledges. If you attempt to fetch another creator's pledge list, the API call will return an HTTPS 403. If you would like to create an application which can manage many creator's campaigns, please contact us at [platform@patreon.com](mailto:platform@patreon.com).
+You may only fetch your own list of pledges. If you attempt to fetch another creator's pledge list, the API call will return an HTTPS 403. If you would like to create an application which can manage many creator's campaigns, please contact us in <a href="https://www.patreondevelopers.com/" target="_blank">the developers forum</a>.

@@ -65,7 +65,7 @@ Get the artifact from
 View the source on [github](https://github.com/Patreon/patreon-java)
 
 #Third Party Libraries
-There are a number of third party libraries that the developer community has created. If you would like to add yours to this  list, please email [platform@patreon.com](mailto:platform@patreon.com).
+There are a number of third party libraries that the developer community has created.
 
 ##Go
 View the source on [github](https://github.com/mxpv/patreon-go)

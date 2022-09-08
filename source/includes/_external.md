@@ -14,7 +14,7 @@ It's perfect for many of the use cases that would ordinarily require webhooks an
 * Sync new patrons with a Mailchimp, Hubspot, ConvertKit, Drip, InfusionSoft, etc.
 
 
-Our Zapier plugin currently supports pledge activity (adds, updates and deletes). We plan to add more triggers in the future. If you would like to request a trigger, send the request to [platform@patreon.com](mailto:platform@patreon.com).
+Our Zapier plugin currently supports pledge activity (adds, updates and deletes). We plan to add more triggers in the future. If you would like to request a trigger, please contact us in <a href="https://www.patreondevelopers.com/" target="_blank">the developers forum</a>.
 
 ## Wordpress
 We have a wordpress plugin that allows creators to gate content on their wordpress page to patrons only. For more information [check it out](https://www.patreon.com/apps/wordpress).
