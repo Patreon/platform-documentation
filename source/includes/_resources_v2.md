@@ -272,6 +272,7 @@ embed_data | object | An object containing embed data if media is embedded in th
 embed_url | string | Embed media url Can be null.
 is_paid | boolean | True if the post incurs a bill as part of a pay-per-post campaign Can be null.
 is_public | boolean | True if the post is viewable by anyone,False if only patrons (or a subset of patrons) can view Can be null.
+tiers | array[Tiers] | The tier ids that allow the patrons from those tiers to view the post. Empty array if no tiers assigned even if is_paid is true.  Can be null.
 published_at | string (UTC ISO format) | Datetime that the creator most recently published (made publicly visible) the post. Can be null.
 title | string |  Can be null.
 url | string | A URL to access this post on patreon.com
