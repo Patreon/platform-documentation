@@ -10,7 +10,7 @@ orbs:
 executors:
   ruby:
     docker:
-      - image: cimg/ruby:2.5.9
+      - image: circleci/ruby:2.5.1
         environment:
           TZ: "America/Los_Angeles"
 jobs:
