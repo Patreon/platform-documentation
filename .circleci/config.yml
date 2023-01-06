@@ -4,6 +4,9 @@
 #
 version: 2.1
 
+orbs:
+  aws-cli: circleci/aws-cli@3.1.4
+
 executors:
   ruby:
     docker:
@@ -36,12 +39,10 @@ jobs:
     working_directory: ~/platform-documentation
     executor: ruby
     steps:
+      - aws-cli/setup:
+          role-arn: 'arn:aws:iam::792916230465:role/circleci/project/cci-platform-documentation'
       - attach_workspace:
           at: .
-      - run:
-          command: |
-            sudo apt-get update
-            sudo apt-get install awscli
       - deploy:
           name: Uploading Docs to S3
           command: /bin/bash publish_to_s3.sh
@@ -53,6 +54,7 @@ workflows:
       - build
       - deploy_to_s3:
           context:
-            - platform-documentation
+            - aws/region/us-west-1
+            - aws/account/production
           requires:
             - build
