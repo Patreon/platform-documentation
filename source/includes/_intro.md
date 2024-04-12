@@ -23,6 +23,9 @@ We'd love to hear from you.
     </ul>
 </aside>
 
+<aside class="aside">
+APIv2 is maintained whereas APIv1 is slated for deprecation. Please upgrade any integration that is still using v1 to v2. You can come to the <a href="https://discord.com/channels/501792035657744425/751556646232391732">dev-and-api channel</a> at Patreon Discord or <a href="https://www.patreondevelopers.com/c/friendly-help/5">the api help subforum at Patreon Developers forum</a> for your questions and to receive help for upgrading your v1 integration to v2.
+</aside>
 ## Make these docs better
 
 If you find any errors in our docs, we'd love to have you tell us! Submit an issue or a pull request [github repo](https://github.com/Patreon/platform-documentation) and we'll get them fixed up.
