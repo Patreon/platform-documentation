@@ -1,9 +1,5 @@
 # APIv2: Resource Endpoints
 
-<aside class="aside">
-APIv2 is still in beta, and while the scopes and endpoints are stable, the specific properties returned on the resources may change.
-</aside>
-
 <aside class="notice">
 All API requests should use the hostname https://www.patreon.com
 </aside>

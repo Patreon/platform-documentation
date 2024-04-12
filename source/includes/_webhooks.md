@@ -113,4 +113,4 @@ You can also use our [webhooks page] (https://www.patreon.com/portal/registratio
 
 ### Programmatically Adding Webhooks
 
-In addition to manually adding webhooks, you can also create, read, update, delete and list webhooks with our API. This feature is currently in early beta. If you would like to know more please contact us in <a href="https://www.patreondevelopers.com/" target="_blank">the developers forum</a>.
+In addition to manually adding webhooks, you can also create, read, update, delete and list webhooks with our API. If you would like to know more please contact us in <a href="https://www.patreondevelopers.com/" target="_blank">the developers forum</a>.

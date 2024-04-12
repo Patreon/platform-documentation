@@ -1,9 +1,5 @@
 # APIv2: OAuth
 
-<aside class="aside">
-APIv2 is still in beta, and while the scopes and endpoints are stable, the specific properties returned on the resources may change.
-</aside>
-
 ### What's new?
 At a high level, the main differences between APIv1 and APIv2 are:
 

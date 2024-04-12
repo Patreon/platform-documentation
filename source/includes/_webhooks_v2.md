@@ -1,9 +1,5 @@
 # APIv2: Webhook Endpoints
 
-<aside class="aside">
-APIv2 is still in beta, and while the scopes and endpoints are stable, the specific properties returned on the resources may change.
-</aside>
-
 ## GET /api/oauth2/v2/webhooks
 
 Get the [Webhooks](/#webhook) for the current user's [Campaign](/#campaign-v2) created by the API client. You will only be able to see webhooks created by your client. Requires the `w:campaigns.webhook` scope.
