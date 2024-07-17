@@ -48,3 +48,11 @@ If you find any errors in our docs, we'd love to have you tell us! Submit an iss
 
     If you have an inquiry about partnering with Patreon, please contact us at <a href="mailto:partnerships@patreon.com">partnerships@patreon.com</a>.
 </aside>
+
+<aside class="notice">
+    Make sure to include a User-Agent header in your code that calls the API, otherwise your calls may be dropped with a 403 response. For the value of the User-Agent header, try to use an informative string that can identify your app, in a format like "MyCampaignName - Sync App", or "MyCampaignName - Website".
+</aside>
+
+<aside>
+    To be able to get your patrons' Discord user ids via the API, you must connect Patreon's Discord integration at your page at patreon.com and add it as a benefit to the tier(s) for which you will ask the Discord ids from the API. You can use your own Discord bot along Patreon's Discord integration.
+</aside>
