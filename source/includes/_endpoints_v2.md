@@ -156,7 +156,7 @@ Fields for each include must be explicitly requested i.e. `fields[campaign]=crea
 
 Gets the [Members](/#member) for a given [Campaign](/#campaign-v2). Requires the `campaigns.members` scope.
 
-Top-level `includes`: [`address`](/#address) (requires `campaigns.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2).
+Top-level `includes`: [`address`](/#address) (requires `campaigns.members.address` scope), [`campaign`](/#campaign-v2), [`currently_entitled_tiers`](/#tier), [`user`](/#user-v2), [`pledge_history`](/#pledge-event).
 
 Fields for each include must be explicitly requested i.e. `fields[tier]=currently_entitled_tiers` but url encode the brackets i.e.`fields%5Btier%5D=currently_entitled_tiers`
 
