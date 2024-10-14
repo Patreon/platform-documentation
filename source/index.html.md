@@ -18,6 +18,7 @@ includes:
 - clients
 - oauth
 - errors
+- rate_limits
 - oauth_v2
 - endpoints_v2
 - webhooks_v2
