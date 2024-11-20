@@ -70,6 +70,9 @@ There are a number of third party libraries that the developer community has cre
 ##Go
 View the source on [github](https://github.com/mxpv/patreon-go)
 
+##Swift
+View the source on [github](https://github.com/amirsaam/PatreonAPI-Swift)
+
 ##django-allauth
 Patreon is available as an OAuth backend in [django-allauth](http://django-allauth.readthedocs.io/en/latest/installation.html).
 
