@@ -64,14 +64,18 @@ Get the artifact from
 
 View the source on [github](https://github.com/Patreon/patreon-java)
 
-#Third Party Libraries
+# Third Party Libraries
 There are a number of third party libraries that the developer community has created.
 
-##Go
+## Go
 View the source on [github](https://github.com/mxpv/patreon-go)
 
-##django-allauth
+## django-allauth
 Patreon is available as an OAuth backend in [django-allauth](http://django-allauth.readthedocs.io/en/latest/installation.html).
 
-##python-social-auth
+## python-social-auth
 Patreon is available as an OAuth backend in [python-social-auth](http://python-social-auth-docs.readthedocs.io/en/latest/).
+
+## .NET
+Available on [NuGet](https://www.nuget.org/packages/IVAXOR.PatreonNET)
+View the source on [github](https://github.com/ivaxor/Patreon.NET)
