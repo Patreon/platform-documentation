@@ -80,7 +80,7 @@ is_nsfw | boolean | `true` if the creator has marked the campaign as containing 
 main_video_embed | string |  Can be null.
 main_video_url | string |  Can be null.
 one_liner | string | Pithy one-liner for this campaign, displayed on the creator page. Can be null.
-patron_count | integer | Number of patrons pledging to this creator.
+patron_count | integer | Number of patrons having access to this creator.
 pay_per_name | string | The thing which patrons are paying per, as in "`vanity` is making $1000 per `pay_per_name`". Can be null.
 pledge_url | string | Relative (to patreon.com) URL for the pledge checkout flow for this campaign.
 published_at | string (UTC ISO format) | Datetime that the creator most recently published (made publicly visible) the campaign. Can be null.
@@ -102,7 +102,7 @@ benefits | array[[Benefit](#benefit)] | The campaign's benefits.
 campaign_installations | array[Campaign-Installation] |
 categories | array[Category] | The campaign's categories.
 creator | [User](#user-v2) | The campaign owner.
-goals | array[[Goal](#goal)] | The campaign's goals.
+goals | array[[Goal](#goal)] | [DEPRECATED!] The campaign's goals. Will always be empty.
 tiers | array[[Tier](#tier)] | The campaign's tiers.
 
 ## Deliverable
@@ -179,18 +179,20 @@ The record of a user's membership to a campaign. Remains consistent across month
 
 Attribute | Type | Description
 --------- | ---- | -----------
-campaign_lifetime_support_cents | integer | The total amount that the member has ever paid to the campaign in campaign's currency. `0` if never paid.
+campaign_lifetime_support_cents | integer | The total amount that the member has ever paid to the campaign in the campaign's currency. `0` if never paid.
 currently_entitled_amount_cents | integer | The amount in cents that the member is entitled to.This includes a current pledge, or payment that covers the current payment period.
 email | string | The member's email address. Requires the `campaigns.members[email]` scope.
 full_name | string | Full name of the member user.
-is_follower | boolean | The user is not a pledging patron but has subscribed to updates about public posts.
+is_follower | boolean | [DEPRECATED!] The user is not a pledging patron but has subscribed to updates about public posts. This will always be false, following has been replaced by free membership.
+is_free_trial | boolean | The user is in a free trial period.
+is_gifted | boolean | The user's membership is from a free gift
 last_charge_date | string (UTC ISO format) | Datetime of last attempted charge. `null` if never charged. Can be null.
-last_charge_status | string | The result of the last attempted charge.The only successful status is `Paid`.`null` if never charged. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Other`. Can be null.
-lifetime_support_cents | integer | The total amount that the member has ever paid to the campaign. `0` if never paid.
-next_charge_date | string (UTC ISO format)| Datetime of next charge. `null` if annual pledge downgrade. Can be null
+last_charge_status | string | The result of the last attempted charge.The only successful status is `Paid`.`null` if never charged. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Refunded by Patreon`, `Other`, `Partially Refunded`, `Free Trial`. Can be null.
+lifetime_support_cents | integer | [DEPRECATED!] Use campaign_lifetime_support_cents. The total amount that the member has ever paid to the campaign in the campaign's currency. `0` if never paid.
+next_charge_date | string (UTC ISO format) | Datetime of next charge. `null` if annual pledge downgrade. Can be null.
 note | string | The creator's notes on the member.
 patron_status | string | One of `active_patron`, `declined_patron`, `former_patron`. A null value indicates the member has never pledged. Can be null.
-pledge_cadence | integer | Number of months between charges.
+pledge_cadence | integer | Number of months between charges. Can be null.
 pledge_relationship_start | string (UTC ISO format) | Datetime of beginning of most recent pledge chainfrom this member to the campaign. Pledge updates do not change this value. Can be null.
 will_pay_amount_cents | integer | The amount in cents the user will pay at the next pay cycle.
 
@@ -223,6 +225,7 @@ privacy_policy_url | string | The URL of the privacy policy provided during clie
 redirect_uris | string | The allowable redirect URIs for the OAuth authorization flow.
 tos_url | string | The URL of the terms of service provided during client setup. Can be null.
 version | integer | The Patreon API version the client is targeting.
+category | string |
 
 ### OAuthClient Relationships
 
@@ -244,7 +247,8 @@ Attribute | Type | Description
 amount_cents | integer | Amount (in the currency in which the patron paid) of the underlying event.
 currency_code | string | ISO code of the currency of the event.
 date | string (UTC ISO format) | The date which this event occurred.
-payment_status | string | Status of underlying payment. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Other`
+pledge_payment_status | string | The payment status of the pledge. One of `queued`, `pending`, `valid`, `declined`, `fraud`, `disabled`.
+payment_status | string | Status of underlying payment. One of `Paid`, `Declined`, `Deleted`, `Pending`, `Refunded`, `Fraud`, `Refunded by Patreon`, `Other`, `Partially Refunded`, `Free Trial`
 tier_id | string | Id of the tier associated with the pledge. Can be null.
 tier_title | string | Title of the reward tier associated with the pledge. Can be null.
 type | string | Event type. One of `pledge_start`, `pledge_upgrade`, `pledge_downgrade`, `pledge_delete`, `subscription`
@@ -272,7 +276,7 @@ embed_data | object | An object containing embed data if media is embedded in th
 embed_url | string | Embed media url Can be null.
 is_paid | boolean | True if the post incurs a bill as part of a pay-per-post campaign Can be null.
 is_public | boolean | True if the post is viewable by anyone,False if only patrons (or a subset of patrons) can view Can be null.
-tiers | array[Tiers] | The tier ids that allow the patrons from those tiers to view the post. Empty array if no tiers assigned even if is_paid is true.  Can be null.
+tiers | collection | The tier ids that the post is locked for if only patrons (or a subset of patrons) can view Can be null.
 published_at | string (UTC ISO format) | Datetime that the creator most recently published (made publicly visible) the post. Can be null.
 title | string |  Can be null.
 url | string | A URL to access this post on patreon.com
@@ -295,7 +299,7 @@ Attribute | Type | Description
 amount_cents | integer | Monetary amount associated with this tier (in U.S. cents).
 created_at | string (UTC ISO format) | Datetime this tier was created.
 description | string | Tier display description.
-discord_role_ids | object | The discord role IDs granted by this tier. Can be null.
+discord_role_ids | collection | The discord role IDs granted by this tier. Can be null.
 edited_at | string (UTC ISO format) | Datetime tier was last modified.
 image_url | string | Full qualified image URL associated with this tier. Can be null.
 patron_count | integer | Number of patrons currently registered for this tier.
@@ -330,16 +334,17 @@ can_see_nsfw | boolean | `true` if this user can view nsfw content. Can be null.
 created | string (UTC ISO format) | Datetime of this user's account creation.
 email | string | The user's email address. Requires certain scopes to access. See the scopes section of this documentation.
 first_name | string | First name. Can be null.
+last_name | string | Last name. Can be null.
 full_name | string | Combined first and last name.
 hide_pledges | boolean | `true` if the user has chosen to keep private which creators they pledge to. Can be null.
 image_url | string | The user's profile picture URL, scaled to width 400px.
 is_email_verified | boolean | `true` if the user has confirmed their email.
-last_name | string | Last name. Can be null.
 like_count | integer | How many posts this user has liked.
 social_connections | object | Mapping from user's connected app names to external user id on the respective app.
 thumb_url | string | The user's profile picture URL, scaled to a square of size 100x100px.
 url | string | URL of this user's creator or patron profile.
-vanity | string | The public "username" of the user. patreon.com/<vanity> goes to this user's creator page. Non-creator users might not have a vanity. [Deprecated! use campaign.vanity] Can be null.
+vanity | string | [DEPRECATED!] Use campaign.vanity. The public "username" of the user. patreon.com/&lt;vanity&gt; goes to this user's creator page. Non-creator users might not have a vanity.
+is_creator | boolean | `true` if this user has an active campaign.
 
 ### User v2 Relationships
 
@@ -369,5 +374,3 @@ Relationship | Type | Description
 ------------ | ---- | -----------
 campaign | [Campaign](#campaign-v2) | The campaign whose events trigger the webhook.
 client | [OAuth Client](#oauthclient) | The client which created the webhook
-
-
