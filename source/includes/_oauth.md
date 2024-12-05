@@ -149,10 +149,11 @@ if ($campaign_response['errors']) {
 
 ```
 POST www.patreon.com/api/oauth2/token
-	?grant_type=refresh_token
-	&refresh_token=<the user‘s refresh_token>
-	&client_id=<your client id>
-	&client_secret=<your client secret>
+
+grant_type=refresh_token
+&refresh_token=<the user‘s refresh_token>
+&client_id=<your client id>
+&client_secret=<your client secret>
 ```
 
 > which will return a JSON response of:
@@ -166,6 +167,7 @@ POST www.patreon.com/api/oauth2/token
 	"token_type": "Bearer"
 }
 ```
+
 > and you should store this information just as before.
 
-Tokens are valid for up to one month after they are issued. During this period, you may refresh a user’s information using the API calls from step 4. If you wish to get up-to-date information after the token has expired, a new token may be issued to be used for the following month. To refresh a token, make a POST request to the token endpoint with a grant type of `refresh_token`, as in the example. You may also manually refresh the token on the appropriate client in your [clients page](https://www.patreon.com/portal/registration/register-clients).
+Tokens are valid for the duration specified by "expires_in" field. During this period, you may refresh a user’s information using the API calls from step 4. If you wish to get up-to-date information after the token has expired, a new token may be issued to be used. To refresh a token, make a POST request to the token endpoint with a grant type of `refresh_token`, as in the example. You may also manually refresh the token on the appropriate client in your [clients page](https://www.patreon.com/portal/registration/register-clients).
